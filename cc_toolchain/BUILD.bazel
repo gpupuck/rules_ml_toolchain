@@ -61,7 +61,7 @@ filegroup(
         "//cc_toolchain/wrappers:all",
         "@llvm_linux_x86_64//:clang",
         "@llvm_linux_x86_64//:clang++",
-        "@llvm_linux_x86_64//:libtinfo",
+        "@llvm_linux_x86_64//:distro_libs",
     ],
 )
 
@@ -73,7 +73,7 @@ filegroup(
         "//cc_toolchain/wrappers:all",
         "@llvm_linux_x86_64//:ld",
         "@sysroot_linux_x86_64//:startup_libs",
-        "@llvm_linux_x86_64//:libtinfo",
+        "@llvm_linux_x86_64//:distro_libs",
     ],
 )
 
@@ -83,6 +83,7 @@ filegroup(
     srcs = [
         "//cc_toolchain/wrappers:all",
         "@llvm_linux_x86_64//:ar",
+        "@llvm_linux_x86_64//:distro_libs",
     ],
 )
 
@@ -241,7 +242,7 @@ filegroup(
         "//cc_toolchain/cuda/wrappers:all",
         "@llvm_linux_x86_64//:clang",
         "@llvm_linux_x86_64//:clang++",
-        "@llvm_linux_x86_64//:libtinfo",
+        "@llvm_linux_x86_64//:distro_libs",
     ],
 )
 
@@ -254,7 +255,7 @@ filegroup(
         "//cc_toolchain/wrappers:all",
         "@llvm_linux_x86_64//:ld",
         "@sysroot_linux_x86_64//:startup_libs",
-        "@llvm_linux_x86_64//:libtinfo",
+        "@llvm_linux_x86_64//:distro_libs",
     ],
 )
 
@@ -265,6 +266,7 @@ filegroup(
         ":cuda_nvcc_files",
         "//cc_toolchain/wrappers:all",
         "@llvm_linux_x86_64//:ar",
+        "@llvm_linux_x86_64//:distro_libs",
     ],
 )
 
@@ -396,6 +398,7 @@ filegroup(
         "//cc_toolchain/wrappers:all",
         "@llvm_linux_x86_64//:clang",
         "@llvm_linux_x86_64//:clang++",
+        "@llvm_linux_x86_64//:distro_libs",
     ],
 )
 
@@ -407,6 +410,7 @@ filegroup(
         "//cc_toolchain/wrappers:all",
         "@llvm_linux_x86_64//:ld",
         "@sysroot_linux_aarch64//:startup_libs",
+        "@llvm_linux_x86_64//:distro_libs",
     ],
 )
 
@@ -416,6 +420,7 @@ filegroup(
     srcs = [
         "//cc_toolchain/wrappers:all",
         "@llvm_linux_x86_64//:ar",
+        "@llvm_linux_x86_64//:distro_libs",
     ],
 )
 
@@ -555,6 +560,7 @@ filegroup(
         "//cc_toolchain/wrappers:all",
         "@llvm_linux_x86_64//:clang",
         "@llvm_linux_x86_64//:clang++",
+        "@llvm_linux_x86_64//:distro_libs",
     ],
 )
 
@@ -566,6 +572,7 @@ filegroup(
         "//cc_toolchain/wrappers:all",
         "@llvm_linux_x86_64//:ld",
         "@sysroot_macos_aarch64//:startup_libs",
+        "@llvm_linux_x86_64//:distro_libs",
     ],
 )
 
@@ -575,6 +582,7 @@ filegroup(
     srcs = [
         "//cc_toolchain/wrappers:all",
         "@llvm_linux_x86_64//:ar_darwin",
+        "@llvm_linux_x86_64//:distro_libs",
     ],
 )
 

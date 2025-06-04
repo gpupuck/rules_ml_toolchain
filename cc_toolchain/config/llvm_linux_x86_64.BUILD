@@ -33,9 +33,6 @@ filegroup(
     srcs = [
         "bin/clang",
     ],
-    data = [
-        ":libtinfo",
-    ],
     visibility = ["//visibility:public"],
 )
 
@@ -44,9 +41,6 @@ filegroup(
     srcs = [
         "bin/clang++",
     ],
-    data = [
-        ":libtinfo",
-    ],
     visibility = ["//visibility:public"],
 )
 
@@ -54,9 +48,6 @@ filegroup(
     name = "ld",
     srcs = [
         "bin/ld.lld",
-    ],
-    data = [
-        ":libtinfo",
     ],
     visibility = ["//visibility:public"],
 )
@@ -79,9 +70,9 @@ filegroup(
     visibility = ["//visibility:public"],
 )
 
-# Ubuntu18 libtinfo.so.5 needed only for LLVM18
+# LLVM18 needs libtinfo.so.5 library as part of ubuntu 18 distributive
 filegroup(
-    name = "libtinfo",
+    name = "distro_libs",
     srcs = [
         "lib/libtinfo.so.5",
     ],
