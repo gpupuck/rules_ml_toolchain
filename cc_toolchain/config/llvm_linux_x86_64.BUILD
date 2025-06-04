@@ -32,6 +32,7 @@ filegroup(
     name = "clang",
     srcs = [
         "bin/clang",
+        "lib/libtinfo.so.5",
     ],
     visibility = ["//visibility:public"],
 )
@@ -40,6 +41,7 @@ filegroup(
     name = "clang++",
     srcs = [
         "bin/clang++",
+        "lib/libtinfo.so.5",
     ],
     visibility = ["//visibility:public"],
 )
@@ -48,6 +50,7 @@ filegroup(
     name = "ld",
     srcs = [
         "bin/ld.lld",
+        "lib/libtinfo.so.5",
     ],
     visibility = ["//visibility:public"],
 )
