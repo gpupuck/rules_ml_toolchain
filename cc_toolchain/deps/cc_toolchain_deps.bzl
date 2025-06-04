@@ -56,7 +56,7 @@ def cc_toolchain_deps():
         http_archive(
             name = "llvm_linux_x86_64",
             url = "https://storage.googleapis.com/ml-sysroot-testing/clang%2Bllvm-18.1.8-x86_64-linux-gnu-ubuntu-18.04.tar.xz",
-            sha256 = "d03a0b4ccb3c1414d14cd0e5185c40257f956d0ae08a7820ef1067020f15de2f",
+            sha256 = "9a80e74bb6ed66431556f6905e356ef1aa470a9dd8240d8017db043725729874",
             build_file = Label("//cc_toolchain/config:llvm_linux_x86_64.BUILD"),
             strip_prefix = "clang+llvm-18.1.8-x86_64-linux-gnu-ubuntu-18.04",
         )
