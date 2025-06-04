@@ -61,6 +61,7 @@ filegroup(
         "//cc_toolchain/wrappers:all",
         "@llvm_linux_x86_64//:clang",
         "@llvm_linux_x86_64//:clang++",
+        "@llvm_linux_x86_64//:libtinfo",
     ],
 )
 
@@ -72,6 +73,7 @@ filegroup(
         "//cc_toolchain/wrappers:all",
         "@llvm_linux_x86_64//:ld",
         "@sysroot_linux_x86_64//:startup_libs",
+        "@llvm_linux_x86_64//:libtinfo",
     ],
 )
 
