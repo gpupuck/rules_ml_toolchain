@@ -1,3 +1,5 @@
+common --noenable_bzlmod
+
 build --incompatible_enable_cc_toolchain_resolution     # Only for bazel 6.5: C++ rules use platforms to select toolchains when you set this
 build --toolchain_resolution_debug=.*
 build --cxxopt=-std=c++17

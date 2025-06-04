@@ -14,16 +14,8 @@
 # ==============================================================================
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
-#load("//cc_toolchain/cuda:nvcc_wrapper_configure.bzl", "nvcc_wrapper_configure")
-
-#load("@bazel_tools//tools/build_defs/repo:local.bzl", "local_repository")
-load(":http_archive_bazel7.bzl", "http_archive_bazel7")  # Remove this line after updating bazel to 7.3.0 or newer
 
 def cc_toolchain_deps():
-    #    if "nvcc_wrapper" not in native.existing_rules():
-    #        print("Initializing NVCC wrapper")
-    #        nvcc_wrapper_configure(name = "nvcc_wrapper")
-
     if "sysroot_linux_x86_64" not in native.existing_rules():
         # Produce wheels with tag manylinux_2_27_x86_64
         http_archive(
@@ -61,8 +53,7 @@ def cc_toolchain_deps():
         )
 
     if "llvm_linux_x86_64" not in native.existing_rules():
-        # Replace 'http_archive_bazel7' by 'http_archive' after updating bazel to 7.3.0 or newer
-        http_archive_bazel7(
+        http_archive(
             name = "llvm_linux_x86_64",
             url = "https://github.com/llvm/llvm-project/releases/download/llvmorg-18.1.8/clang+llvm-18.1.8-x86_64-linux-gnu-ubuntu-18.04.tar.xz",
             sha256 = "54ec30358afcc9fb8aa74307db3046f5187f9fb89fb37064cdde906e062ebf36",
