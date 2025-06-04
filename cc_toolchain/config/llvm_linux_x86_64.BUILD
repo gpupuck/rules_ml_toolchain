@@ -32,7 +32,9 @@ filegroup(
     name = "clang",
     srcs = [
         "bin/clang",
-        "lib/libtinfo.so.5",
+    ],
+    data = [
+        ":libtinfo",
     ],
     visibility = ["//visibility:public"],
 )
@@ -41,7 +43,9 @@ filegroup(
     name = "clang++",
     srcs = [
         "bin/clang++",
-        "lib/libtinfo.so.5",
+    ],
+    data = [
+        ":libtinfo",
     ],
     visibility = ["//visibility:public"],
 )
@@ -50,7 +54,9 @@ filegroup(
     name = "ld",
     srcs = [
         "bin/ld.lld",
-        "lib/libtinfo.so.5",
+    ],
+    data = [
+        ":libtinfo",
     ],
     visibility = ["//visibility:public"],
 )
@@ -70,6 +76,15 @@ filegroup(
 filegroup(
     name = "install_name_tool_darwin",
     srcs = ["bin/llvm-install-name-tool"],
+    visibility = ["//visibility:public"],
+)
+
+# Ubuntu18 libtinfo.so.5 needed only for LLVM18
+filegroup(
+    name = "libtinfo",
+    srcs = [
+        "lib/libtinfo.so.5",
+    ],
     visibility = ["//visibility:public"],
 )
 
