@@ -19,4 +19,4 @@
 set -o pipefail
 
 # run specified tool with all arguments
-LD_DEBUG=libs $GCC_PATH $@
+$GCC_PATH $@

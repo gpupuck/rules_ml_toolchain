@@ -55,10 +55,18 @@ def cc_toolchain_deps():
     if "llvm_linux_x86_64" not in native.existing_rules():
         http_archive(
             name = "llvm_linux_x86_64",
-            url = "https://storage.googleapis.com/ml-sysroot-testing/clang%2Bllvm-18.1.8-x86_64-linux-gnu-ubuntu-18.04.tar.xz",
-            sha256 = "d03a0b4ccb3c1414d14cd0e5185c40257f956d0ae08a7820ef1067020f15de2f",
+            url = "https://github.com/llvm/llvm-project/releases/download/llvmorg-18.1.8/clang+llvm-18.1.8-x86_64-linux-gnu-ubuntu-18.04.tar.xz",
+            sha256 = "54ec30358afcc9fb8aa74307db3046f5187f9fb89fb37064cdde906e062ebf36",
             build_file = Label("//cc_toolchain/config:llvm_linux_x86_64.BUILD"),
             strip_prefix = "clang+llvm-18.1.8-x86_64-linux-gnu-ubuntu-18.04",
+            remote_file_urls = {
+                "lib/libtinfo.so.5": ["https://github.com/yuriit-google/sysroots/raw/f890514a360cd1959c786402a8e794218b1be93f/archives/libtinfo.so.5"],
+                "lib/libtinfo5-copyright.txt": ["https://raw.githubusercontent.com/yuriit-google/sysroots/ba192c408e0f82c6c9a5b92712038edaa64326d6/archives/copyright"],
+            },
+            remote_file_integrity = {
+                "lib/libtinfo.so.5": "sha256-Es/8cnQZDKFpOlLM2DA+cZQH5wfIVX3ft+74HyCO+qs=",
+                "lib/libtinfo5-copyright.txt": "sha256-Xo7pAsiQbdt3ef023Jl5ywi1H76/fAsamut4rzgq9ZA=",
+            },
         )
 
     if "llvm_macos_aarch64" not in native.existing_rules():
