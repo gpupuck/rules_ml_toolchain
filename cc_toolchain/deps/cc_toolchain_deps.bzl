@@ -16,25 +16,25 @@
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 def cc_toolchain_deps():
-    if "sysroot_linux_x86_64" not in native.existing_rules():
-        # Produce wheels with tag manylinux_2_27_x86_64
-        http_archive(
-            name = "sysroot_linux_x86_64",
-            sha256 = "5f62ca2978b4243cfca5d3798e78f4ced50b07bbc7ed1299ccbb8a715931304c",
-            urls = ["https://storage.googleapis.com/ml-sysroot-testing/ubuntu18_x86_64_sysroot.tar.xz"],
-            build_file = Label("//cc_toolchain/config:sysroot_ubuntu18_x86_64.BUILD"),
-            strip_prefix = "ubuntu18_x86_64_sysroot",
-        )
-
-    # Produce wheels with tag manylinux_2_35_x86_64
     #    if "sysroot_linux_x86_64" not in native.existing_rules():
+    #        # Produce wheels with tag manylinux_2_27_x86_64
     #        http_archive(
     #            name = "sysroot_linux_x86_64",
-    #            #sha256 = "d19c4b010a75eb9d599f055c834a993d848880c936d7d91366a7c3765ad028ae",
-    #            urls = ["https://storage.googleapis.com/ml-sysroot-testing/ubuntu18_x86_64_sysroot_gcc9.tar.xz"],
-    #            build_file = Label("//cc_toolchain/config:sysroot_ubuntu18_x86_64_gcc9.BUILD"),
+    #            sha256 = "5f62ca2978b4243cfca5d3798e78f4ced50b07bbc7ed1299ccbb8a715931304c",
+    #            urls = ["https://storage.googleapis.com/ml-sysroot-testing/ubuntu18_x86_64_sysroot.tar.xz"],
+    #            build_file = Label("//cc_toolchain/config:sysroot_ubuntu18_x86_64.BUILD"),
     #            strip_prefix = "ubuntu18_x86_64_sysroot",
     #        )
+
+    # Produce wheels with tag manylinux_2_35_x86_64
+    if "sysroot_linux_x86_64" not in native.existing_rules():
+        http_archive(
+            name = "sysroot_linux_x86_64",
+            #sha256 = "d19c4b010a75eb9d599f055c834a993d848880c936d7d91366a7c3765ad028ae",
+            urls = ["https://storage.googleapis.com/ml-sysroot-testing/ubuntu18_x86_64_sysroot_gcc9.tar.xz"],
+            build_file = Label("//cc_toolchain/config:sysroot_ubuntu18_x86_64_gcc9.BUILD"),
+            strip_prefix = "ubuntu18_x86_64_sysroot",
+        )
 
     if "sysroot_linux_aarch64" not in native.existing_rules():
         http_archive(
