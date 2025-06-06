@@ -112,6 +112,7 @@ cc_toolchain_import(
     additional_libs = [
         "lib64/ld-linux-x86-64.so.2",
         "lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+        "lib/x86_64-linux-gnu/ld-{glibc_version}.so".format(glibc_version = GLIBC_VERSION),
     ],
     shared_library = "usr/lib/x86_64-linux-gnu/libdl.so",
     static_library = "usr/lib/x86_64-linux-gnu/libdl.a",
@@ -122,9 +123,9 @@ cc_toolchain_import(
     name = "math",
     additional_libs = [
         "lib/x86_64-linux-gnu/libm.so.6",
-        "usr/lib/x86_64-linux-gnu/libm-{glibc_version}.a".format(glibc_version = GLIBC_VERSION),
         "lib/x86_64-linux-gnu/libmvec-{glibc_version}.so".format(glibc_version = GLIBC_VERSION),
         "lib/x86_64-linux-gnu/libmvec.so.1",
+        "usr/lib/x86_64-linux-gnu/libm-{glibc_version}.a".format(glibc_version = GLIBC_VERSION),
         "usr/lib/x86_64-linux-gnu/libmvec_nonshared.a",
         "usr/lib/x86_64-linux-gnu/libmvec.so",
         "usr/lib/x86_64-linux-gnu/libmvec.a",
