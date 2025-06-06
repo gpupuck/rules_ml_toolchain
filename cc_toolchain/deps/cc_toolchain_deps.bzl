@@ -30,7 +30,7 @@ def cc_toolchain_deps():
     if "sysroot_linux_x86_64" not in native.existing_rules():
         http_archive(
             name = "sysroot_linux_x86_64",
-            #sha256 = "d19c4b010a75eb9d599f055c834a993d848880c936d7d91366a7c3765ad028ae",
+            sha256 = "5e4aaa4c3fab2b5bba4e591dec66df097cbb0221808a024d27c88990d93d2351",
             urls = ["https://storage.googleapis.com/ml-sysroot-testing/ubuntu18_x86_64_sysroot2.tar.xz"],
             build_file = Label("//cc_toolchain/config:sysroot_ubuntu18_x86_64.BUILD"),
             strip_prefix = "ubuntu18_x86_64_sysroot2",
