@@ -27,7 +27,7 @@ sysroot_package(
     visibility = ["//visibility:public"],
 )
 
-GCC_VERSION = 8
+GCC_VERSION = 9
 GLIBC_VERSION = "2.27"
 
 # Details about C RunTime (CRT) objects:
@@ -57,8 +57,8 @@ cc_toolchain_import(
 cc_toolchain_import(
     name = "includes_c",
     hdrs = glob([
-        "usr/include/c++/{gcc_version}/**".format(gcc_version = GCC_VERSION),
-        "usr/include/x86_64-linux-gnu/c++/{gcc_version}/*/**".format(gcc_version = GCC_VERSION),
+        "usr/include/c++/*/**",
+        "usr/include/x86_64-linux-gnu/c++/*/**",
         "usr/include/c++/{gcc_version}/experimental/**".format(gcc_version = GCC_VERSION),
     ]),
     includes = [
@@ -100,7 +100,7 @@ cc_toolchain_import(
     name = "stdc++",
     additional_libs = [
         "usr/lib/x86_64-linux-gnu/libstdc++.so.6",
-        "usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.25",
+        "usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.28",
     ],
     shared_library = "usr/lib/gcc/x86_64-linux-gnu/{gcc_version}/libstdc++.so".format(gcc_version = GCC_VERSION),
     static_library = "usr/lib/gcc/x86_64-linux-gnu/{gcc_version}/libstdc++.a".format(gcc_version = GCC_VERSION),
