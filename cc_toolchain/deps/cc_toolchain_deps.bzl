@@ -31,7 +31,7 @@ def cc_toolchain_deps():
         http_archive(
             name = "sysroot_linux_x86_64",
             #sha256 = "d19c4b010a75eb9d599f055c834a993d848880c936d7d91366a7c3765ad028ae",
-            urls = ["https://storage.googleapis.com/ml-sysroot-testing/ubuntu18_x86_64_sysroot_gcc9.tar.xz"],
+            urls = ["https://storage.googleapis.com/ml-sysroot-testing/gromacs_ci-ubuntu-18.04-gcc-9.tar.xz"],
             build_file = Label("//cc_toolchain/config:sysroot_ubuntu18_x86_64_gcc9.BUILD"),
             strip_prefix = "ubuntu18_x86_64_sysroot",
         )
