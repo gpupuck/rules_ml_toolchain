@@ -138,9 +138,9 @@ cc_toolchain_import(
         "lib/x86_64-linux-gnu/libpthread.so.0",
         "lib/x86_64-linux-gnu/libpthread-{glibc_version}.so".format(glibc_version = GLIBC_VERSION),
         "usr/lib/x86_64-linux-gnu/libpthread_nonshared.a",
-        "usr/lib/x86_64-linux-gnu/libpthread.so",
         "usr/lib/x86_64-linux-gnu/libpthread.a",
     ],
+    shared_library = "usr/lib/x86_64-linux-gnu/libpthread.so",
     visibility = ["//visibility:public"],
     deps = [
         ":libc",
