@@ -41,9 +41,9 @@ def cc_toolchain_deps():
         http_archive(
             name = "sysroot_linux_x86_64",
             #sha256 = "5e4aaa4c3fab2b5bba4e591dec66df097cbb0221808a024d27c88990d93d2351",
-            urls = ["https://storage.googleapis.com/ml-sysroot-testing/x86_64_ubuntu18_gcc9.3_sysroot.tar.xz"],
-            build_file = Label("//cc_toolchain/config:sysroot_x86_64_ubuntu18_gcc9.3.BUILD"),
-            strip_prefix = "x86_64_ubuntu18_gcc9.3_sysroot",
+            urls = ["https://storage.googleapis.com/ml-sysroot-testing/x86_64_ubuntu18_gcc9.5_sysroot.tar.xz"],
+            build_file = Label("//cc_toolchain/config:sysroot_x86_64_ubuntu18_gcc9.5.BUILD"),
+            strip_prefix = "x86_64_ubuntu18_gcc9.5_sysroot",
         )
 
     if "sysroot_linux_aarch64" not in native.existing_rules():
