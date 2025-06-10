@@ -88,9 +88,9 @@ cc_toolchain_import(
     additional_libs = [
         "usr/lib64/libgcc_s.so.1",
         "usr/lib/gcc/x86_64-linux-gnu/{gcc_version}/libgcc_eh.a".format(gcc_version = GCC_VERSION),
+        "usr/lib/gcc/x86_64-linux-gnu/{gcc_version}/libgcc.a".format(gcc_version = GCC_VERSION),
     ],
     shared_library = "usr/lib64/libgcc_s.so",
-    static_library = "usr/lib/gcc/x86_64-linux-gnu/{gcc_version}/libgcc.a".format(gcc_version = GCC_VERSION),
     visibility = ["//visibility:public"],
 )
 
@@ -99,9 +99,9 @@ cc_toolchain_import(
     additional_libs = [
         "usr/lib64/libstdc++.so.6",
         "usr/lib64/libstdc++.so.6.0.28",
+        "usr/lib64/libstdc++.a",
     ],
     shared_library = "usr/lib64/libstdc++.so".format(gcc_version = GCC_VERSION),
-    static_library = "usr/lib64/libstdc++.a".format(gcc_version = GCC_VERSION),
     visibility = ["//visibility:public"],
 )
 
@@ -111,9 +111,9 @@ cc_toolchain_import(
         "lib64/ld-linux-x86-64.so.2",
         "lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
         "lib/x86_64-linux-gnu/ld-{glibc_version}.so".format(glibc_version = GLIBC_VERSION),
+        "usr/lib/x86_64-linux-gnu/libdl.so",
+        "usr/lib/x86_64-linux-gnu/libdl.a",
     ],
-    shared_library = "usr/lib/x86_64-linux-gnu/libdl.so",
-    static_library = "usr/lib/x86_64-linux-gnu/libdl.a",
     deps = [":libc"],
 )
 
@@ -124,11 +124,11 @@ cc_toolchain_import(
         "lib/x86_64-linux-gnu/libmvec-{glibc_version}.so".format(glibc_version = GLIBC_VERSION),
         "lib/x86_64-linux-gnu/libmvec.so.1",
         "usr/lib/x86_64-linux-gnu/libm-{glibc_version}.a".format(glibc_version = GLIBC_VERSION),
+        "usr/lib/x86_64-linux-gnu/libm.so",
         "usr/lib/x86_64-linux-gnu/libmvec_nonshared.a",
         "usr/lib/x86_64-linux-gnu/libmvec.so",
         "usr/lib/x86_64-linux-gnu/libmvec.a",
     ],
-    shared_library = "usr/lib/x86_64-linux-gnu/libm.so",
     visibility = ["//visibility:public"],
 )
 
@@ -138,9 +138,9 @@ cc_toolchain_import(
         "lib/x86_64-linux-gnu/libpthread.so.0",
         "lib/x86_64-linux-gnu/libpthread-{glibc_version}.so".format(glibc_version = GLIBC_VERSION),
         "usr/lib/x86_64-linux-gnu/libpthread_nonshared.a",
+        "usr/lib/x86_64-linux-gnu/libpthread.so",
+        "usr/lib/x86_64-linux-gnu/libpthread.a",
     ],
-    shared_library = "usr/lib/x86_64-linux-gnu/libpthread.so",
-    static_library = "usr/lib/x86_64-linux-gnu/libpthread.a",
     visibility = ["//visibility:public"],
     deps = [
         ":libc",
@@ -161,12 +161,12 @@ cc_toolchain_import(
 cc_toolchain_import(
     name = "libc",
     additional_libs = [
+        "usr/lib/x86_64-linux-gnu/libc.a",
         "lib/x86_64-linux-gnu/libc.so.6",
         "lib/x86_64-linux-gnu/libc-{glibc_version}.so".format(glibc_version = GLIBC_VERSION),
         "usr/lib/x86_64-linux-gnu/libc_nonshared.a",
     ],
     shared_library = "usr/lib/x86_64-linux-gnu/libc.so",
-    static_library = "usr/lib/x86_64-linux-gnu/libc.a",
     visibility = ["//visibility:public"],
     deps = [
         ":gcc",
