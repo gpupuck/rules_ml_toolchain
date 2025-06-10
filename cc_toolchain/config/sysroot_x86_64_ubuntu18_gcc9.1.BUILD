@@ -27,7 +27,7 @@ sysroot_package(
     visibility = ["//visibility:public"],
 )
 
-GCC_VERSION = "9.2.0"
+GCC_VERSION = "9.1.0"
 GLIBC_VERSION = "2.27"
 
 # Details about C RunTime (CRT) objects:
@@ -98,7 +98,7 @@ cc_toolchain_import(
     name = "stdc++",
     additional_libs = [
         "usr/lib64/libstdc++.so.6",
-        "usr/lib64/libstdc++.so.6.0.27",
+        "usr/lib64/libstdc++.so.6.0.26",
     ],
     shared_library = "usr/lib64/libstdc++.so".format(gcc_version = GCC_VERSION),
     static_library = "usr/lib64/libstdc++.a".format(gcc_version = GCC_VERSION),
