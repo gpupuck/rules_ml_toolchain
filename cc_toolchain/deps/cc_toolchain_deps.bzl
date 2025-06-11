@@ -26,16 +26,6 @@ def cc_toolchain_deps():
             strip_prefix = "ubuntu18_x86_64_sysroot",
         )
 
-    # Produce wheels with tag manylinux_2_31_x86_64
-    #    if "sysroot_linux_x86_64" not in native.existing_rules():
-    #        http_archive(
-    #            name = "sysroot_linux_x86_64",
-    #            #sha256 = "5e4aaa4c3fab2b5bba4e591dec66df097cbb0221808a024d27c88990d93d2351",
-    #            urls = ["INSERT CORRECT URL HERE"],
-    #            build_file = Label("//cc_toolchain/config:sysroot_ubuntu20_x86_64.BUILD"),
-    #            strip_prefix = "ubuntu20_x86_64_sysroot",
-    #        )
-
     if "sysroot_linux_aarch64" not in native.existing_rules():
         http_archive(
             name = "sysroot_linux_aarch64",
