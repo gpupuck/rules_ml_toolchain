@@ -19,7 +19,6 @@ workspace(
 
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
-load("//cc_toolchain/deps:cc_toolchain_deps.bzl", "cc_toolchain_deps")
 
 ### rules_cc
 http_archive(
@@ -163,22 +162,26 @@ load(
 
 cuda_configure(name = "local_config_cuda")
 
+##############################################################
+# NCCL configuration
+load(
+    "@rules_ml_toolchain//third_party/nccl/hermetic:nccl_redist_init_repository.bzl",
+    "nccl_redist_init_repository",
+)
+
+nccl_redist_init_repository()
+
+load(
+    "@rules_ml_toolchain//third_party/nccl/hermetic:nccl_configure.bzl",
+    "nccl_configure",
+)
+
+nccl_configure(name = "local_config_nccl")
+
+##############################################################
+# Hermetic toolchain configuration
+load("//cc_toolchain/deps:cc_toolchain_deps.bzl", "cc_toolchain_deps")
+
 cc_toolchain_deps()
 
 register_toolchains("//cc_toolchain/...")
-
-##############################################################
-# NCCL configuration
-#load(
-#    "@rules_ml_toolchain//nccl/hermetic:nccl_redist_init_repository.bzl",
-#    "nccl_redist_init_repository",
-#)
-
-#nccl_redist_init_repository()
-
-#load(
-#    "@rules_ml_toolchain//nccl/hermetic:nccl_configure.bzl",
-#    "nccl_configure",
-#)
-
-#nccl_configure(name = "local_config_nccl")
