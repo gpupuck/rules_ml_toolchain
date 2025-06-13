@@ -15,6 +15,26 @@
 # Tensor Standard Libraries - common utilities for implementing XLA.
 
 config_setting(
+    name = "linux_aarch64",
+    constraint_values =
+        [
+            "@platforms//cpu:aarch64",
+            "@platforms//os:linux",
+        ],
+    visibility = ["//visibility:public"],
+)
+
+config_setting(
+    name = "linux_armhf",
+    constraint_values =
+        [
+            "@platforms//cpu:armv7e-mf",
+            "@platforms//os:linux",
+        ],
+    visibility = ["//visibility:public"],
+)
+
+config_setting(
     name = "linux_x86_64",
     constraint_values =
         [

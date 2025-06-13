@@ -18,6 +18,14 @@ filegroup(
 )
 
 filegroup(
+    name = "nvdisasm",
+    srcs = [
+        "bin/nvdisasm",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
     name = "nvlink",
     srcs = [
         "bin/nvlink",
