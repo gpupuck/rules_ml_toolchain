@@ -142,6 +142,19 @@ def create_dummy_build_file(repository_ctx, use_comment_symbols = True):
         },
     )
 
+def create_cuda_nvcc_build_file(repository_ctx, use_comment_symbols = True):
+    cuda_version = (get_env_var(repository_ctx, "HERMETIC_CUDA_VERSION") or
+                    get_env_var(repository_ctx, "TF_CUDA_VERSION"))
+    repository_ctx.template(
+        "BUILD",
+        repository_ctx.attr.build_templates[0],
+        {
+            "%{multiline_comment}": "'''" if use_comment_symbols else "",
+            "%{comment}": "#" if use_comment_symbols else "",
+            "%{version_of_cuda}": cuda_version,
+        },
+    )
+
 def _get_build_template(repository_ctx, major_lib_version):
     template = None
     for i in range(0, len(repository_ctx.attr.versions)):
@@ -176,10 +189,18 @@ def create_build_file(
         build_template_content = repository_ctx.read(
             repository_ctx.attr.build_templates[0],
         )
-        if "_version}" not in build_template_content:
-            create_dummy_build_file(repository_ctx, use_comment_symbols = False)
+
+        if repository_ctx.name == "cuda_nvcc":
+            create_cuda_nvcc_build_file(
+                repository_ctx,
+                use_comment_symbols = True if "_version}" in build_template_content else False,
+            )
         else:
-            create_dummy_build_file(repository_ctx)
+            create_dummy_build_file(
+                repository_ctx,
+                use_comment_symbols = True if "_version}" in build_template_content else False,
+            )
+
         return
     build_template = _get_build_template(
         repository_ctx,
