@@ -78,7 +78,7 @@ cuda_nvcc_feature(
     name = "feature",
     enabled = True,
     bin = ":bin/nvcc",
-    version = "%{version_of_cuda}",
+    version = "12.6.3",
     visibility = ["@rules_ml_toolchain//cc_toolchain:__pkg__"],
 )
 
