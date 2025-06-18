@@ -107,6 +107,8 @@ cc_toolchain_import(
     visibility = ["//visibility:public"],
 )
 
+# Inclusion of libstdc++fs is required because the sysroot utilizes GCC version 8.4.
+# This requirement is obsolete for GCC versions 9 and above.
 cc_toolchain_import(
     name = "stdc++fs",
     static_library = "usr/lib/gcc/x86_64-linux-gnu/{gcc_version}/libstdc++fs.a".format(gcc_version = GCC_VERSION),
