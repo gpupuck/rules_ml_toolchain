@@ -108,6 +108,12 @@ cc_toolchain_import(
 )
 
 cc_toolchain_import(
+    name = "stdc++fs",
+    static_library = "usr/lib/gcc/x86_64-linux-gnu/{gcc_version}/libstdc++fs.a".format(gcc_version = GCC_VERSION),
+    visibility = ["//visibility:public"],
+)
+
+cc_toolchain_import(
     name = "dynamic_linker",
     additional_libs = [
         "lib64/ld-linux-x86-64.so.2",
@@ -174,6 +180,7 @@ cc_toolchain_import(
         ":gcc",
         ":math",
         ":stdc++",
+        ":stdc++fs",
         ":rt",
     ],
 )
