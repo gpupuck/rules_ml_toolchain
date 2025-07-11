@@ -15,6 +15,7 @@
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 load("llvm_http_archive.bzl", "llvm_http_archive")
+load("llvm_empty.bzl", "llvm_empty")
 
 def cc_toolchain_deps():
     if "sysroot_linux_x86_64" not in native.existing_rules():
@@ -41,6 +42,15 @@ def cc_toolchain_deps():
             name = "sysroot_macos_aarch64",
             build_file = "//cc_toolchain/config:sysroot_macos_aarch64.BUILD",
             path = "cc_toolchain/sysroots/macos_arm64/MacOSX.sdk",
+        )
+
+    if "llvm_empty" not in native.existing_rules():
+        llvm_http_archive(
+            name = "llvm_empty",
+            url = "https://storage.googleapis.com/ml-sysroot-testing/LLVM-empty.tar.xz",
+            sha256 = "980ad496868edca70718582ff8eb65e77434bb5342ab607eb1d1b6ff02ca2664",
+            build_file = Label("//cc_toolchain/config:llvm_empty.BUILD"),
+            strip_prefix = "LLVM-empty",
         )
 
     if "llvm_linux_x86_64" not in native.existing_rules():

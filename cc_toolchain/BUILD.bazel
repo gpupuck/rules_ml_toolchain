@@ -18,6 +18,16 @@ load("@rules_cc//cc:defs.bzl", "cc_toolchain")
 load("//third_party/rules_cc_toolchain:toolchain_config.bzl", "cc_toolchain_config")
 load("//third_party/rules_cc_toolchain/features:cc_toolchain_import.bzl", "cc_toolchain_import")
 
+alias(
+    name = "llvm",
+    actual = select({
+        "@bazel_tools//src/conditions:linux_x86_64": "@llvm_linux_x86_64",
+        "@bazel_tools//src/conditions:darwin_x86_64": "@llvm_macos_aarch64",
+        "//conditions:default": "@llvm_empty",
+    }),
+    visibility = ["//visibility:public"],
+)
+
 #=====================================================================
 # Tools: Linux x86_64, Sysroot: Linux x86_64
 #=====================================================================

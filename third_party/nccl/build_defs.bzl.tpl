@@ -230,11 +230,11 @@ _merge_archive = rule(
         ),
         "ar": attr.label(
             allow_single_file = True,
-            default = "@llvm_linux_x86_64//:bin/llvm-ar",
+            default = "@llvm//:bin/llvm-ar",
         ),
         "distro_libs":  attr.label(
             allow_single_file = True,
-            default = "@llvm_linux_x86_64//:distro_libs",
+            default = "@llvm//:distro_libs",
         ),
     },
     outputs = {"out": "lib%{name}.a"},

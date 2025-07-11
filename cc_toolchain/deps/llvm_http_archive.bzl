@@ -61,19 +61,19 @@ def extract_llvm_version(text):
 
     start_index = text.find(start_marker)
     if start_index == -1:
-        return None # "llvm" not found
+        return "" # "llvm" not found
 
     version_start = start_index + len(start_marker)
 
     end_index = text.find(end_marker, version_start)
     if end_index == -1:
-        return None # "_" not found after "llvm"
+        return "" # "_" not found after "llvm"
 
     version_str = text[version_start:end_index]
 
     return version_str
 
-def create_version_file(repository_ctx, major_version):
+def _create_version_file(repository_ctx, major_version):
     repository_ctx.file(
         "version.bzl",
         "VERSION = \"{}\"".format(major_version),
@@ -188,12 +188,12 @@ def _llvm_http_archive_impl(ctx):
 
     patch(ctx, auth = auth)
 
-    llvm_version = None
+    llvm_version = ""
     if ctx.attr.build_file:
         llvm_version = extract_llvm_version(str(ctx.attr.build_file))
 
-    if llvm_version:
-        create_version_file(ctx, llvm_version)
+    print("_llvm_http_archive_impl: llvm_version = ", llvm_version)
+    _create_version_file(ctx, llvm_version)
 
     return _update_sha256_attr(ctx, _http_archive_attrs, download_info)
 

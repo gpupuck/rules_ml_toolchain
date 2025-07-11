@@ -51,7 +51,7 @@ load("@cuda_nvdisasm//:version.bzl", _nvdisasm_version = "VERSION")
 load("@cuda_nvjitlink//:version.bzl", _nvjitlink_version = "VERSION")
 load("@cuda_nvml//:version.bzl", _nvml_version = "VERSION")
 load("@cuda_nvtx//:version.bzl", _nvtx_version = "VERSION")
-load("@llvm_linux_x86_64//:version.bzl", _llvm_hermetic_version = "VERSION")
+load("@llvm//:version.bzl", _llvm_hermetic_version = "VERSION")
 load(
     "//third_party/gpus:compiler_common_tools.bzl",
     "get_cxx_inc_directories",
