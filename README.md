@@ -14,13 +14,53 @@ Cross-Platform builds benefits:
 * Single Source of Truth: Develop and maintain a single codebase that can be built for various target platforms (e.g., Linux, macOS).
 * Efficiency: Streamlines the build and release process for multiple platforms.
 
-# C++ toolchains 
+# C++ toolchains
+
+## How to configure ML toolchain in your project (Bazel 6.5)
+
+Add this code before CUDA initialization in WORKSPACE file
+
+```
+http_archive(
+    name = "rules_ml_toolchain",
+    sha256 = "<enter valid hash code>",
+    strip_prefix = "rules_ml_toolchain-main",
+    urls = [
+        "https://github.com/google-ml-infra/rules_ml_toolchain/archive/main.tar.gz",
+    ],
+)
+
+load(
+    "@rules_ml_toolchain//cc_toolchain/deps:cc_toolchain_deps.bzl",
+    "cc_toolchain_deps",
+)
+
+cc_toolchain_deps()
+
+# How to understand toolchain name:
+#   First letter is OS. Examples: l - linux, m - macOS.
+#   Next letters mark architecture. Examples: x64 - x86_64, a64 - aarch64.
+# First part of name means executor platform, the second means target platform.
+# Examples: 
+#   lx64_lx64 - Linux x86_64 execution platform, Linux x86_64 target platform (for hermetic build).
+#   lx64_ma64 - Linux x86_64 execution platform, macOS aarch64 target platform (for cross platform build).
+
+# Leave only needed toolchains.
+register_toolchains("@rules_ml_toolchain//cc_toolchain:lx64_lx64")
+register_toolchains("@rules_ml_toolchain//cc_toolchain:lx64_lx64_cuda")
+register_toolchains("@rules_ml_toolchain//cc_toolchain:lx64_la64")
+register_toolchains("@rules_ml_toolchain//cc_toolchain:lx64_ma64")
+register_toolchains("@rules_ml_toolchain//cc_toolchain:ma64_ma64")
+
+```
+
+## How to build
 ### CPU Hermetic builds
 Project supports CPU hermetic builds on:
 * Linux x86_64
 * macOS aarch64
 
-You could run hermetic build tests with help of command
+The command allows you to run hermetic build tests:
 
 `bazel test //cc_toolchain/tests/cpu:all`
 
