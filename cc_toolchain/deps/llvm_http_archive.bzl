@@ -1,4 +1,4 @@
-# Copyright 2016 The Bazel Authors. All rights reserved.
+# Copyright 2025 The Bazel Authors. All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -36,7 +36,6 @@ load(
     "read_user_netrc",
     "update_attrs",
     "use_netrc",
-    "workspace_and_buildfile",
 )
 
 _URL_DOC = """A URL to a file that will be made available to Bazel.
@@ -54,6 +53,21 @@ Authentication is not supported.
 
 URLs are tried in order until one succeeds, so you should list local mirrors first.
 If all downloads fail, the rule will fail."""
+
+def buildfile(ctx):
+    """Utility function for writing a BUILD file.
+
+    This rule is intended to be used in the implementation function of a
+    repository rule.
+    It assumes the parameters `name` and `build_file` to
+    be present in `ctx.attr`.
+
+    Args:
+      ctx: The repository context of the repository rule calling this utility
+        function.
+    """
+
+    ctx.file("BUILD.bazel", ctx.read(ctx.attr.build_file))
 
 def extract_llvm_version(text):
     start_marker = "llvm"
@@ -83,14 +97,12 @@ def _get_all_urls(ctx):
     """Returns all urls provided via the url or urls attributes.
 
     Also checks that at least one url is provided."""
-    if not ctx.attr.url and not ctx.attr.urls:
-        fail("At least one of url and urls must be provided")
+    if not ctx.attr.urls:
+        fail("At least one of url must be provided")
 
     all_urls = []
     if ctx.attr.urls:
         all_urls = ctx.attr.urls
-    if ctx.attr.url:
-        all_urls = [ctx.attr.url] + all_urls
 
     return all_urls
 
@@ -165,9 +177,6 @@ def _update_sha256_attr(ctx, attrs, download_info):
 
 def _llvm_http_archive_impl(ctx):
     """Implementation of the llvm_http_archive rule."""
-    if ctx.attr.build_file and ctx.attr.build_file_content:
-        fail("Only one of build_file and build_file_content can be provided.")
-    print("_llvm_http_archive_impl: build_file = ", str(ctx.attr.build_file))
 
     all_urls = _get_all_urls(ctx)
     auth = _get_auth(ctx, all_urls)
@@ -182,15 +191,13 @@ def _llvm_http_archive_impl(ctx):
         auth = auth,
         integrity = ctx.attr.integrity,
     )
-    workspace_and_buildfile(ctx)
+    buildfile(ctx)
 
     _download_remote_files(ctx)
 
     patch(ctx, auth = auth)
 
-    llvm_version = None
-    if ctx.attr.build_file:
-        llvm_version = extract_llvm_version(str(ctx.attr.build_file))
+    llvm_version = extract_llvm_version(str(ctx.attr.build_file))
 
     if llvm_version:
         create_version_file(ctx, llvm_version)
@@ -198,7 +205,6 @@ def _llvm_http_archive_impl(ctx):
     return _update_sha256_attr(ctx, _http_archive_attrs, download_info)
 
 _http_archive_attrs = {
-    "url": attr.string(doc = _URL_DOC),
     "urls": attr.string_list(doc = _URLS_DOC),
     "sha256": attr.string(
         doc = """The expected SHA-256 of the file downloaded.
@@ -331,32 +337,13 @@ following: `"zip"`, `"war"`, `"aar"`, `"tar"`, `"tar.gz"`, `"tgz"`,
     ),
     "build_file": attr.label(
         allow_single_file = True,
+        mandatory = True,
         doc =
             "The file to use as the BUILD file for this repository." +
             "This attribute is an absolute label (use '@//' for the main " +
             "repo). The file does not need to be named BUILD, but can " +
             "be (something like BUILD.new-repo-name may work well for " +
-            "distinguishing it from the repository's actual BUILD files. " +
-            "Either build_file or build_file_content can be specified, but " +
-            "not both.",
-    ),
-    "build_file_content": attr.string(
-        doc =
-            "The content for the BUILD file for this repository. " +
-            "Either build_file or build_file_content can be specified, but " +
-            "not both.",
-    ),
-    "workspace_file": attr.label(
-        doc =
-            "The file to use as the `WORKSPACE` file for this repository. " +
-            "Either `workspace_file` or `workspace_file_content` can be " +
-            "specified, or neither, but not both.",
-    ),
-    "workspace_file_content": attr.string(
-        doc =
-            "The content for the WORKSPACE file for this repository. " +
-            "Either `workspace_file` or `workspace_file_content` can be " +
-            "specified, or neither, but not both.",
+            "distinguishing it from the repository's actual BUILD files. "
     ),
 }
 
@@ -403,7 +390,7 @@ Examples:
 
   http_archive(
       name = "my_ssl",
-      url = "http://example.com/openssl.zip",
+      urls = ["http://example.com/openssl.zip"],
       sha256 = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       build_file = "@//:openssl.BUILD",
   )

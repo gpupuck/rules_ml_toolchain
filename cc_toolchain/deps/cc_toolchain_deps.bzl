@@ -46,7 +46,7 @@ def cc_toolchain_deps():
     if "llvm_linux_x86_64" not in native.existing_rules():
         llvm_http_archive(
             name = "llvm_linux_x86_64",
-            url = "https://github.com/llvm/llvm-project/releases/download/llvmorg-18.1.8/clang+llvm-18.1.8-x86_64-linux-gnu-ubuntu-18.04.tar.xz",
+            urls = ["https://github.com/llvm/llvm-project/releases/download/llvmorg-18.1.8/clang+llvm-18.1.8-x86_64-linux-gnu-ubuntu-18.04.tar.xz"],
             sha256 = "54ec30358afcc9fb8aa74307db3046f5187f9fb89fb37064cdde906e062ebf36",
             build_file = Label("//cc_toolchain/config:llvm18_linux_x86_64.BUILD"),
             strip_prefix = "clang+llvm-18.1.8-x86_64-linux-gnu-ubuntu-18.04",
@@ -64,7 +64,7 @@ def cc_toolchain_deps():
     #if "llvm_linux_x86_64" not in native.existing_rules():
     #    llvm_http_archive(
     #        name = "llvm_linux_x86_64",
-    #        url = "https://github.com/llvm/llvm-project/releases/download/llvmorg-19.1.7/LLVM-19.1.7-Linux-X64.tar.xz",
+    #        urls = ["https://github.com/llvm/llvm-project/releases/download/llvmorg-19.1.7/LLVM-19.1.7-Linux-X64.tar.xz"],
     #        sha256 = "4a5ec53951a584ed36f80240f6fbf8fdd46b4cf6c7ee87cc2d5018dc37caf679",
     #        build_file = Label("//cc_toolchain/config:llvm19_linux_x86_64.BUILD"),
     #        strip_prefix = "LLVM-19.1.7-Linux-X64",
@@ -73,7 +73,7 @@ def cc_toolchain_deps():
     if "llvm_macos_aarch64" not in native.existing_rules():
         llvm_http_archive(
             name = "llvm_macos_aarch64",
-            url = "https://github.com/yuriit-google/sysroots/raw/ba192c408e0f82c6c9a5b92712038edaa64326d6/archives/ubuntu18_aarch64-sysroot.tar.xz",
+            urls = ["https://github.com/yuriit-google/sysroots/raw/ba192c408e0f82c6c9a5b92712038edaa64326d6/archives/ubuntu18_aarch64-sysroot.tar.xz"],
             sha256 = "4573b7f25f46d2a9c8882993f091c52f416c83271db6f5b213c93f0bd0346a10",
             build_file = Label("//cc_toolchain/config:llvm_macos_aarch64.BUILD"),
             strip_prefix = "clang+llvm-18.1.8-arm64-apple-macos11",
