@@ -3,22 +3,22 @@
 > [!WARNING]
 > This project is under active development and is not yet ready for production use.
 
-This project provides Bazel rules to achieve hermetic and cross-platform builds.
+This project provides Bazel rules for ML project to achieve hermetic and cross-platform builds.
 
-Hermetic builds benefits:
+C++ and CUDA hermetic builds benefits:
 * Reproducibility: Every build produces identical results regardless of the developer's machine environment.
 * Consistency: Eliminates "works on my machine" issues, ensuring builds are consistent across different development environments.
 * Isolation: Builds are isolated from the host system, minimizing unexpected dependencies and side effects.
 
-Cross-Platform builds benefits:
+C++ cross-platform builds benefits:
 * Single Source of Truth: Develop and maintain a single codebase that can be built for various target platforms (e.g., Linux, macOS).
 * Efficiency: Streamlines the build and release process for multiple platforms.
 
-# C++ toolchains
+# Configure C++ toolchains
 
-### How to configure ML toolchain in your project
+### How to configure toolchains for ML project
 
-Add this code before CUDA initialization in WORKSPACE file
+Add below code before CUDA initialization in WORKSPACE file
 
 ```
 http_archive(
@@ -42,12 +42,15 @@ register_toolchains("@rules_ml_toolchain//cc_toolchain:lx64_lx64_cuda")
 
 ```
 
-Make sure that builds for Linux x86_64 run without `--noincompatible_enable_cc_toolchain_resolution` flag 
-and without some environment variables like `CLANG_COMPILER_PATH`, `BAZEL_COMPILER`, `CC`, `CXX`, etc.
-After all modifications builds for Linux x86_64 and CUDA should be run hermetically without any additional changes.
+It must be ensured that builds for Linux x86_64 are run without the `--noincompatible_enable_cc_toolchain_resolution` 
+flag. Furthermore, reliance on environment variables like `CLANG_COMPILER_PATH`, `BAZEL_COMPILER`, `CC`, or `CXX` 
+must be avoided.
 
-### How to run tests
-#### CPU Hermetic builds
+For diagnosing the utility set being used during build or test execution, the `--subcommands` flag should be appended 
+to the Bazel command. This will facilitate checking that the compiler or linker are not being used from your machine.
+
+### How to run this project tests
+#### CPU Hermetic tests
 Project supports CPU hermetic builds on:
 * Linux x86_64
 * macOS aarch64
@@ -59,13 +62,10 @@ The command allows you to run hermetic build tests:
 If project doesn't support cross-platform builds for specified platform,
 it will use host utilities and host sysroot for running such build.
 
-#### GPU Hermetic builds 
-Requires machine with NVIDIA GPU
+#### GPU Hermetic test 
+Project supports GPU hermetic builds on Linux x86_64 and requires machine with NVIDIA GPU
 
-Project supports GPU hermetic builds on:
-* Linux x86_64
-
-You could run hermetic build and test with help of command:
+You could run hermetic tests with help of command:
 ###### Build by Clang
 `bazel test //cc_toolchain/tests/gpu:all --config=build_cuda_with_clang --config=cuda --config=cuda_libraries_from_stubs`
 
