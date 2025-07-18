@@ -1,9 +1,9 @@
 # Hermetic Toolchains for ML
 
-This project provides Bazel rules to achieve hermetic and cross-platform builds.
-
 > [!WARNING]
 > This project is under active development and is not yet ready for production use.
+
+This project provides Bazel rules to achieve hermetic and cross-platform builds.
 
 Hermetic builds benefits:
 * Reproducibility: Every build produces identical results regardless of the developer's machine environment.
@@ -16,17 +16,17 @@ Cross-Platform builds benefits:
 
 # C++ toolchains
 
-## How to configure ML toolchain in your project (Bazel 6.5)
+### How to configure ML toolchain in your project
 
 Add this code before CUDA initialization in WORKSPACE file
 
 ```
 http_archive(
     name = "rules_ml_toolchain",
-    sha256 = "<enter valid hash code>",
-    strip_prefix = "rules_ml_toolchain-main",
+    sha256 = "562e0517f4e833afe0de7bb8da49f9adafcbca30a8259f118a65b4adf533b51f",
+    strip_prefix = "rules_ml_toolchain-4995c0be587c6e173fe8cf8dc614f92011f7913d",
     urls = [
-        "https://github.com/google-ml-infra/rules_ml_toolchain/archive/main.tar.gz",
+        "https://github.com/google-ml-infra/rules_ml_toolchain/archive/4995c0be587c6e173fe8cf8dc614f92011f7913d.zip",
     ],
 )
 
@@ -37,25 +37,17 @@ load(
 
 cc_toolchain_deps()
 
-# How to understand toolchain name:
-#   First letter is OS. Examples: l - linux, m - macOS.
-#   Next letters mark architecture. Examples: x64 - x86_64, a64 - aarch64.
-# First part of name means executor platform, the second means target platform.
-# Examples: 
-#   lx64_lx64 - Linux x86_64 execution platform, Linux x86_64 target platform (for hermetic build).
-#   lx64_ma64 - Linux x86_64 execution platform, macOS aarch64 target platform (for cross platform build).
-
-# Leave only needed toolchains.
 register_toolchains("@rules_ml_toolchain//cc_toolchain:lx64_lx64")
 register_toolchains("@rules_ml_toolchain//cc_toolchain:lx64_lx64_cuda")
-register_toolchains("@rules_ml_toolchain//cc_toolchain:lx64_la64")
-register_toolchains("@rules_ml_toolchain//cc_toolchain:lx64_ma64")
-register_toolchains("@rules_ml_toolchain//cc_toolchain:ma64_ma64")
 
 ```
 
-## How to build
-### CPU Hermetic builds
+Make sure that builds for Linux x86_64 run without `--noincompatible_enable_cc_toolchain_resolution` flag 
+and without some environment variables like `CLANG_COMPILER_PATH`, `BAZEL_COMPILER`, `CC`, `CXX`, etc.
+After all modifications builds for Linux x86_64 and CUDA should be run hermetically without any additional changes.
+
+### How to run tests
+#### CPU Hermetic builds
 Project supports CPU hermetic builds on:
 * Linux x86_64
 * macOS aarch64
@@ -67,20 +59,20 @@ The command allows you to run hermetic build tests:
 If project doesn't support cross-platform builds for specified platform,
 it will use host utilities and host sysroot for running such build.
 
-### GPU Hermetic builds 
-Requires machine with GPU
+#### GPU Hermetic builds 
+Requires machine with NVIDIA GPU
 
 Project supports GPU hermetic builds on:
 * Linux x86_64
 
 You could run hermetic build and test with help of command:
-##### Build by Clang
+###### Build by Clang
 `bazel test //cc_toolchain/tests/gpu:all --config=build_cuda_with_clang --config=cuda --config=cuda_libraries_from_stubs`
 
-##### Build by NVCC
+###### Build by NVCC
 `bazel test //cc_toolchain/tests/gpu:all --config=build_cuda_with_nvcc --config=cuda --config=cuda_libraries_from_stubs`
 
-### Non-hermetic builds
+#### Non-hermetic builds
 When executor and a target are the same, you still can run non-hermetic build. Command should look like:
 
 `bazel build //cc_toolchain/tests/cpu:all --//cc_toolchain/config:enable_hermetic_cc=False`
