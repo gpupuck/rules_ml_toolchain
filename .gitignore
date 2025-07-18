@@ -1,5 +1,6 @@
 bazel-*
 compare/
+.bazelrc.user
 .ijwb/
 .clwb/
 .idea/

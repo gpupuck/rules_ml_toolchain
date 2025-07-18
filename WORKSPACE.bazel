@@ -19,6 +19,7 @@ workspace(
 
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+load("//cc_toolchain/deps:register_cc_toolchains.bzl", "register_cc_toolchains")
 
 ### rules_cc
 http_archive(
@@ -130,10 +131,11 @@ http_archive(
 
 ##############################################################
 # Hermetic toolchain configuration
-load("//cc_toolchain/deps:cc_toolchain_deps.bzl", "cc_toolchain_deps")
-cc_toolchain_deps()
 
-register_toolchains("//cc_toolchain/...")
+register_cc_toolchains(toolchain_list = [
+    "@rules_ml_toolchain//cc_toolchain:lx64_lx64",
+    "@rules_ml_toolchain//cc_toolchain:lx64_lx64_cuda",
+])
 
 ##############################################################
 # CUDA
@@ -208,6 +210,3 @@ load(
 nvshmem_redist_init_repository(
     nvshmem_redistributions = NVSHMEM_REDISTRIBUTIONS,
 )
-
-
-
