@@ -23,14 +23,14 @@ load("//third_party/rules_cc_toolchain/features:cc_toolchain_import.bzl", "cc_to
 #=====================================================================
 
 alias(
-    name = "startup_libs_lx64",
+    name = "startup_libs_linux_x86_64",
     actual = "@sysroot_linux_x86_64//:startup_libs",
     visibility = ["//visibility:public"],
 )
 
 # buildifier: leave-alone
 cc_toolchain_import(
-    name = "imports_lx64_lx64",
+    name = "imports_linux_x86_64_linux_x86_64",
     deps = [
         "@sysroot_linux_x86_64//:includes_c",
         "@llvm_linux_x86_64//:includes",
@@ -44,20 +44,20 @@ cc_toolchain_import(
 
 # buildifier: leave-alone
 filegroup(
-    name = "all_lx64_lx64",
+    name = "all_linux_x86_64_linux_x86_64",
     srcs = [
-        ":imports_lx64_lx64",
+        ":imports_linux_x86_64_linux_x86_64",
         "//cc_toolchain/wrappers:all",
-        "//cc_toolchain/features:startup_libs_lx64",
+        "//cc_toolchain/features:startup_libs_linux_x86_64",
         "@llvm_linux_x86_64//:all",
     ],
 )
 
 # buildifier: leave-alone
 filegroup(
-    name = "compiler_lx64_lx64",
+    name = "compiler_linux_x86_64_linux_x86_64",
     srcs = [
-        ":imports_lx64_lx64",
+        ":imports_linux_x86_64_linux_x86_64",
         "//cc_toolchain/wrappers:all",
         "@llvm_linux_x86_64//:clang",
         "@llvm_linux_x86_64//:clang++",
@@ -67,9 +67,9 @@ filegroup(
 
 # buildifier: leave-alone
 filegroup(
-    name = "linker_lx64_lx64",
+    name = "linker_linux_x86_64_linux_x86_64",
     srcs = [
-        ":compiler_lx64_lx64",
+        ":compiler_linux_x86_64_linux_x86_64",
         "//cc_toolchain/wrappers:all",
         "@llvm_linux_x86_64//:ld",
         "@sysroot_linux_x86_64//:startup_libs",
@@ -79,7 +79,7 @@ filegroup(
 
 # buildifier: leave-alone
 filegroup(
-    name = "ar_lx64_lx64",
+    name = "ar_linux_x86_64_linux_x86_64",
     srcs = [
         "//cc_toolchain/wrappers:all",
         "@llvm_linux_x86_64//:ar",
@@ -88,28 +88,28 @@ filegroup(
 )
 
 cc_toolchain(
-    name = "toolchain_lx64_lx64",
-    all_files = ":all_lx64_lx64",
-    ar_files = ":ar_lx64_lx64",
-    compiler_files = ":compiler_lx64_lx64",
-    dwp_files = ":all_lx64_lx64",
-    linker_files = ":linker_lx64_lx64",
+    name = "toolchain_linux_x86_64_linux_x86_64",
+    all_files = ":all_linux_x86_64_linux_x86_64",
+    ar_files = ":ar_linux_x86_64_linux_x86_64",
+    compiler_files = ":compiler_linux_x86_64_linux_x86_64",
+    dwp_files = ":all_linux_x86_64_linux_x86_64",
+    linker_files = ":linker_linux_x86_64_linux_x86_64",
     objcopy_files = ":empty",
     strip_files = ":empty",
     supports_param_files = 1,
-    toolchain_config = ":toolchain_config_lx64_lx64",
-    toolchain_identifier = "toolchain_lx64_lx64_id",
+    toolchain_config = ":toolchain_config_linux_x86_64_linux_x86_64",
+    toolchain_identifier = "toolchain_linux_x86_64_linux_x86_64_id",
 )
 
 cc_toolchain_config(
-    name = "toolchain_config_lx64_lx64",
+    name = "toolchain_config_linux_x86_64_linux_x86_64",
     archiver = "@llvm_linux_x86_64//:ar",
     c_compiler = "@llvm_linux_x86_64//:clang",
     cc_compiler = "@llvm_linux_x86_64//:clang++",
     compiler_features = [
         # Hermetic libraries feature required before import.
         "//third_party/rules_cc_toolchain/features:hermetic_libraries",
-        "//cc_toolchain/features:toolchain_import_lx64_lx64",
+        "//cc_toolchain/features:toolchain_import_linux_x86_64_linux_x86_64",
 
         # Toolchain configuration
         "//third_party/rules_cc_toolchain/features:warnings",
@@ -117,8 +117,8 @@ cc_toolchain_config(
         "//third_party/rules_cc_toolchain/features:reproducible",
         "//third_party/rules_cc_toolchain/features:language",
         "//third_party/rules_cc_toolchain/features:use_lld",
-        "//cc_toolchain/features:sysroot_lx64",
-        "//cc_toolchain/features:startup_libs_lx64",
+        "//cc_toolchain/features:sysroot_linux_x86_64",
+        "//cc_toolchain/features:startup_libs_linux_x86_64",
         "//third_party/rules_cc_toolchain/features:coverage",
 
         # PIC / PIE flags
@@ -151,7 +151,7 @@ cc_toolchain_config(
 )
 
 toolchain(
-    name = "lx64_lx64",
+    name = "linux_x86_64_linux_x86_64",
     exec_compatible_with = [
         "@platforms//cpu:x86_64",
         "@platforms//os:linux",
@@ -164,7 +164,7 @@ toolchain(
         "@local_config_cuda//:is_cuda_disabled",
         "//cc_toolchain/config:is_hermetic_cc_enabled",
     ],
-    toolchain = ":toolchain_lx64_lx64",
+    toolchain = ":toolchain_linux_x86_64_linux_x86_64",
     toolchain_type = "@bazel_tools//tools/cpp:toolchain_type",
 )
 
@@ -206,7 +206,7 @@ CUDA_TOOLS = if_cuda_hermetic_clang(
 
 # buildifier: leave-alone
 cc_toolchain_import(
-    name = "imports_lx64_lx64_cuda",
+    name = "imports_linux_x86_64_linux_x86_64_cuda",
     deps = [
         "@rules_ml_toolchain//cc_toolchain/cuda/clang:inject_cuda_runtime_wrapper",
         "@sysroot_linux_x86_64//:includes_c",
@@ -221,23 +221,23 @@ cc_toolchain_import(
 
 # buildifier: leave-alone
 filegroup(
-    name = "all_lx64_lx64_cuda",
+    name = "all_linux_x86_64_linux_x86_64_cuda",
     srcs = [
         ":cuda_nvcc_files",
-        ":imports_lx64_lx64_cuda",
+        ":imports_linux_x86_64_linux_x86_64_cuda",
         "//cc_toolchain/wrappers:all",
         "//cc_toolchain/cuda/wrappers:all",
-        "//cc_toolchain/features:startup_libs_lx64",
+        "//cc_toolchain/features:startup_libs_linux_x86_64",
         "@llvm_linux_x86_64//:all",
     ],
 )
 
 # buildifier: leave-alone
 filegroup(
-    name = "compiler_lx64_lx64_cuda",
+    name = "compiler_linux_x86_64_linux_x86_64_cuda",
     srcs = [
         ":cuda_nvcc_files",
-        ":imports_lx64_lx64_cuda",
+        ":imports_linux_x86_64_linux_x86_64_cuda",
         "//cc_toolchain/wrappers:all",
         "//cc_toolchain/cuda/wrappers:all",
         "@llvm_linux_x86_64//:clang",
@@ -248,9 +248,9 @@ filegroup(
 
 # buildifier: leave-alone
 filegroup(
-    name = "linker_lx64_lx64_cuda",
+    name = "linker_linux_x86_64_linux_x86_64_cuda",
     srcs = [
-        ":compiler_lx64_lx64_cuda",
+        ":compiler_linux_x86_64_linux_x86_64_cuda",
         ":cuda_nvcc_files",
         "//cc_toolchain/wrappers:all",
         "@llvm_linux_x86_64//:ld",
@@ -261,7 +261,7 @@ filegroup(
 
 # buildifier: leave-alone
 filegroup(
-    name = "ar_lx64_lx64_cuda",
+    name = "ar_linux_x86_64_linux_x86_64_cuda",
     srcs = [
         ":cuda_nvcc_files",
         "//cc_toolchain/wrappers:all",
@@ -271,27 +271,27 @@ filegroup(
 )
 
 cc_toolchain(
-    name = "toolchain_lx64_lx64_cuda",
-    all_files = ":all_lx64_lx64_cuda",
-    ar_files = ":ar_lx64_lx64_cuda",
-    compiler_files = ":compiler_lx64_lx64_cuda",
-    dwp_files = ":all_lx64_lx64_cuda",
-    linker_files = ":linker_lx64_lx64_cuda",
+    name = "toolchain_linux_x86_64_linux_x86_64_cuda",
+    all_files = ":all_linux_x86_64_linux_x86_64_cuda",
+    ar_files = ":ar_linux_x86_64_linux_x86_64_cuda",
+    compiler_files = ":compiler_linux_x86_64_linux_x86_64_cuda",
+    dwp_files = ":all_linux_x86_64_linux_x86_64_cuda",
+    linker_files = ":linker_linux_x86_64_linux_x86_64_cuda",
     objcopy_files = ":empty",
     strip_files = ":empty",
     supports_param_files = 1,
-    toolchain_config = ":toolchain_config_lx64_lx64_cuda",
-    toolchain_identifier = "toolchain_lx64_lx64_cuda_id",
+    toolchain_config = ":toolchain_config_linux_x86_64_linux_x86_64_cuda",
+    toolchain_identifier = "toolchain_linux_x86_64_linux_x86_64_cuda_id",
 )
 
 cc_toolchain_config(
-    name = "toolchain_config_lx64_lx64_cuda",
+    name = "toolchain_config_linux_x86_64_linux_x86_64_cuda",
     archiver = "@llvm_linux_x86_64//:ar",
     c_compiler = "@llvm_linux_x86_64//:clang",
     cc_compiler = "@llvm_linux_x86_64//:clang++",
     compiler_features = [
         # Cuda features
-        "//cc_toolchain/cuda/features:toolchain_import_lx64_lx64",
+        "//cc_toolchain/cuda/features:toolchain_import_linux_x86_64_linux_x86_64",
         "@cuda_nvcc//:feature",
         "//cc_toolchain/cuda/features:hermetic",
 
@@ -303,8 +303,8 @@ cc_toolchain_config(
         "//third_party/rules_cc_toolchain/features:errors",
         "//third_party/rules_cc_toolchain/features:reproducible",
         "//third_party/rules_cc_toolchain/features:use_lld",
-        "//cc_toolchain/features:sysroot_lx64",
-        "//cc_toolchain/features:startup_libs_lx64",
+        "//cc_toolchain/features:sysroot_linux_x86_64",
+        "//cc_toolchain/features:startup_libs_linux_x86_64",
         "//third_party/rules_cc_toolchain/features:coverage",
 
         # PIC / PIE flags
@@ -338,7 +338,7 @@ cc_toolchain_config(
 )
 
 toolchain(
-    name = "lx64_lx64_cuda",
+    name = "linux_x86_64_linux_x86_64_cuda",
     exec_compatible_with = [
         "@platforms//cpu:x86_64",
         "@platforms//os:linux",
@@ -352,7 +352,7 @@ toolchain(
         "@local_config_cuda//:is_cuda_enabled",
         "//cc_toolchain/config:is_hermetic_cc_enabled",
     ],
-    toolchain = ":toolchain_lx64_lx64_cuda",
+    toolchain = ":toolchain_linux_x86_64_linux_x86_64_cuda",
     toolchain_type = "@bazel_tools//tools/cpp:toolchain_type",
 )
 
@@ -361,14 +361,14 @@ toolchain(
 ######################################################################
 
 alias(
-    name = "startup_libs_la64",
+    name = "startup_libs_linux_aarch64",
     actual = "@sysroot_linux_aarch64//:startup_libs",
     visibility = ["//visibility:public"],
 )
 
 # buildifier: leave-alone
 cc_toolchain_import(
-    name = "imports_lx64_la64",
+    name = "imports_linux_x86_64_linux_aarch64",
     deps = [
         "@sysroot_linux_aarch64//:includes_c",
         "@llvm_linux_x86_64//:includes",
@@ -381,20 +381,20 @@ cc_toolchain_import(
 
 # buildifier: leave-alone
 filegroup(
-    name = "all_lx64_la64",
+    name = "all_linux_x86_64_linux_aarch64",
     srcs = [
-        ":imports_lx64_la64",
+        ":imports_linux_x86_64_linux_aarch64",
         "//cc_toolchain/wrappers:all",
-        "//cc_toolchain/features:startup_libs_la64",
+        "//cc_toolchain/features:startup_libs_linux_aarch64",
         "@llvm_linux_x86_64//:all",
     ],
 )
 
 # buildifier: leave-alone
 filegroup(
-    name = "compiler_lx64_la64",
+    name = "compiler_linux_x86_64_linux_aarch64",
     srcs = [
-        ":all_lx64_la64",
+        ":all_linux_x86_64_linux_aarch64",
         "//cc_toolchain/wrappers:all",
         "@llvm_linux_x86_64//:clang",
         "@llvm_linux_x86_64//:clang++",
@@ -404,9 +404,9 @@ filegroup(
 
 # buildifier: leave-alone
 filegroup(
-    name = "linker_lx64_la64",
+    name = "linker_linux_x86_64_linux_aarch64",
     srcs = [
-        ":compiler_lx64_la64",
+        ":compiler_linux_x86_64_linux_aarch64",
         "//cc_toolchain/wrappers:all",
         "@llvm_linux_x86_64//:ld",
         "@sysroot_linux_aarch64//:startup_libs",
@@ -416,7 +416,7 @@ filegroup(
 
 # buildifier: leave-alone
 filegroup(
-    name = "ar_lx64_la64",
+    name = "ar_linux_x86_64_linux_aarch64",
     srcs = [
         "//cc_toolchain/wrappers:all",
         "@llvm_linux_x86_64//:ar",
@@ -425,28 +425,28 @@ filegroup(
 )
 
 cc_toolchain(
-    name = "toolchain_lx64_la64",
-    all_files = ":all_lx64_la64",
-    ar_files = ":ar_lx64_la64",
-    compiler_files = ":compiler_lx64_la64",
-    dwp_files = ":all_lx64_la64",
-    linker_files = ":linker_lx64_la64",
+    name = "toolchain_linux_x86_64_linux_aarch64",
+    all_files = ":all_linux_x86_64_linux_aarch64",
+    ar_files = ":ar_linux_x86_64_linux_aarch64",
+    compiler_files = ":compiler_linux_x86_64_linux_aarch64",
+    dwp_files = ":all_linux_x86_64_linux_aarch64",
+    linker_files = ":linker_linux_x86_64_linux_aarch64",
     objcopy_files = ":empty",
     strip_files = ":empty",
     supports_param_files = 1,
-    toolchain_config = ":toolchain_config_lx64_la64",
-    toolchain_identifier = "toolchain_id_lx64_la64",
+    toolchain_config = ":toolchain_config_linux_x86_64_linux_aarch64",
+    toolchain_identifier = "toolchain_id_linux_x86_64_linux_aarch64",
 )
 
 cc_toolchain_config(
-    name = "toolchain_config_lx64_la64",
+    name = "toolchain_config_linux_x86_64_linux_aarch64",
     archiver = "@llvm_linux_x86_64//:ar",
     c_compiler = "@llvm_linux_x86_64//:clang",
     cc_compiler = "@llvm_linux_x86_64//:clang++",
     compiler_features = [
         # Hermetic libraries feature required before import.
         "//third_party/rules_cc_toolchain/features:hermetic_libraries",
-        "//cc_toolchain/features:toolchain_import_lx64_la64",
+        "//cc_toolchain/features:toolchain_import_linux_x86_64_linux_aarch64",
 
         # Toolchain configuration
         "//third_party/rules_cc_toolchain/features:warnings",
@@ -454,8 +454,8 @@ cc_toolchain_config(
         "//third_party/rules_cc_toolchain/features:reproducible",
         "//third_party/rules_cc_toolchain/features:language",
         "//third_party/rules_cc_toolchain/features:use_lld",
-        "//cc_toolchain/features:sysroot_la64",
-        "//cc_toolchain/features:startup_libs_la64",
+        "//cc_toolchain/features:sysroot_linux_aarch64",
+        "//cc_toolchain/features:startup_libs_linux_aarch64",
         "//third_party/rules_cc_toolchain/features:coverage",
 
         # PIC / PIE flags
@@ -489,7 +489,7 @@ cc_toolchain_config(
 
 # buildifier: leave-alone
 toolchain(
-    name = "lx64_la64",
+    name = "linux_x86_64_linux_aarch64",
     exec_compatible_with = [
         "@platforms//cpu:x86_64",
         "@platforms//os:linux",
@@ -502,7 +502,7 @@ toolchain(
         "@local_config_cuda//:is_cuda_disabled",
         "//cc_toolchain/config:is_hermetic_cc_enabled",
     ],
-    toolchain = ":toolchain_lx64_la64",
+    toolchain = ":toolchain_linux_x86_64_linux_aarch64",
     toolchain_type = "@bazel_tools//tools/cpp:toolchain_type",
 )
 
@@ -523,40 +523,40 @@ MAC_TOOLS = {
 }
 
 alias(
-    name = "startup_libs_ma64",
-    actual = "@sysroot_macos_aarch64//:startup_libs",
+    name = "startup_libs_darwin_aarch64",
+    actual = "@sysroot_darwin_aarch64//:startup_libs",
     visibility = ["//visibility:public"],
 )
 
 # buildifier: leave-alone
 cc_toolchain_import(
-    name = "imports_lx64_ma64",
+    name = "imports_linux_x86_64_darwin_aarch64",
     deps = [
-        "@sysroot_macos_aarch64//:includes_c",
+        "@sysroot_darwin_aarch64//:includes_c",
         "@llvm_linux_x86_64//:includes",
-        "@sysroot_macos_aarch64//:includes_system",
-        "@sysroot_macos_aarch64//:glibc",
-        "@sysroot_macos_aarch64//:pthread",
+        "@sysroot_darwin_aarch64//:includes_system",
+        "@sysroot_darwin_aarch64//:glibc",
+        "@sysroot_darwin_aarch64//:pthread",
     ],
     visibility = ["//visibility:public"],
 )
 
 # buildifier: leave-alone
 filegroup(
-    name = "all_lx64_ma64",
+    name = "all_linux_x86_64_darwin_aarch64",
     srcs = [
-        ":imports_lx64_ma64",
+        ":imports_linux_x86_64_darwin_aarch64",
         "//cc_toolchain/wrappers:all",
-        "//cc_toolchain/features:startup_libs_ma64",
+        "//cc_toolchain/features:startup_libs_darwin_aarch64",
         "@llvm_linux_x86_64//:all",
     ],
 )
 
 # buildifier: leave-alone
 filegroup(
-    name = "compiler_lx64_ma64",
+    name = "compiler_linux_x86_64_darwin_aarch64",
     srcs = [
-        ":all_lx64_ma64",
+        ":all_linux_x86_64_darwin_aarch64",
         "//cc_toolchain/wrappers:all",
         "@llvm_linux_x86_64//:clang",
         "@llvm_linux_x86_64//:clang++",
@@ -566,19 +566,19 @@ filegroup(
 
 # buildifier: leave-alone
 filegroup(
-    name = "linker_lx64_ma64",
+    name = "linker_linux_x86_64_darwin_aarch64",
     srcs = [
-        ":compiler_lx64_ma64",
+        ":compiler_linux_x86_64_darwin_aarch64",
         "//cc_toolchain/wrappers:all",
         "@llvm_linux_x86_64//:ld",
-        "@sysroot_macos_aarch64//:startup_libs",
+        "@sysroot_darwin_aarch64//:startup_libs",
         "@llvm_linux_x86_64//:distro_libs",
     ],
 )
 
 # buildifier: leave-alone
 filegroup(
-    name = "ar_lx64_ma64",
+    name = "ar_linux_x86_64_darwin_aarch64",
     srcs = [
         "//cc_toolchain/wrappers:all",
         "@llvm_linux_x86_64//:ar_darwin",
@@ -587,28 +587,28 @@ filegroup(
 )
 
 cc_toolchain(
-    name = "toolchain_lx64_ma64",
-    all_files = ":all_lx64_ma64",
-    ar_files = ":ar_lx64_ma64",
-    compiler_files = ":compiler_lx64_ma64",
-    dwp_files = ":all_lx64_ma64",
-    linker_files = ":linker_lx64_ma64",
+    name = "toolchain_linux_x86_64_darwin_aarch64",
+    all_files = ":all_linux_x86_64_darwin_aarch64",
+    ar_files = ":ar_linux_x86_64_darwin_aarch64",
+    compiler_files = ":compiler_linux_x86_64_darwin_aarch64",
+    dwp_files = ":all_linux_x86_64_darwin_aarch64",
+    linker_files = ":linker_linux_x86_64_darwin_aarch64",
     objcopy_files = ":empty",
     strip_files = ":empty",
     supports_param_files = 1,
-    toolchain_config = ":toolchain_config_lx64_ma64",
-    toolchain_identifier = "toolchain_id_lx64_ma64",
+    toolchain_config = ":toolchain_config_linux_x86_64_darwin_aarch64",
+    toolchain_identifier = "toolchain_id_linux_x86_64_darwin_aarch64",
 )
 
 cc_toolchain_config(
-    name = "toolchain_config_lx64_ma64",
+    name = "toolchain_config_linux_x86_64_darwin_aarch64",
     archiver = "@llvm_linux_x86_64//:ar_darwin",
     c_compiler = "@llvm_linux_x86_64//:clang",
     cc_compiler = "@llvm_linux_x86_64//:clang++",
     compiler_features = [
         # Hermetic libraries feature required before import.
         "//third_party/rules_cc_toolchain/features:hermetic_libraries",
-        "//cc_toolchain/features:toolchain_import_lx64_ma64",
+        "//cc_toolchain/features:toolchain_import_linux_x86_64_darwin_aarch64",
         "//third_party/rules_cc_toolchain/features:undefined_symbols",
 
         # Toolchain configuration
@@ -617,8 +617,8 @@ cc_toolchain_config(
         "//third_party/rules_cc_toolchain/features:reproducible",
         "//third_party/rules_cc_toolchain/features:language",
         "//third_party/rules_cc_toolchain/features:use_lld",
-        "//cc_toolchain/features:sysroot_ma64",
-        "//cc_toolchain/features:startup_libs_ma64",
+        "//cc_toolchain/features:sysroot_darwin_aarch64",
+        "//cc_toolchain/features:startup_libs_darwin_aarch64",
         "//third_party/rules_cc_toolchain/features:coverage",
         "//cc_toolchain/features:max_install_names",
         "//cc_toolchain/features:no_elaborated_enum_base",
@@ -656,7 +656,7 @@ cc_toolchain_config(
 
 # buildifier: leave-alone
 toolchain(
-    name = "lx64_ma64",
+    name = "linux_x86_64_darwin_aarch64",
     exec_compatible_with = [
         "@platforms//cpu:x86_64",
         "@platforms//os:linux",
@@ -669,7 +669,7 @@ toolchain(
         "@local_config_cuda//:is_cuda_disabled",
         "//cc_toolchain/config:is_hermetic_cc_enabled",
     ],
-    toolchain = ":toolchain_lx64_ma64",
+    toolchain = ":toolchain_linux_x86_64_darwin_aarch64",
     toolchain_type = "@bazel_tools//tools/cpp:toolchain_type",
 )
 
@@ -679,82 +679,82 @@ toolchain(
 
 # buildifier: leave-alone
 cc_toolchain_import(
-    name = "imports_ma64_ma64",
+    name = "imports_darwin_aarch64_darwin_aarch64",
     deps = [
-        "@sysroot_macos_aarch64//:includes_c",
-        "@llvm_macos_aarch64//:includes",
-        "@sysroot_macos_aarch64//:includes_system",
-        "@sysroot_macos_aarch64//:glibc",
-        "@sysroot_macos_aarch64//:pthread",
+        "@sysroot_darwin_aarch64//:includes_c",
+        "@llvm_darwin_aarch64//:includes",
+        "@sysroot_darwin_aarch64//:includes_system",
+        "@sysroot_darwin_aarch64//:glibc",
+        "@sysroot_darwin_aarch64//:pthread",
     ],
     visibility = ["//visibility:public"],
 )
 
 # buildifier: leave-alone
 filegroup(
-    name = "all_ma64_ma64",
+    name = "all_darwin_aarch64_darwin_aarch64",
     srcs = [
-        ":imports_ma64_ma64",
+        ":imports_darwin_aarch64_darwin_aarch64",
         "//cc_toolchain/wrappers:all",
-        "//cc_toolchain/features:startup_libs_ma64",
-        "@llvm_macos_aarch64//:all",
+        "//cc_toolchain/features:startup_libs_darwin_aarch64",
+        "@llvm_darwin_aarch64//:all",
     ],
 )
 
 # buildifier: leave-alone
 filegroup(
-    name = "compiler_ma64_ma64",
+    name = "compiler_darwin_aarch64_darwin_aarch64",
     srcs = [
-        ":all_ma64_ma64",
+        ":all_darwin_aarch64_darwin_aarch64",
         "//cc_toolchain/wrappers:all",
-        "@llvm_macos_aarch64//:clang",
-        "@llvm_macos_aarch64//:clang++",
+        "@llvm_darwin_aarch64//:clang",
+        "@llvm_darwin_aarch64//:clang++",
     ],
 )
 
 # buildifier: leave-alone
 filegroup(
-    name = "linker_ma64_ma64",
+    name = "linker_darwin_aarch64_darwin_aarch64",
     srcs = [
-        ":compiler_ma64_ma64",
+        ":compiler_darwin_aarch64_darwin_aarch64",
         "//cc_toolchain/wrappers:all",
-        "@llvm_macos_aarch64//:ld",
-        "@sysroot_macos_aarch64//:startup_libs",
+        "@llvm_darwin_aarch64//:ld",
+        "@sysroot_darwin_aarch64//:startup_libs",
     ],
 )
 
 # buildifier: leave-alone
 filegroup(
-    name = "ar_ma64_ma64",
+    name = "ar_darwin_aarch64_darwin_aarch64",
     srcs = [
         "//cc_toolchain/wrappers:all",
-        "@llvm_macos_aarch64//:ar",
+        "@llvm_darwin_aarch64//:ar",
     ],
 )
 
 cc_toolchain(
-    name = "toolchain_ma64_ma64",
-    all_files = ":all_ma64_ma64",
-    ar_files = ":ar_ma64_ma64",
-    compiler_files = ":compiler_ma64_ma64",
-    dwp_files = ":all_ma64_ma64",
-    linker_files = ":linker_ma64_ma64",
+    name = "toolchain_darwin_aarch64_darwin_aarch64",
+    all_files = ":all_darwin_aarch64_darwin_aarch64",
+    ar_files = ":ar_darwin_aarch64_darwin_aarch64",
+    compiler_files = ":compiler_darwin_aarch64_darwin_aarch64",
+    dwp_files = ":all_darwin_aarch64_darwin_aarch64",
+    linker_files = ":linker_darwin_aarch64_darwin_aarch64",
     objcopy_files = ":empty",
     strip_files = ":empty",
     supports_param_files = 1,
-    toolchain_config = ":toolchain_config_ma64_ma64",
-    toolchain_identifier = "toolchain_id_ma64_ma64",
+    toolchain_config = ":toolchain_config_darwin_aarch64_darwin_aarch64",
+    toolchain_identifier = "toolchain_id_darwin_aarch64_darwin_aarch64",
 )
 
 cc_toolchain_config(
-    name = "toolchain_config_ma64_ma64",
-    archiver = "@llvm_macos_aarch64//:ar",
-    c_compiler = "@llvm_macos_aarch64//:clang",
-    cc_compiler = "@llvm_macos_aarch64//:clang++",
+    name = "toolchain_config_darwin_aarch64_darwin_aarch64",
+    archiver = "@llvm_darwin_aarch64//:ar",
+    c_compiler = "@llvm_darwin_aarch64//:clang",
+    cc_compiler = "@llvm_darwin_aarch64//:clang++",
     compiler_features = [
         # Hermetic libraries feature required before import.
         "//third_party/rules_cc_toolchain/features:hermetic_libraries",
-        "//cc_toolchain/features:toolchain_import_ma64_ma64",
+        "//cc_toolchain/features:toolchain_import_darwin_aarch64_darwin_aarch64",
         "//third_party/rules_cc_toolchain/features:undefined_symbols",
 
         # Toolchain configuration
@@ -763,8 +763,8 @@ cc_toolchain_config(
         "//third_party/rules_cc_toolchain/features:reproducible",
         "//third_party/rules_cc_toolchain/features:language",
         "//third_party/rules_cc_toolchain/features:use_lld",
-        "//cc_toolchain/features:sysroot_ma64",
-        "//cc_toolchain/features:startup_libs_ma64",
+        "//cc_toolchain/features:sysroot_darwin_aarch64",
+        "//cc_toolchain/features:startup_libs_darwin_aarch64",
         "//third_party/rules_cc_toolchain/features:coverage",
         "//cc_toolchain/features:max_install_names",
         "//cc_toolchain/features:no_elaborated_enum_base",
@@ -792,8 +792,8 @@ cc_toolchain_config(
         "//cc_toolchain/features:supports_start_end_lib_feature",
     ],
     dynamic_library_extension = ".dylib",
-    install_name = "@llvm_macos_aarch64//:install_name_tool_darwin",
-    linker = "@llvm_macos_aarch64//:ld",
+    install_name = "@llvm_darwin_aarch64//:install_name_tool_darwin",
+    linker = "@llvm_darwin_aarch64//:ld",
     target_cpu = "aarch64",
     target_libc = "macosx",
     target_system_name = "local",
@@ -802,7 +802,7 @@ cc_toolchain_config(
 
 # buildifier: leave-alone
 toolchain(
-    name = "ma64_ma64",
+    name = "darwin_aarch64_darwin_aarch64",
     exec_compatible_with = [
         "@platforms//cpu:aarch64",
         "@platforms//os:macos",
@@ -815,6 +815,6 @@ toolchain(
         "@local_config_cuda//:is_cuda_disabled",
         "//cc_toolchain/config:is_hermetic_cc_enabled",
     ],
-    toolchain = ":toolchain_ma64_ma64",
+    toolchain = ":toolchain_darwin_aarch64_darwin_aarch64",
     toolchain_type = "@bazel_tools//tools/cpp:toolchain_type",
 )

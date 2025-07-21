@@ -36,10 +36,10 @@ def cc_toolchain_deps():
             strip_prefix = "ubuntu18_aarch64-sysroot",
         )
 
-    if "sysroot_macos_aarch64" not in native.existing_rules():
+    if "sysroot_darwin_aarch64" not in native.existing_rules():
         native.new_local_repository(
-            name = "sysroot_macos_aarch64",
-            build_file = "//cc_toolchain/config:sysroot_macos_aarch64.BUILD",
+            name = "sysroot_darwin_aarch64",
+            build_file = "//cc_toolchain/config:sysroot_darwin_aarch64.BUILD",
             path = "cc_toolchain/sysroots/macos_arm64/MacOSX.sdk",
         )
 
@@ -70,11 +70,11 @@ def cc_toolchain_deps():
     #        strip_prefix = "LLVM-19.1.7-Linux-X64",
     #    )
 
-    if "llvm_macos_aarch64" not in native.existing_rules():
+    if "llvm_darwin_aarch64" not in native.existing_rules():
         llvm_http_archive(
-            name = "llvm_macos_aarch64",
+            name = "llvm_darwin_aarch64",
             urls = ["https://github.com/yuriit-google/sysroots/raw/ba192c408e0f82c6c9a5b92712038edaa64326d6/archives/ubuntu18_aarch64-sysroot.tar.xz"],
             sha256 = "4573b7f25f46d2a9c8882993f091c52f416c83271db6f5b213c93f0bd0346a10",
-            build_file = Label("//cc_toolchain/config:llvm_macos_aarch64.BUILD"),
+            build_file = Label("//cc_toolchain/config:llvm_darwin_aarch64.BUILD"),
             strip_prefix = "clang+llvm-18.1.8-arm64-apple-macos11",
         )
