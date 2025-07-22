@@ -21,13 +21,7 @@ load(
 )
 
 package(
-    default_visibility = ["//cc_toolchain:__pkg__"],
-)
-
-cc_toolchain_import_feature(
-    name = "toolchain_import_lx64_lx64",
-    enabled = True,
-    toolchain_import = "//cc_toolchain:imports_lx64_lx64_cuda",
+    default_visibility = ["//cc_toolchain/impls/cuda:__pkg__"],
 )
 
 cc_feature(
