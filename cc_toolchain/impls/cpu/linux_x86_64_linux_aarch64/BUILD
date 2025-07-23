@@ -1,22 +1,15 @@
-load("@rules_cc//cc:defs.bzl", "cc_toolchain")
-load("//third_party/rules_cc_toolchain:toolchain_config.bzl", "cc_toolchain_config")
 load("//third_party/rules_cc_toolchain/features:cc_toolchain_import.bzl", "cc_toolchain_import")
 load("//third_party/rules_cc_toolchain/features:features.bzl", "cc_toolchain_import_feature")
 
-#=====================================================================
-# Tools: Linux x86_64, Sysroot: Linux x86_64
-#=====================================================================
-
 package(
     default_visibility = [
-        "//cc_toolchain:__pkg__",
+        "//cc_toolchain/impls/cpu:__pkg__",
     ],
 )
 
-# TODO: remove below alias
 alias(
     name = "startup_libs",
-    actual = "@sysroot_linux_x86_64//:startup_libs",
+    actual = "@sysroot_linux_aarch64//:startup_libs",
     visibility = ["//visibility:public"],
 )
 
@@ -30,12 +23,11 @@ cc_toolchain_import_feature(
 cc_toolchain_import(
     name = "imports",
     deps = [
-        "@sysroot_linux_x86_64//:includes_c",
+        "@sysroot_linux_aarch64//:includes_c",
         "@llvm_linux_x86_64//:includes",
-        "@sysroot_linux_x86_64//:includes_system",
-        "@sysroot_linux_x86_64//:glibc",
-        "@sysroot_linux_x86_64//:pthread",
-        "@llvm_linux_x86_64//:libclang_rt",
+        "@sysroot_linux_aarch64//:includes_system",
+        "@sysroot_linux_aarch64//:glibc",
+        "@sysroot_linux_aarch64//:pthread",
     ],
     visibility = ["//visibility:public"],
 )
@@ -51,8 +43,8 @@ filegroup(
     name = "all",
     srcs = [
         ":imports",
-        "//cc_toolchain/wrappers:all",
-        ":startup_libs_feature",
+        "//cc_toolchain/impls/cpu/wrappers:all",
+        ":startup_libs",
         "@llvm_linux_x86_64//:all",
     ],
 )
@@ -61,8 +53,8 @@ filegroup(
 filegroup(
     name = "compiler",
     srcs = [
-        ":imports",
-        "//cc_toolchain/wrappers:all",
+        ":all",
+        "//cc_toolchain/impls/cpu/wrappers:all",
         "@llvm_linux_x86_64//:clang",
         "@llvm_linux_x86_64//:clang++",
         "@llvm_linux_x86_64//:distro_libs",
@@ -74,9 +66,9 @@ filegroup(
     name = "linker",
     srcs = [
         ":compiler",
-        "//cc_toolchain/wrappers:all",
+        "//cc_toolchain/impls/cpu/wrappers:all",
         "@llvm_linux_x86_64//:ld",
-        "@sysroot_linux_x86_64//:startup_libs",
+        "@sysroot_linux_aarch64//:startup_libs",
         "@llvm_linux_x86_64//:distro_libs",
     ],
 )
@@ -85,7 +77,7 @@ filegroup(
 filegroup(
     name = "ar",
     srcs = [
-        "//cc_toolchain/wrappers:all",
+        "//cc_toolchain/impls/cpu/wrappers:all",
         "@llvm_linux_x86_64//:ar",
         "@llvm_linux_x86_64//:distro_libs",
     ],

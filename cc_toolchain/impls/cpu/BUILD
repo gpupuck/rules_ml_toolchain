@@ -1,0 +1,136 @@
+load("@rules_cc//cc:defs.bzl", "cc_toolchain")
+load("//third_party/rules_cc_toolchain:toolchain_config.bzl", "cc_toolchain_config")
+
+#=====================================================================
+# Tools: Linux x86_64, Sysroot: Linux x86_64
+#=====================================================================
+
+cc_toolchain_config(
+    name = "toolchain_config_linux_x86_64_linux_x86_64",
+    archiver = "@llvm_linux_x86_64//:ar",
+    c_compiler = "@llvm_linux_x86_64//:clang",
+    cc_compiler = "@llvm_linux_x86_64//:clang++",
+    compiler_features = [
+        # Hermetic libraries feature required before import.
+        "//third_party/rules_cc_toolchain/features:hermetic_libraries",
+        "//cc_toolchain/impls/cpu/linux_x86_64_linux_x86_64:imports_feature",
+
+        # Toolchain configuration
+        "//third_party/rules_cc_toolchain/features:warnings",
+        "//third_party/rules_cc_toolchain/features:errors",
+        "//third_party/rules_cc_toolchain/features:reproducible",
+        "//third_party/rules_cc_toolchain/features:language",
+        "//third_party/rules_cc_toolchain/features:use_lld",
+        "//cc_toolchain/features:sysroot_linux_x86_64",
+        "//cc_toolchain/impls/cpu/linux_x86_64_linux_x86_64:startup_libs_feature",
+        "//third_party/rules_cc_toolchain/features:coverage",
+
+        # PIC / PIE flags
+        "//third_party/rules_cc_toolchain/features:supports_pic",
+        "//third_party/rules_cc_toolchain/features:position_independent_code",
+        "//third_party/rules_cc_toolchain/features:position_independent_executable",
+
+        # Optimization flags
+        "//third_party/rules_cc_toolchain/features:garbage_collect_symbols",
+        "//cc_toolchain/features:constants_merge",
+        "//cc_toolchain/features:asserts_disable",
+        "//third_party/rules_cc_toolchain/features:dbg",
+        "//third_party/rules_cc_toolchain/features:opt",
+        "//cc_toolchain/features:detect_issues",
+        "//cc_toolchain/features:detect_issues_ext",
+
+        # C++ standard configuration
+        "//third_party/rules_cc_toolchain/features:c++11",
+        "//third_party/rules_cc_toolchain/features:c++14",
+        "//third_party/rules_cc_toolchain/features:c++17",
+
+        #
+        "//cc_toolchain/features:allow_shlib_undefined",
+        "//cc_toolchain/features:supports_dynamic_linker",
+        "//cc_toolchain/features:supports_start_end_lib_feature",
+    ],
+    linker = "@llvm_linux_x86_64//:ld",
+    target_cpu = "x86_64",
+    target_system_name = "local",
+)
+
+cc_toolchain(
+    name = "toolchain_linux_x86_64_linux_x86_64",
+    all_files = "//cc_toolchain/impls/cpu/linux_x86_64_linux_x86_64:all",
+    ar_files = "//cc_toolchain/impls/cpu/linux_x86_64_linux_x86_64:ar",
+    compiler_files = "//cc_toolchain/impls/cpu/linux_x86_64_linux_x86_64:compiler",
+    dwp_files = "//cc_toolchain/impls/cpu/linux_x86_64_linux_x86_64:all",
+    linker_files = "//cc_toolchain/impls/cpu/linux_x86_64_linux_x86_64:linker",
+    objcopy_files = ":empty",
+    strip_files = ":empty",
+    supports_param_files = 1,
+    toolchain_config = ":toolchain_config_linux_x86_64_linux_x86_64",
+    toolchain_identifier = "toolchain_linux_x86_64_linux_x86_64_id",
+)
+
+######################################################################
+# Tools: Linux x86_64, Sysroot: Linux aarch64
+######################################################################
+
+cc_toolchain_config(
+    name = "toolchain_config_linux_x86_64_linux_aarch64",
+    archiver = "@llvm_linux_x86_64//:ar",
+    c_compiler = "@llvm_linux_x86_64//:clang",
+    cc_compiler = "@llvm_linux_x86_64//:clang++",
+    compiler_features = [
+        # Hermetic libraries feature required before import.
+        "//third_party/rules_cc_toolchain/features:hermetic_libraries",
+        "//cc_toolchain/impls/cpu/linux_x86_64_linux_aarch64:imports_feature",
+
+        # Toolchain configuration
+        "//third_party/rules_cc_toolchain/features:warnings",
+        "//third_party/rules_cc_toolchain/features:errors",
+        "//third_party/rules_cc_toolchain/features:reproducible",
+        "//third_party/rules_cc_toolchain/features:language",
+        "//third_party/rules_cc_toolchain/features:use_lld",
+        "//cc_toolchain/features:sysroot_linux_aarch64",
+        "//cc_toolchain/impls/cpu/linux_x86_64_linux_aarch64:startup_libs_feature",
+        "//third_party/rules_cc_toolchain/features:coverage",
+
+        # PIC / PIE flags
+        "//third_party/rules_cc_toolchain/features:supports_pic",
+        "//third_party/rules_cc_toolchain/features:position_independent_code",
+        "//third_party/rules_cc_toolchain/features:position_independent_executable",
+
+        # Optimization flags
+        "//third_party/rules_cc_toolchain/features:garbage_collect_symbols",
+        "//cc_toolchain/features:constants_merge",
+        "//cc_toolchain/features:asserts_disable",
+        "//third_party/rules_cc_toolchain/features:dbg",
+        "//third_party/rules_cc_toolchain/features:opt",
+        "//cc_toolchain/features:detect_issues",
+        "//cc_toolchain/features:detect_issues_ext",
+
+        # C++ standard configuration
+        "//third_party/rules_cc_toolchain/features:c++11",
+        "//third_party/rules_cc_toolchain/features:c++14",
+        "//third_party/rules_cc_toolchain/features:c++17",
+
+        #
+        "//cc_toolchain/features:allow_shlib_undefined",
+        "//cc_toolchain/features:supports_dynamic_linker",
+        "//cc_toolchain/features:supports_start_end_lib_feature",
+    ],
+    linker = "@llvm_linux_x86_64//:ld",
+    target_cpu = "aarch64",
+    target_system_name = "local",
+)
+
+cc_toolchain(
+    name = "toolchain_linux_x86_64_linux_aarch64",
+    all_files = "//cc_toolchain/impls/cpu/linux_x86_64_linux_aarch64:all",
+    ar_files = "//cc_toolchain/impls/cpu/linux_x86_64_linux_aarch64:ar",
+    compiler_files = "//cc_toolchain/impls/cpu/linux_x86_64_linux_aarch64:compiler",
+    dwp_files = "//cc_toolchain/impls/cpu/linux_x86_64_linux_aarch64:all",
+    linker_files = "//cc_toolchain/impls/cpu/linux_x86_64_linux_aarch64:linker",
+    objcopy_files = ":empty",
+    strip_files = ":empty",
+    supports_param_files = 1,
+    toolchain_config = ":toolchain_config_linux_x86_64_linux_aarch64",
+    toolchain_identifier = "toolchain_id_linux_x86_64_linux_aarch64",
+)

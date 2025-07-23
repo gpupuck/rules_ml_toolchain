@@ -16,8 +16,8 @@
 filegroup(
     name = "all",
     srcs = [
-        "//cc_toolchain/wrappers/darwin:all",
-        "//cc_toolchain/wrappers/linux:all",
+        "//cc_toolchain/impls/cpu/wrappers/darwin:all",
+        "//cc_toolchain/impls/cpu/wrappers/linux:all",
     ],
     visibility = ["//visibility:public"],
 )

@@ -30,6 +30,7 @@ load(
 package(
     default_visibility = [
         "//cc_toolchain:__pkg__",
+        "//cc_toolchain/impls/cpu:__pkg__",
         "//cc_toolchain/impls/cuda:__pkg__",
     ],
 )
