@@ -96,7 +96,7 @@ toolchain(
         "@platforms//os:linux",
     ],
     target_settings = [
-        "@local_config_cuda//:is_cuda_disabled",
+        "//common:is_cuda_disabled",
         "//cc_toolchain/config:is_hermetic_cc_enabled",
     ],
     toolchain = ":toolchain_linux_x86_64_linux_x86_64",
@@ -119,7 +119,7 @@ toolchain(
         #"//cc_toolchain/config:cuda_enabled",
     ],
     target_settings = [
-        "@local_config_cuda//:is_cuda_enabled",
+        "//common:is_cuda_enabled",
         "//cc_toolchain/config:is_hermetic_cc_enabled",
     ],
     toolchain = "//cc_toolchain/impls/cuda:toolchain_linux_x86_64_linux_x86_64_cuda",
@@ -269,7 +269,7 @@ toolchain(
         "@platforms//os:linux",
     ],
     target_settings = [
-        "@local_config_cuda//:is_cuda_disabled",
+        "//common:is_cuda_disabled",
         "//cc_toolchain/config:is_hermetic_cc_enabled",
     ],
     toolchain = ":toolchain_linux_x86_64_linux_aarch64",
@@ -436,7 +436,7 @@ toolchain(
         "@platforms//os:macos",
     ],
     target_settings = [
-        "@local_config_cuda//:is_cuda_disabled",
+        "//common:is_cuda_disabled",
         "//cc_toolchain/config:is_hermetic_cc_enabled",
     ],
     toolchain = ":toolchain_linux_x86_64_darwin_aarch64",
@@ -582,7 +582,7 @@ toolchain(
         "@platforms//os:macos",
     ],
     target_settings = [
-        "@local_config_cuda//:is_cuda_disabled",
+        "//common:is_cuda_disabled",
         "//cc_toolchain/config:is_hermetic_cc_enabled",
     ],
     toolchain = ":toolchain_darwin_aarch64_darwin_aarch64",
