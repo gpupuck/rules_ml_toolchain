@@ -23,6 +23,15 @@ Let's imagine that you copy or download SDK to `~/Downloads` directory and the p
 `~/Projects/rules_ml_toolchain`. 
 5. Extract MacOSX.sdk to the project directory `sysroots/darwin_aarch64` directory with help of next command:
 
-`tar xf ~/Downloads/MacOSX.sdk.tar.xz -C ~/Projects/rules_ml_toolchain/sysroots/darwin_aarch64/`
+`tar xf ~/Downloads/MacOSX.sdk.tar.xz -C ~/Projects/rules_ml_toolchain/cc_toolchain/sysroots/darwin_aarch64/`
 
 That's it, you project is ready for cross-platform builds where target is macOS ARM64.
+
+### Troubleshooting
+
+Create link to SDK or rename SDK directory to `MacOSX.sdk` if default directory name contains SDK version.
+
+ERROR: Infinite symlink expansion, for cc_toolchain/sysroots/darwin_aarch64/MacOSX.sdk/System/Library/Frameworks/Ruby.framework/Versions/2.6/Headers/ruby/ruby, skipping: Infinite symlink expansion
+##### How to fix?
+Just remove recursive symlink. Example: 
+`rm cc_toolchain/sysroots/darwin_aarch64/MacOSX.sdk/System/Library/Frameworks/Ruby.framework/Versions/2.6/Headers/ruby/ruby`

@@ -89,150 +89,6 @@ toolchain(
 # Tools: Linux x86_64, Sysroot: macOS aarch64
 ######################################################################
 
-MAC_TOOLS = {
-    "gcc": "wrappers/darwin/clang",
-    "cpp": "wrappers/darwin/clang++",
-    "ld": "wrappers/darwin/ld",
-    "ar": "wrappers/darwin/ar",
-    "gcov": "wrappers/darwin/idler",
-    "llvm-cov": "wrappers/darwin/idler",
-    "nm": "wrappers/darwin/idler",
-    "objdump": "wrappers/darwin/idler",
-    "strip": "wrappers/darwin/idler",
-}
-
-alias(
-    name = "startup_libs_darwin_aarch64",
-    actual = "@sysroot_darwin_aarch64//:startup_libs",
-    visibility = ["//visibility:public"],
-)
-
-# buildifier: leave-alone
-cc_toolchain_import(
-    name = "imports_linux_x86_64_darwin_aarch64",
-    deps = [
-        "@sysroot_darwin_aarch64//:includes_c",
-        "@llvm_linux_x86_64//:includes",
-        "@sysroot_darwin_aarch64//:includes_system",
-        "@sysroot_darwin_aarch64//:glibc",
-        "@sysroot_darwin_aarch64//:pthread",
-    ],
-    visibility = ["//visibility:public"],
-)
-
-# buildifier: leave-alone
-filegroup(
-    name = "all_linux_x86_64_darwin_aarch64",
-    srcs = [
-        ":imports_linux_x86_64_darwin_aarch64",
-        "//cc_toolchain/wrappers:all",
-        "//cc_toolchain/features:startup_libs_darwin_aarch64",
-        "@llvm_linux_x86_64//:all",
-    ],
-)
-
-# buildifier: leave-alone
-filegroup(
-    name = "compiler_linux_x86_64_darwin_aarch64",
-    srcs = [
-        ":all_linux_x86_64_darwin_aarch64",
-        "//cc_toolchain/wrappers:all",
-        "@llvm_linux_x86_64//:clang",
-        "@llvm_linux_x86_64//:clang++",
-        "@llvm_linux_x86_64//:distro_libs",
-    ],
-)
-
-# buildifier: leave-alone
-filegroup(
-    name = "linker_linux_x86_64_darwin_aarch64",
-    srcs = [
-        ":compiler_linux_x86_64_darwin_aarch64",
-        "//cc_toolchain/wrappers:all",
-        "@llvm_linux_x86_64//:ld",
-        "@sysroot_darwin_aarch64//:startup_libs",
-        "@llvm_linux_x86_64//:distro_libs",
-    ],
-)
-
-# buildifier: leave-alone
-filegroup(
-    name = "ar_linux_x86_64_darwin_aarch64",
-    srcs = [
-        "//cc_toolchain/wrappers:all",
-        "@llvm_linux_x86_64//:ar_darwin",
-        "@llvm_linux_x86_64//:distro_libs",
-    ],
-)
-
-cc_toolchain(
-    name = "toolchain_linux_x86_64_darwin_aarch64",
-    all_files = ":all_linux_x86_64_darwin_aarch64",
-    ar_files = ":ar_linux_x86_64_darwin_aarch64",
-    compiler_files = ":compiler_linux_x86_64_darwin_aarch64",
-    dwp_files = ":all_linux_x86_64_darwin_aarch64",
-    linker_files = ":linker_linux_x86_64_darwin_aarch64",
-    objcopy_files = ":empty",
-    strip_files = ":empty",
-    supports_param_files = 1,
-    toolchain_config = ":toolchain_config_linux_x86_64_darwin_aarch64",
-    toolchain_identifier = "toolchain_id_linux_x86_64_darwin_aarch64",
-)
-
-cc_toolchain_config(
-    name = "toolchain_config_linux_x86_64_darwin_aarch64",
-    archiver = "@llvm_linux_x86_64//:ar_darwin",
-    c_compiler = "@llvm_linux_x86_64//:clang",
-    cc_compiler = "@llvm_linux_x86_64//:clang++",
-    compiler_features = [
-        # Hermetic libraries feature required before import.
-        "//third_party/rules_cc_toolchain/features:hermetic_libraries",
-        "//cc_toolchain/features:toolchain_import_linux_x86_64_darwin_aarch64",
-        "//third_party/rules_cc_toolchain/features:undefined_symbols",
-
-        # Toolchain configuration
-        "//third_party/rules_cc_toolchain/features:warnings",
-        "//third_party/rules_cc_toolchain/features:errors",
-        "//third_party/rules_cc_toolchain/features:reproducible",
-        "//third_party/rules_cc_toolchain/features:language",
-        "//third_party/rules_cc_toolchain/features:use_lld",
-        "//cc_toolchain/features:sysroot_darwin_aarch64",
-        "//cc_toolchain/features:startup_libs_darwin_aarch64",
-        "//third_party/rules_cc_toolchain/features:coverage",
-        "//cc_toolchain/features:max_install_names",
-        "//cc_toolchain/features:no_elaborated_enum_base",
-
-        # PIC / PIE flags
-        "//third_party/rules_cc_toolchain/features:supports_pic",
-        "//third_party/rules_cc_toolchain/features:position_independent_code",
-
-        # Optimization flags
-        "//cc_toolchain/features:garbage_collect_symbols_mac",
-        "//cc_toolchain/features:constants_merge",
-        "//cc_toolchain/features:asserts_disable",
-        "//third_party/rules_cc_toolchain/features:dbg",
-        "//third_party/rules_cc_toolchain/features:opt",
-        "//cc_toolchain/features:detect_issues",
-
-        # C++ standard configuration
-        "//third_party/rules_cc_toolchain/features:c++11",
-        "//third_party/rules_cc_toolchain/features:c++14",
-        "//third_party/rules_cc_toolchain/features:c++17",
-
-        #
-        "//cc_toolchain/features:allow_shlib_undefined",
-        "//cc_toolchain/features:supports_dynamic_linker",
-        "//cc_toolchain/features:supports_start_end_lib_feature",
-    ],
-    dynamic_library_extension = ".dylib",
-    install_name = "@llvm_linux_x86_64//:install_name_tool_darwin",
-    linker = "@llvm_linux_x86_64//:ld",
-    target_cpu = "aarch64",
-    target_libc = "macosx",
-    target_system_name = "local",
-    tool_paths = MAC_TOOLS,
-)
-
 # buildifier: leave-alone
 toolchain(
     name = "linux_x86_64_darwin_aarch64",
@@ -248,13 +104,25 @@ toolchain(
         "//common:is_cuda_disabled",
         "//cc_toolchain/config:is_hermetic_cc_enabled",
     ],
-    toolchain = ":toolchain_linux_x86_64_darwin_aarch64",
+    toolchain = "//cc_toolchain/impls/cpu:toolchain_linux_x86_64_darwin_aarch64",
     toolchain_type = "@bazel_tools//tools/cpp:toolchain_type",
 )
 
 ######################################################################
 # Tools: macOS aarch64, Sysroot: macOS aarch64
 ######################################################################
+
+MAC_TOOLS = {
+    "gcc": "wrappers/darwin/clang",
+    "cpp": "wrappers/darwin/clang++",
+    "ld": "wrappers/darwin/ld",
+    "ar": "wrappers/darwin/ar",
+    "gcov": "wrappers/darwin/idler",
+    "llvm-cov": "wrappers/darwin/idler",
+    "nm": "wrappers/darwin/idler",
+    "objdump": "wrappers/darwin/idler",
+    "strip": "wrappers/darwin/idler",
+}
 
 # buildifier: leave-alone
 cc_toolchain_import(
@@ -275,7 +143,6 @@ filegroup(
     srcs = [
         ":imports_darwin_aarch64_darwin_aarch64",
         "//cc_toolchain/wrappers:all",
-        "//cc_toolchain/features:startup_libs_darwin_aarch64",
         "@llvm_darwin_aarch64//:all",
     ],
 )
@@ -343,7 +210,6 @@ cc_toolchain_config(
         "//third_party/rules_cc_toolchain/features:language",
         "//third_party/rules_cc_toolchain/features:use_lld",
         "//cc_toolchain/features:sysroot_darwin_aarch64",
-        "//cc_toolchain/features:startup_libs_darwin_aarch64",
         "//third_party/rules_cc_toolchain/features:coverage",
         "//cc_toolchain/features:max_install_names",
         "//cc_toolchain/features:no_elaborated_enum_base",
@@ -366,7 +232,7 @@ cc_toolchain_config(
         "//third_party/rules_cc_toolchain/features:c++17",
 
         #
-        "//cc_toolchain/features:allow_shlib_undefined",
+        # "//cc_toolchain/features:allow_shlib_undefined",  # Instead of --allow-shlib-undefined, macOS uses the -undefined flag with dynamic_lookup as an argument.
         "//cc_toolchain/features:supports_dynamic_linker",
         "//cc_toolchain/features:supports_start_end_lib_feature",
     ],

@@ -27,28 +27,6 @@ sysroot_package(
     visibility = ["//visibility:public"],
 )
 
-CRT_OBJECTS = [
-    # "crt1", # error: ld64.lld: warning: usr/lib/crt1.o has architecture x86_64 which is incompatible with target architecture arm64
-]
-
-[
-    cc_toolchain_import(
-        name = obj,
-        static_library = "usr/lib/%s.o" % obj,
-    )
-    for obj in CRT_OBJECTS
-]
-
-cc_toolchain_import(
-    name = "startup_libs",
-    #target_compatible_with = select({
-    #    "@platforms//os:macos": ["@platforms//cpu:aarch64"],
-    #    "//conditions:default": ["@platforms//:incompatible"],
-    #}),
-    visibility = ["//visibility:public"],
-    deps = [":" + obj for obj in CRT_OBJECTS],
-)
-
 cc_toolchain_import(
     name = "includes_c",
     hdrs = glob([

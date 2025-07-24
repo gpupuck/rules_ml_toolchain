@@ -40,7 +40,7 @@ def cc_toolchain_deps():
         native.new_local_repository(
             name = "sysroot_darwin_aarch64",
             build_file = "//cc_toolchain/config:sysroot_darwin_aarch64.BUILD",
-            path = "cc_toolchain/sysroots/macos_arm64/MacOSX.sdk",
+            path = "cc_toolchain/sysroots/darwin_aarch64/MacOSX.sdk",
         )
 
     if "llvm_linux_x86_64" not in native.existing_rules():

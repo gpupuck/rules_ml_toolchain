@@ -57,4 +57,4 @@ and allows build for such targets:
 #### Build for macOS aarch64
 [Prepare SDK](cc_toolchain/sysroots/darwin_aarch64/README.md) before run the following command.
 
-`bazel build //cc_toolchain/tests/... --platforms=//cc_toolchain/config:macos_aarch64`
+`bazel build //cc_toolchain/tests/cpu/... --platforms=//cc_toolchain/config:macos_aarch64`
