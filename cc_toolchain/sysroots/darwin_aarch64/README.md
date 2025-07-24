@@ -31,7 +31,8 @@ That's it, you project is ready for cross-platform builds where target is macOS 
 
 Create link to SDK or rename SDK directory to `MacOSX.sdk` if default directory name contains SDK version.
 
+##### Errors
 ERROR: Infinite symlink expansion, for cc_toolchain/sysroots/darwin_aarch64/MacOSX.sdk/System/Library/Frameworks/Ruby.framework/Versions/2.6/Headers/ruby/ruby, skipping: Infinite symlink expansion
-##### How to fix?
+###### How to fix?
 Just remove recursive symlink. Example: 
 `rm cc_toolchain/sysroots/darwin_aarch64/MacOSX.sdk/System/Library/Frameworks/Ruby.framework/Versions/2.6/Headers/ruby/ruby`

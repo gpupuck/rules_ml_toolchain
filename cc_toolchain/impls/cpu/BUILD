@@ -217,3 +217,75 @@ cc_toolchain(
     toolchain_config = ":toolchain_config_linux_x86_64_darwin_aarch64",
     toolchain_identifier = "toolchain_id_linux_x86_64_darwin_aarch64",
 )
+
+
+######################################################################
+# Tools: macOS aarch64, Sysroot: macOS aarch64
+######################################################################
+
+cc_toolchain_config(
+    name = "toolchain_config_darwin_aarch64_darwin_aarch64",
+    archiver = "@llvm_darwin_aarch64//:ar",
+    c_compiler = "@llvm_darwin_aarch64//:clang",
+    cc_compiler = "@llvm_darwin_aarch64//:clang++",
+    compiler_features = [
+        # Hermetic libraries feature required before import.
+        "//third_party/rules_cc_toolchain/features:hermetic_libraries",
+        "//cc_toolchain/impls/cpu/darwin_aarch64_darwin_aarch64:imports_feature",
+        "//third_party/rules_cc_toolchain/features:undefined_symbols",
+
+        # Toolchain configuration
+        "//third_party/rules_cc_toolchain/features:warnings",
+        "//third_party/rules_cc_toolchain/features:errors",
+        "//third_party/rules_cc_toolchain/features:reproducible",
+        "//third_party/rules_cc_toolchain/features:language",
+        "//third_party/rules_cc_toolchain/features:use_lld",
+        "//cc_toolchain/features:sysroot_darwin_aarch64",
+        "//third_party/rules_cc_toolchain/features:coverage",
+        "//cc_toolchain/features:max_install_names",
+        "//cc_toolchain/features:no_elaborated_enum_base",
+
+        # PIC / PIE flags
+        "//third_party/rules_cc_toolchain/features:supports_pic",
+        "//third_party/rules_cc_toolchain/features:position_independent_code",
+
+        # Optimization flags
+        "//cc_toolchain/features:garbage_collect_symbols_mac",
+        "//cc_toolchain/features:constants_merge",
+        "//cc_toolchain/features:asserts_disable",
+        "//third_party/rules_cc_toolchain/features:dbg",
+        "//third_party/rules_cc_toolchain/features:opt",
+        "//cc_toolchain/features:detect_issues",
+
+        # C++ standard configuration
+        "//third_party/rules_cc_toolchain/features:c++11",
+        "//third_party/rules_cc_toolchain/features:c++14",
+        "//third_party/rules_cc_toolchain/features:c++17",
+
+        #
+        # "//cc_toolchain/features:allow_shlib_undefined",  # Instead of --allow-shlib-undefined, macOS uses the -undefined flag with dynamic_lookup as an argument.
+        "//cc_toolchain/features:supports_dynamic_linker",
+        "//cc_toolchain/features:supports_start_end_lib_feature",
+    ],
+    dynamic_library_extension = ".dylib",
+    install_name = "@llvm_darwin_aarch64//:install_name_tool_darwin",
+    linker = "@llvm_darwin_aarch64//:ld",
+    target_cpu = "aarch64",
+    target_libc = "macosx",
+    target_system_name = "local",
+    tool_paths = MAC_TOOLS,
+)
+
+cc_toolchain(
+    name = "toolchain_darwin_aarch64_darwin_aarch64",
+    all_files = "//cc_toolchain/impls/cpu/darwin_aarch64_darwin_aarch64:all",
+    ar_files = "//cc_toolchain/impls/cpu/darwin_aarch64_darwin_aarch64:ar",
+    compiler_files = "//cc_toolchain/impls/cpu/darwin_aarch64_darwin_aarch64:compiler",
+    dwp_files = "//cc_toolchain/impls/cpu/darwin_aarch64_darwin_aarch64:all",
+    linker_files = "//cc_toolchain/impls/cpu/darwin_aarch64_darwin_aarch64:linker",
+    objcopy_files = ":empty",
+    strip_files = ":empty",
+    supports_param_files = 1,
+    toolchain_config = ":toolchain_config_darwin_aarch64_darwin_aarch64",
+    toolchain_identifier = "toolchain_id_darwin_aarch64_darwin_aarch64",
+)

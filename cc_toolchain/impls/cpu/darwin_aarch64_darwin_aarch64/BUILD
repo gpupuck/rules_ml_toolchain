@@ -2,3 +2,56 @@ load("@rules_cc//cc:defs.bzl", "cc_toolchain")
 load("//third_party/rules_cc_toolchain:toolchain_config.bzl", "cc_toolchain_config")
 load("//third_party/rules_cc_toolchain/features:cc_toolchain_import.bzl", "cc_toolchain_import")
 load("//third_party/rules_cc_toolchain/features:features.bzl", "cc_toolchain_import_feature")
+
+# buildifier: leave-alone
+cc_toolchain_import(
+    name = "imports",
+    deps = [
+        "@sysroot_darwin_aarch64//:includes_c",
+        "@llvm_darwin_aarch64//:includes",
+        "@sysroot_darwin_aarch64//:includes_system",
+        "@sysroot_darwin_aarch64//:glibc",
+        "@sysroot_darwin_aarch64//:pthread",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+# buildifier: leave-alone
+filegroup(
+    name = "all",
+    srcs = [
+        ":imports",
+        "//cc_toolchain/impls/cpu/wrappers:all",
+        "@llvm_darwin_aarch64//:all",
+    ],
+)
+
+# buildifier: leave-alone
+filegroup(
+    name = "compiler",
+    srcs = [
+        ":all",
+        "//cc_toolchain/impls/cpu/wrappers:all",
+        "@llvm_darwin_aarch64//:clang",
+        "@llvm_darwin_aarch64//:clang++",
+    ],
+)
+
+# buildifier: leave-alone
+filegroup(
+    name = "linker",
+    srcs = [
+        ":compiler",
+        "//cc_toolchain/impls/cpu/wrappers:all",
+        "@llvm_darwin_aarch64//:ld",
+    ],
+)
+
+# buildifier: leave-alone
+filegroup(
+    name = "ar",
+    srcs = [
+        "//cc_toolchain/impls/cpu/wrappers:all",
+        "@llvm_darwin_aarch64//:ar",
+    ],
+)
