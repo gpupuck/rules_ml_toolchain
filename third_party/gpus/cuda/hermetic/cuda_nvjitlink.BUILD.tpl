@@ -13,6 +13,7 @@ cc_import(
 %{multiline_comment}
 cc_library(
     name = "nvjitlink",
+    %{comment}srcs = ["lib/libnvJitLink_static.a"],
     %{comment}deps = [":nvjitlink_shared_library"],
     %{comment}linkopts = cuda_rpath_flags("nvidia/nvjitlink/lib"),
     visibility = ["//visibility:public"],

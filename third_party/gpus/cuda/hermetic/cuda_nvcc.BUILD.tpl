@@ -94,3 +94,10 @@ cc_library(
     strip_include_prefix = "include",
     visibility = ["@local_config_cuda//cuda:__pkg__"],
 )
+
+cc_library(
+    name = "nvptxcompiler",
+    %{comment}hdrs = ["include/nvPTXCompiler.h"],
+    %{comment}srcs = ["lib/libnvptxcompiler_static.a"],
+    visibility = ["@local_config_cuda//cuda:__pkg__"],
+)
