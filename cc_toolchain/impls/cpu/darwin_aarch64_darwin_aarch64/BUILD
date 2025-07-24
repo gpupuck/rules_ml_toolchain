@@ -16,6 +16,12 @@ cc_toolchain_import(
     visibility = ["//visibility:public"],
 )
 
+cc_toolchain_import_feature(
+    name = "imports_feature",
+    enabled = True,
+    toolchain_import = ":imports",
+)
+
 # buildifier: leave-alone
 filegroup(
     name = "all",

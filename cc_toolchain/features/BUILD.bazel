@@ -28,12 +28,6 @@ package(
     ],
 )
 
-cc_toolchain_import_feature(
-    name = "toolchain_import_darwin_aarch64_darwin_aarch64",
-    enabled = True,
-    toolchain_import = "//cc_toolchain:imports_darwin_aarch64_darwin_aarch64",
-)
-
 cc_feature(
     name = "garbage_collect_symbols_mac",
     compiler_flags = [
