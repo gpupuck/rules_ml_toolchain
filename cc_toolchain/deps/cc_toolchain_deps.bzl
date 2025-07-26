@@ -73,7 +73,7 @@ def cc_toolchain_deps():
     if "llvm_darwin_aarch64" not in native.existing_rules():
         llvm_http_archive(
             name = "llvm_darwin_aarch64",
-            urls = ["https://github.com/yuriit-google/sysroots/raw/ba192c408e0f82c6c9a5b92712038edaa64326d6/archives/ubuntu18_aarch64-sysroot.tar.xz"],
+            urls = ["https://github.com/llvm/llvm-project/releases/download/llvmorg-18.1.8/clang+llvm-18.1.8-arm64-apple-macos11.tar.xz"],
             sha256 = "4573b7f25f46d2a9c8882993f091c52f416c83271db6f5b213c93f0bd0346a10",
             build_file = Label("//cc_toolchain/config:llvm_darwin_aarch64.BUILD"),
             strip_prefix = "clang+llvm-18.1.8-arm64-apple-macos11",
