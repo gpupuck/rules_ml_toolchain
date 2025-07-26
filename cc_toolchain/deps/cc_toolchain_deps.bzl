@@ -75,6 +75,6 @@ def cc_toolchain_deps():
             name = "llvm_darwin_aarch64",
             urls = ["https://github.com/llvm/llvm-project/releases/download/llvmorg-18.1.8/clang+llvm-18.1.8-arm64-apple-macos11.tar.xz"],
             sha256 = "4573b7f25f46d2a9c8882993f091c52f416c83271db6f5b213c93f0bd0346a10",
-            build_file = Label("//cc_toolchain/config:llvm_darwin_aarch64.BUILD"),
+            build_file = Label("//cc_toolchain/config:llvm18_darwin_aarch64.BUILD"),
             strip_prefix = "clang+llvm-18.1.8-arm64-apple-macos11",
         )
