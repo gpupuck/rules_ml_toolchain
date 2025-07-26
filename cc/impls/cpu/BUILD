@@ -168,22 +168,22 @@ cc_toolchain_config(
         "//third_party/rules_cc_toolchain/features:reproducible",
         "//third_party/rules_cc_toolchain/features:language",
         "//third_party/rules_cc_toolchain/features:use_lld",
-        "//cc_toolchain/features:sysroot_darwin_aarch64",
+        "//cc/features:sysroot_darwin_aarch64",
         "//third_party/rules_cc_toolchain/features:coverage",
-        "//cc_toolchain/features:max_install_names",
-        "//cc_toolchain/features:no_elaborated_enum_base",
+        "//cc/features:max_install_names",
+        "//cc/features:no_elaborated_enum_base",
 
         # PIC / PIE flags
         "//third_party/rules_cc_toolchain/features:supports_pic",
         "//third_party/rules_cc_toolchain/features:position_independent_code",
 
         # Optimization flags
-        "//cc_toolchain/features:garbage_collect_symbols_mac",
-        "//cc_toolchain/features:constants_merge",
-        "//cc_toolchain/features:asserts_disable",
+        "//cc/features:garbage_collect_symbols_mac",
+        "//cc/features:constants_merge",
+        "//cc/features:asserts_disable",
         "//third_party/rules_cc_toolchain/features:dbg",
         "//third_party/rules_cc_toolchain/features:opt",
-        "//cc_toolchain/features:detect_issues",
+        "//cc/features:detect_issues",
 
         # C++ standard configuration
         "//third_party/rules_cc_toolchain/features:c++11",
@@ -191,9 +191,9 @@ cc_toolchain_config(
         "//third_party/rules_cc_toolchain/features:c++17",
 
         #
-        # "//cc_toolchain/features:allow_shlib_undefined",  # Instead of --allow-shlib-undefined, macOS uses the -undefined flag with dynamic_lookup as an argument.
-        "//cc_toolchain/features:supports_dynamic_linker",
-        "//cc_toolchain/features:supports_start_end_lib_feature",
+        # "//cc/features:allow_shlib_undefined",  # Instead of --allow-shlib-undefined, macOS uses the -undefined flag with dynamic_lookup as an argument.
+        "//cc/features:supports_dynamic_linker",
+        "//cc/features:supports_start_end_lib_feature",
     ],
     dynamic_library_extension = ".dylib",
     install_name = "@llvm_linux_x86_64//:install_name_tool_darwin",
@@ -206,11 +206,11 @@ cc_toolchain_config(
 
 cc_toolchain(
     name = "toolchain_linux_x86_64_darwin_aarch64",
-    all_files = "//cc_toolchain/impls/cpu/linux_x86_64_darwin_aarch64:all",
-    ar_files = "//cc_toolchain/impls/cpu/linux_x86_64_darwin_aarch64:ar",
-    compiler_files = "//cc_toolchain/impls/cpu/linux_x86_64_darwin_aarch64:compiler",
-    dwp_files = "//cc_toolchain/impls/cpu/linux_x86_64_darwin_aarch64:all",
-    linker_files = "//cc_toolchain/impls/cpu/linux_x86_64_darwin_aarch64:linker",
+    all_files = "//cc/impls/cpu/linux_x86_64_darwin_aarch64:all",
+    ar_files = "//cc/impls/cpu/linux_x86_64_darwin_aarch64:ar",
+    compiler_files = "//cc/impls/cpu/linux_x86_64_darwin_aarch64:compiler",
+    dwp_files = "//cc/impls/cpu/linux_x86_64_darwin_aarch64:all",
+    linker_files = "//cc/impls/cpu/linux_x86_64_darwin_aarch64:linker",
     objcopy_files = ":empty",
     strip_files = ":empty",
     supports_param_files = 1,
@@ -231,7 +231,7 @@ cc_toolchain_config(
     compiler_features = [
         # Hermetic libraries feature required before import.
         "//third_party/rules_cc_toolchain/features:hermetic_libraries",
-        "//cc_toolchain/impls/cpu/darwin_aarch64_darwin_aarch64:imports_feature",
+        "//cc/impls/cpu/darwin_aarch64_darwin_aarch64:imports_feature",
         "//third_party/rules_cc_toolchain/features:undefined_symbols",
 
         # Toolchain configuration
@@ -240,22 +240,22 @@ cc_toolchain_config(
         "//third_party/rules_cc_toolchain/features:reproducible",
         "//third_party/rules_cc_toolchain/features:language",
         "//third_party/rules_cc_toolchain/features:use_lld",
-        "//cc_toolchain/features:sysroot_darwin_aarch64",
+        "//cc/features:sysroot_darwin_aarch64",
         "//third_party/rules_cc_toolchain/features:coverage",
-        "//cc_toolchain/features:max_install_names",
-        "//cc_toolchain/features:no_elaborated_enum_base",
+        "//cc/features:max_install_names",
+        "//cc/features:no_elaborated_enum_base",
 
         # PIC / PIE flags
         "//third_party/rules_cc_toolchain/features:supports_pic",
         "//third_party/rules_cc_toolchain/features:position_independent_code",
 
         # Optimization flags
-        "//cc_toolchain/features:garbage_collect_symbols_mac",
-        "//cc_toolchain/features:constants_merge",
-        "//cc_toolchain/features:asserts_disable",
+        "//cc/features:garbage_collect_symbols_mac",
+        "//cc/features:constants_merge",
+        "//cc/features:asserts_disable",
         "//third_party/rules_cc_toolchain/features:dbg",
         "//third_party/rules_cc_toolchain/features:opt",
-        "//cc_toolchain/features:detect_issues",
+        "//cc/features:detect_issues",
 
         # C++ standard configuration
         "//third_party/rules_cc_toolchain/features:c++11",
@@ -263,9 +263,9 @@ cc_toolchain_config(
         "//third_party/rules_cc_toolchain/features:c++17",
 
         #
-        # "//cc_toolchain/features:allow_shlib_undefined",  # Instead of --allow-shlib-undefined, macOS uses the -undefined flag with dynamic_lookup as an argument.
-        "//cc_toolchain/features:supports_dynamic_linker",
-        "//cc_toolchain/features:supports_start_end_lib_feature",
+        # "//cc/features:allow_shlib_undefined",  # Instead of --allow-shlib-undefined, macOS uses the -undefined flag with dynamic_lookup as an argument.
+        "//cc/features:supports_dynamic_linker",
+        "//cc/features:supports_start_end_lib_feature",
     ],
     dynamic_library_extension = ".dylib",
     install_name = "@llvm_darwin_aarch64//:install_name_tool_darwin",
@@ -278,11 +278,11 @@ cc_toolchain_config(
 
 cc_toolchain(
     name = "toolchain_darwin_aarch64_darwin_aarch64",
-    all_files = "//cc_toolchain/impls/cpu/darwin_aarch64_darwin_aarch64:all",
-    ar_files = "//cc_toolchain/impls/cpu/darwin_aarch64_darwin_aarch64:ar",
-    compiler_files = "//cc_toolchain/impls/cpu/darwin_aarch64_darwin_aarch64:compiler",
-    dwp_files = "//cc_toolchain/impls/cpu/darwin_aarch64_darwin_aarch64:all",
-    linker_files = "//cc_toolchain/impls/cpu/darwin_aarch64_darwin_aarch64:linker",
+    all_files = "//cc/impls/cpu/darwin_aarch64_darwin_aarch64:all",
+    ar_files = "//cc/impls/cpu/darwin_aarch64_darwin_aarch64:ar",
+    compiler_files = "//cc/impls/cpu/darwin_aarch64_darwin_aarch64:compiler",
+    dwp_files = "//cc/impls/cpu/darwin_aarch64_darwin_aarch64:all",
+    linker_files = "//cc/impls/cpu/darwin_aarch64_darwin_aarch64:linker",
     objcopy_files = ":empty",
     strip_files = ":empty",
     supports_param_files = 1,

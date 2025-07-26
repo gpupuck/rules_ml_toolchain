@@ -14,7 +14,7 @@
 # ==============================================================================
 
 load(
-    "@rules_ml_toolchain//cc_toolchain:cuda.bzl",
+    "@rules_ml_toolchain//cc:cuda.bzl",
     "cuda_package",
 )
 load(

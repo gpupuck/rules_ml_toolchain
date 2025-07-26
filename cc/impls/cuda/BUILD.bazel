@@ -10,7 +10,7 @@ load("//third_party/rules_cc_toolchain/features:features.bzl", "cc_toolchain_imp
 
 package(
     default_visibility = [
-        "//cc_toolchain:__pkg__",
+        "//cc:__pkg__",
     ],
 )
 
