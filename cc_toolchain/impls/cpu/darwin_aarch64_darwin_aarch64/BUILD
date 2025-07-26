@@ -3,6 +3,12 @@ load("//third_party/rules_cc_toolchain:toolchain_config.bzl", "cc_toolchain_conf
 load("//third_party/rules_cc_toolchain/features:cc_toolchain_import.bzl", "cc_toolchain_import")
 load("//third_party/rules_cc_toolchain/features:features.bzl", "cc_toolchain_import_feature")
 
+package(
+    default_visibility = [
+        "//cc_toolchain/impls/cpu:__pkg__",
+    ],
+)
+
 # buildifier: leave-alone
 cc_toolchain_import(
     name = "imports",
