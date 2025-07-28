@@ -32,36 +32,11 @@ config_setting(
     },
 )
 
-constraint_setting(
-    name = "cuda",
-    default_constraint_value = "cuda_disabled",
-)
-
-constraint_value(
-    name = "cuda_enabled",
-    constraint_setting = ":cuda",
-)
-
-constraint_value(
-    name = "cuda_disabled",
-    constraint_setting = ":cuda",
-)
-
 platform(
     name = "linux_x86_64",
     constraint_values = [
         "@platforms//os:linux",
         "@platforms//cpu:x86_64",
-        ":cuda_disabled",
-    ],
-)
-
-platform(
-    name = "linux_x86_64_cuda",
-    constraint_values = [
-        "@platforms//os:linux",
-        "@platforms//cpu:x86_64",
-        ":cuda_enabled",
     ],
 )
 
