@@ -20,18 +20,6 @@ package(
     default_visibility = ["//visibility:public"],
 )
 
-bool_flag(
-    name = "enable_hermetic_cc",
-    build_setting_default = True,
-)
-
-config_setting(
-    name = "is_hermetic_cc_enabled",
-    flag_values = {
-        ":enable_hermetic_cc": "True",
-    },
-)
-
 platform(
     name = "linux_x86_64",
     constraint_values = [

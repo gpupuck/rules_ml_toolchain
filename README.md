@@ -43,7 +43,7 @@ You could run hermetic build and test with help of command:
 ### Non-hermetic builds
 When executor and a target are the same, you still can run non-hermetic build. Command should look like:
 
-`bazel build //cc/tests/cpu:all --//cc/config:enable_hermetic_cc=False`
+`bazel build //cc/tests/cpu:all --//common:enable_hermetic_cc=False`
 
 ### Cross-platform builds
 Project supports cross-platform builds only on Linux x86_64 executor 

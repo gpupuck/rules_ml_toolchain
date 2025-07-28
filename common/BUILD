@@ -1,8 +1,25 @@
+load("@bazel_skylib//rules:common_settings.bzl", "bool_flag")
 load("//gpu/cuda:enable_cuda_flag.bzl", "enable_cuda_flag")
 
 package(default_visibility = ["//visibility:public"])
 
-# Build flag to enable CUDA support.
+#######################################################
+# Enable Hermetic C++ support flags.
+
+bool_flag(
+    name = "enable_hermetic_cc",
+    build_setting_default = True,
+)
+
+config_setting(
+    name = "is_hermetic_cc_enabled",
+    flag_values = {
+        ":enable_hermetic_cc": "True",
+    },
+)
+
+#######################################################
+# Enable CUDA support flags.
 #
 # Enable with '--@local_config_cuda//:enable_cuda', or indirectly with
 # ./configure or '--config=cuda'.
