@@ -4,6 +4,32 @@ load("//gpu/cuda:enable_cuda_flag.bzl", "enable_cuda_flag")
 package(default_visibility = ["//visibility:public"])
 
 #######################################################
+# Platforms definition
+platform(
+    name = "linux_x86_64",
+    constraint_values = [
+        "@platforms//os:linux",
+        "@platforms//cpu:x86_64",
+    ],
+)
+
+platform(
+    name = "linux_aarch64",
+    constraint_values = [
+        "@platforms//os:linux",
+        "@platforms//cpu:aarch64",
+    ],
+)
+
+platform(
+    name = "macos_aarch64",
+    constraint_values = [
+        "@platforms//os:macos",
+        "@platforms//cpu:aarch64",
+    ],
+)
+
+#######################################################
 # Enable Hermetic C++ support flags.
 
 bool_flag(

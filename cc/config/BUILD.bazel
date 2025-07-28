@@ -12,36 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ==============================================================================
-
-load("@bazel_skylib//rules:common_settings.bzl", "bool_flag")
 load("//third_party/rules_cc_toolchain/features:features.bzl", "cc_toolchain_import_feature")
 
 package(
     default_visibility = ["//visibility:public"],
-)
-
-platform(
-    name = "linux_x86_64",
-    constraint_values = [
-        "@platforms//os:linux",
-        "@platforms//cpu:x86_64",
-    ],
-)
-
-platform(
-    name = "linux_aarch64",
-    constraint_values = [
-        "@platforms//os:linux",
-        "@platforms//cpu:aarch64",
-    ],
-)
-
-platform(
-    name = "macos_aarch64",
-    constraint_values = [
-        "@platforms//os:macos",
-        "@platforms//cpu:aarch64",
-    ],
 )
 
 # This is a placeholder to signify an empty dependency.

@@ -52,9 +52,9 @@ and allows build for such targets:
 * macOS aarch64
 
 #### Build for Linux aarch64
-`bazel build //cc/tests/cpu/... --platforms=//cc/config:linux_aarch64`
+`bazel build //cc/tests/cpu/... --platforms=//common:linux_aarch64`
 
 #### Build for macOS aarch64
 [Prepare SDK](cc/sysroots/darwin_aarch64/README.md) before run the following command.
 
-`bazel build //cc/tests/cpu/... --platforms=//cc/config:macos_aarch64`
+`bazel build //cc/tests/cpu/... --platforms=//common:macos_aarch64`
