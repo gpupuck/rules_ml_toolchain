@@ -5,8 +5,9 @@ def _enable_cuda_flag_impl(ctx):
     value = ctx.build_setting_value
     if ctx.attr.enable_override:
         print(
-            "\n\033[1;33mWarning:\033[0m '--define=using_cuda_nvcc' will be " +
-            "unsupported soon. Use '--@local_config_cuda//:enable_cuda' " +
+            "\n\033[1;33mWarning:\033[0m '--define=using_cuda_nvcc' and " +
+            "'build:cuda --@local_config_cuda//:enable_cuda' will be " +
+            "unsupported soon. Use '--@rules_ml_toolchain//common:enable_cuda' " +
             "instead."
         )
         value = True
