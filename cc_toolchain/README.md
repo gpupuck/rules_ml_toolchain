@@ -1,0 +1,1 @@
+This deprecated package remains for backward compatibility but should be removed soon.

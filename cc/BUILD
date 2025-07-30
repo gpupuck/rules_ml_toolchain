@@ -17,6 +17,10 @@ load("@rules_cc//cc:defs.bzl", "cc_toolchain")
 load("//third_party/rules_cc_toolchain:toolchain_config.bzl", "cc_toolchain_config")
 load("//third_party/rules_cc_toolchain/features:cc_toolchain_import.bzl", "cc_toolchain_import")
 
+package(
+    default_visibility = ["//visibility:public"],
+)
+
 #=====================================================================
 # Tools: Linux x86_64, Sysroot: Linux x86_64
 #=====================================================================

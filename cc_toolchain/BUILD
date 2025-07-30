@@ -17,40 +17,14 @@ load("@rules_cc//cc:defs.bzl", "cc_toolchain")
 load("//third_party/rules_cc_toolchain:toolchain_config.bzl", "cc_toolchain_config")
 load("//third_party/rules_cc_toolchain/features:cc_toolchain_import.bzl", "cc_toolchain_import")
 
-# DEPRECATED TOOLCHAINS, USE //cc:linux_x86_64_linux_x86_64 and //cc:linux_x86_64_linux_x86_64_cuda
+# DEPRECATED TOOLCHAINS, USE //cc:linux_x86_64_linux_x86_64 and //cc:linux_x86_64_linux_x86_64_cuda INSTEAD
 
-toolchain(
+alias(
     name = "lx64_lx64",
-    exec_compatible_with = [
-        "@platforms//cpu:x86_64",
-        "@platforms//os:linux",
-    ],
-    target_compatible_with = [
-        "@platforms//cpu:x86_64",
-        "@platforms//os:linux",
-    ],
-    target_settings = [
-        "//common:is_cuda_disabled",
-        "//common:is_hermetic_cc_enabled",
-    ],
-    toolchain = "//cc/impls/cpu:toolchain_linux_x86_64_linux_x86_64",
-    toolchain_type = "@bazel_tools//tools/cpp:toolchain_type",
+    actual = "@rules_ml_toolchain//cc:linux_x86_64_linux_x86_64",
 )
 
-toolchain(
+alias(
     name = "lx64_lx64_cuda",
-    exec_compatible_with = [
-        "@platforms//cpu:x86_64",
-        "@platforms//os:linux",
-    ],
-    target_compatible_with = [
-        "@platforms//cpu:x86_64",
-        "@platforms//os:linux",
-    ],
-    target_settings = [
-        "//common:is_cuda_enabled",
-        "//common:is_hermetic_cc_enabled",
-    ],
-    toolchain = "//cc/impls/cuda:toolchain_linux_x86_64_linux_x86_64_cuda",
-    toolchain_type = "@bazel_tools//tools/cpp:toolchain_type",
+    actual = "@rules_ml_toolchain//cc:linux_x86_64_linux_x86_64_cuda",
 )
