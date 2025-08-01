@@ -46,6 +46,7 @@ filegroup(
         "//cc/impls/cpu/wrappers:all",
         "@llvm_darwin_aarch64//:clang",
         "@llvm_darwin_aarch64//:clang++",
+        "@llvm_darwin_aarch64//:asan_ignorelist",
     ],
 )
 

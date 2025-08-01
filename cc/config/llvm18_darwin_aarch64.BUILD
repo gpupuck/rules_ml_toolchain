@@ -64,6 +64,14 @@ filegroup(
     visibility = ["//visibility:public"],
 )
 
+filegroup(
+    name = "asan_ignorelist",
+    srcs = [
+        "lib/clang/18/share/asan_ignorelist.txt"
+    ],
+    visibility = ["//visibility:public"],
+)
+
 cc_toolchain_import(
     name = "includes",
     hdrs = glob([
