@@ -158,6 +158,8 @@ cc_toolchain_config(
         "//cc/features:sysroot_linux_x86_64",
         ":startup_libs_feature",
         "//third_party/rules_cc_toolchain/features:coverage",
+        "//cc/features:clang_ml",
+        #"//cc/features:clang19_ml",    # Uncomment for clang 19 or above
 
         # PIC / PIE flags
         "//third_party/rules_cc_toolchain/features:supports_pic",

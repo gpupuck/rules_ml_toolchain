@@ -76,7 +76,7 @@ cc_feature(
 )
 
 cc_feature(
-    name = "clang",
+    name = "clang_ml",
     compiler_flags = [
         # Disable clang extention that rejects type definitions within offsetof.
         # This was added in clang-16 by https://reviews.llvm.org/D133574.
@@ -90,6 +90,18 @@ cc_feature(
 
         # Error on struct/class mismatches, since this causes link failures on Windows.
         "-Werror=mismatched-tags",
+
+        # Required when building with clang>=19, see jax-ml/jax#27091
+        # "-Wno-error=c23-extensions",
+    ],
+    enabled = True,
+)
+
+# Required when building with clang>=19, see jax-ml/jax#27091
+cc_feature(
+    name = "clang19_ml",
+    compiler_flags = [
+        "-Wno-error=c23-extensions",
     ],
     enabled = True,
 )
