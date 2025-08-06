@@ -159,7 +159,7 @@ cc_toolchain_config(
         ":startup_libs_feature",
         "//third_party/rules_cc_toolchain/features:coverage",
         "//cc/features:clang_ml",
-        #"//cc/features:clang19_ml",    # Uncomment for clang 19 or above
+        #"//cc/features:clang19_ml",    # TODO: Add select depending on Clang version
 
         # PIC / PIE flags
         "//third_party/rules_cc_toolchain/features:supports_pic",
