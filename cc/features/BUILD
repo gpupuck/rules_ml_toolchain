@@ -90,9 +90,6 @@ cc_feature(
 
         # Error on struct/class mismatches, since this causes link failures on Windows.
         "-Werror=mismatched-tags",
-
-        # Required when building with clang>=19, see jax-ml/jax#27091
-        # "-Wno-error=c23-extensions",
     ],
     enabled = True,
 )
