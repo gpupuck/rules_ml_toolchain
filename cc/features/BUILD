@@ -76,7 +76,7 @@ cc_feature(
 )
 
 cc_feature(
-    name = "clang_ml",
+    name = "clang",
     compiler_flags = [
         # Disable clang extention that rejects type definitions within offsetof.
         # This was added in clang-16 by https://reviews.llvm.org/D133574.
@@ -96,7 +96,7 @@ cc_feature(
 
 # Required when building with clang>=19, see jax-ml/jax#27091
 cc_feature(
-    name = "clang19_ml",
+    name = "clang19",
     compiler_flags = [
         "-Wno-error=c23-extensions",
     ],
