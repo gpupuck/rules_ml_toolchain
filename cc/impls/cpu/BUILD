@@ -25,7 +25,7 @@ cc_toolchain_config(
         "//cc/impls/cpu/linux_x86_64_linux_x86_64:startup_libs_feature",
         "//third_party/rules_cc_toolchain/features:coverage",
         "//cc/features:clang_ml",
-        #"//cc/features:clang19_ml",    # TODO: Add select depending on Clang version
+        #"//cc/features:clang19_ml",    # TODO: Add a selection mechanism based on the Clang version
 
         # PIC / PIE flags
         "//third_party/rules_cc_toolchain/features:supports_pic",
@@ -94,7 +94,7 @@ cc_toolchain_config(
         "//cc/impls/cpu/linux_x86_64_linux_aarch64:startup_libs_feature",
         "//third_party/rules_cc_toolchain/features:coverage",
         "//cc/features:clang_ml",
-        #"//cc/features:clang19_ml",    # TODO: Add select depending on Clang version
+        #"//cc/features:clang19_ml",    # TODO: Add a selection mechanism based on the Clang version
 
         # PIC / PIE flags
         "//third_party/rules_cc_toolchain/features:supports_pic",
@@ -175,7 +175,7 @@ cc_toolchain_config(
         "//cc/features:sysroot_darwin_aarch64",
         "//third_party/rules_cc_toolchain/features:coverage",
         "//cc/features:clang_ml",
-        #"//cc/features:clang19_ml",    # TODO: Add select depending on Clang version
+        #"//cc/features:clang19_ml",    # TODO: Add a selection mechanism based on the Clang version
         "//cc/features:max_install_names",
         "//cc/features:no_elaborated_enum_base",
 
@@ -249,7 +249,7 @@ cc_toolchain_config(
         "//cc/features:sysroot_darwin_aarch64",
         "//third_party/rules_cc_toolchain/features:coverage",
         "//cc/features:clang_ml",
-        #"//cc/features:clang19_ml",    # TODO: Add select depending on Clang version
+        #"//cc/features:clang19_ml",    # TODO: Add a selection mechanism based on the Clang version
         "//cc/features:max_install_names",
         "//cc/features:no_elaborated_enum_base",
 
