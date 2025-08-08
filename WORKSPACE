@@ -167,7 +167,6 @@ cudnn_redist_init_repository(
 
 load(
     "//gpu/cuda:cuda_configure.bzl",
-    #"//third_party/gpus/cuda/hermetic:cuda_configure.bzl",
     "cuda_configure",
 )
 
