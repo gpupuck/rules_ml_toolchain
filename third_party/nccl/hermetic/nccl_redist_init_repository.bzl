@@ -150,3 +150,9 @@ def nccl_redist_init_repository(
         build_templates = templates,
         strip_prefix = "nvidia/nccl",
     )
+
+# TODO(yuriit): Remove after moving to //gpu/nccl package
+def nccl_redist_init_repository_wrapper(
+        cuda_nccl_wheels,
+        redist_versions_to_build_templates):
+    nccl_redist_init_repository(cuda_nccl_wheels, redist_versions_to_build_templates)

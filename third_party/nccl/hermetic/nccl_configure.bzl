@@ -162,7 +162,8 @@ def _create_local_nccl_repository(repository_ctx):
     )
     repository_ctx.file("nccl_config.h", "#define TF_NCCL_VERSION \"%s\"" % nccl_version)
 
-def _nccl_autoconf_impl(repository_ctx):
+# TODO(yuriit): Rename to _nccl_autoconf_impl after moving to //gpu/nccl package
+def nccl_autoconf_impl(repository_ctx):
     if (not enable_cuda(repository_ctx) or
         get_cpu_value(repository_ctx) != "Linux"):
         # Add a dummy build file to make bazel query happy.
@@ -180,7 +181,8 @@ def _nccl_autoconf_impl(repository_ctx):
 
 USE_HERMETIC_CC_TOOLCHAIN = "USE_HERMETIC_CC_TOOLCHAIN"
 
-_ENVIRONS = [
+# TODO(yuriit): Rename to _ENVIRONS after moving to //gpu/nccl package
+ENVIRONS = [
     TF_NEED_CUDA,
     TF_CUDA_VERSION,
     _TF_NCCL_USE_STUB,
@@ -191,8 +193,8 @@ _ENVIRONS = [
 ]
 
 nccl_configure = repository_rule(
-    environ = _ENVIRONS,
-    implementation = _nccl_autoconf_impl,
+    environ = ENVIRONS,
+    implementation = nccl_autoconf_impl,
     attrs = {
         "environ": attr.string_dict(),
         "generated_names_tpl": attr.label(default = Label("//third_party/nccl:generated_names.bzl.tpl")),

@@ -697,7 +697,8 @@ def _create_toolchains_repository(repository_ctx):
     if not created:
         _create_dummy_toolchains_repository(repository_ctx)
 
-def _cuda_configure_impl(repository_ctx):
+# TODO: Rename to _cuda_configure_impl after moving to //gpu/cuda package
+def cuda_configure_impl(repository_ctx):
     """Implementation of the cuda_configure repository rule."""
     build_file = repository_ctx.attr.local_config_cuda_build_file
 
@@ -723,7 +724,7 @@ _TF_SYSROOT = "TF_SYSROOT"
 _TMPDIR = "TMPDIR"
 
 cuda_configure = repository_rule(
-    implementation = _cuda_configure_impl,
+    implementation = cuda_configure_impl,
     attrs = {
         "environ": attr.string_dict(),
         "cccl_version": attr.label(default = Label("@cuda_cccl//:version.bzl")),

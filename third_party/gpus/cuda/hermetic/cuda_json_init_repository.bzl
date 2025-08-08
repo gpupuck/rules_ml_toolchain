@@ -81,3 +81,11 @@ def cuda_json_init_repository(
     _combined_redist_json(
         name = "cuda_redist_json",
     )
+
+# TODO(yuriit): Remove after moving to //gpu/cuda package
+def cuda_json_init_repository_wrapper(
+        cuda_json_dict,
+        cudnn_json_dict,
+        mirrored_tars_cuda_json_dict,
+        mirrored_tars_cudnn_json_dict):
+    cuda_json_init_repository(cuda_json_dict, cudnn_json_dict, mirrored_tars_cuda_json_dict, mirrored_tars_cudnn_json_dict)
