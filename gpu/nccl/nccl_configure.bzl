@@ -17,16 +17,8 @@
 
 load(
     "@rules_ml_toolchain//third_party/nccl/hermetic:nccl_configure.bzl",
-    "ENVIRONS",
-    "nccl_autoconf_impl",
+    "nccl_configure_wrapper",
 )
 
-nccl_configure = repository_rule(
-    environ = ENVIRONS,
-    implementation = nccl_autoconf_impl,
-    attrs = {
-        "environ": attr.string_dict(),
-        "generated_names_tpl": attr.label(default = Label("//third_party/nccl:generated_names.bzl.tpl")),
-        "build_defs_tpl": attr.label(default = Label("//third_party/nccl:build_defs.bzl.tpl")),
-    },
-)
+def nccl_configure(name):
+    nccl_configure_wrapper(name = name)

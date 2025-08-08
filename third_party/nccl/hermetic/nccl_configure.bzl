@@ -162,8 +162,7 @@ def _create_local_nccl_repository(repository_ctx):
     )
     repository_ctx.file("nccl_config.h", "#define TF_NCCL_VERSION \"%s\"" % nccl_version)
 
-# TODO(yuriit): Rename to _nccl_autoconf_impl after moving to //gpu/nccl package
-def nccl_autoconf_impl(repository_ctx):
+def _nccl_autoconf_impl(repository_ctx):
     if (not enable_cuda(repository_ctx) or
         get_cpu_value(repository_ctx) != "Linux"):
         # Add a dummy build file to make bazel query happy.
@@ -181,8 +180,7 @@ def nccl_autoconf_impl(repository_ctx):
 
 USE_HERMETIC_CC_TOOLCHAIN = "USE_HERMETIC_CC_TOOLCHAIN"
 
-# TODO(yuriit): Rename to _ENVIRONS after moving to //gpu/nccl package
-ENVIRONS = [
+_ENVIRONS = [
     TF_NEED_CUDA,
     TF_CUDA_VERSION,
     _TF_NCCL_USE_STUB,
@@ -193,8 +191,8 @@ ENVIRONS = [
 ]
 
 nccl_configure = repository_rule(
-    environ = ENVIRONS,
-    implementation = nccl_autoconf_impl,
+    environ = _ENVIRONS,
+    implementation = _nccl_autoconf_impl,
     attrs = {
         "environ": attr.string_dict(),
         "generated_names_tpl": attr.label(default = Label("//third_party/nccl:generated_names.bzl.tpl")),
@@ -212,3 +210,7 @@ nccl_configure(name = "local_config_nccl")
 Args:
   name: A unique name for this workspace rule.
 """  # buildifier: disable=no-effect
+
+# TODO(yuriit): Remove after moving to //gpu/nccl package
+def nccl_configure_wrapper(name):
+    nccl_configure(name = name)

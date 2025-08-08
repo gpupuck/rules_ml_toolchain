@@ -763,3 +763,7 @@ cuda_configure(name = "local_config_cuda")
 Args:
   name: A unique name for this workspace rule.
 """  # buildifier: disable=no-effect
+
+# TODO(yuriit): Remove after moving to //gpu/cuda package
+def cuda_configure_wrapper(name):
+    cuda_configure(name = name)
