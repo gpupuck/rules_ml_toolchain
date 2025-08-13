@@ -14,10 +14,9 @@
 # ==============================================================================
 
 # ==============================================================================
-# Tools: Linux x86_64, Sysroot: macOS aarch64
+# Tools: Linux x86_64, Sysroot: Linux x86_64
 # ==============================================================================
 
-load("@rules_cc//cc:defs.bzl", "cc_toolchain")
 load("//third_party/rules_cc_toolchain:toolchain_config.bzl", "cc_toolchain_config")
 load("//third_party/rules_cc_toolchain/features:cc_toolchain_import.bzl", "cc_toolchain_import")
 load("//third_party/rules_cc_toolchain/features:features.bzl", "cc_toolchain_import_feature")
@@ -31,20 +30,34 @@ package(
 filegroup(
     name = "wrappers",
     srcs = [
-        "//cc/impls/cpu/linux_x86_64_darwin_aarch64/wrappers:all",
+        "//cc/impls/linux_x86_64_linux_x86_64/wrappers:all",
     ],
     visibility = ["//visibility:public"],
+)
+
+# TODO: remove below alias
+alias(
+    name = "startup_libs",
+    actual = "@sysroot_linux_x86_64//:startup_libs",
+    visibility = ["//visibility:public"],
+)
+
+cc_toolchain_import_feature(
+    name = "startup_libs_feature",
+    enabled = True,
+    toolchain_import = ":startup_libs",
 )
 
 # buildifier: leave-alone
 cc_toolchain_import(
     name = "imports",
     deps = [
-        "@sysroot_darwin_aarch64//:includes_c",
+        "@sysroot_linux_x86_64//:includes_c",
         "@llvm_linux_x86_64//:includes",
-        "@sysroot_darwin_aarch64//:includes_system",
-        "@sysroot_darwin_aarch64//:glibc",
-        "@sysroot_darwin_aarch64//:pthread",
+        "@sysroot_linux_x86_64//:includes_system",
+        "@sysroot_linux_x86_64//:glibc",
+        "@sysroot_linux_x86_64//:pthread",
+        "@llvm_linux_x86_64//:libclang_rt",
     ],
     visibility = ["//visibility:public"],
 )
@@ -61,6 +74,7 @@ filegroup(
     srcs = [
         ":imports",
         ":wrappers",
+        ":startup_libs",
         "@llvm_linux_x86_64//:all",
     ],
 )
@@ -69,7 +83,7 @@ filegroup(
 filegroup(
     name = "compiler",
     srcs = [
-        ":all",
+        ":imports",
         ":wrappers",
         "@llvm_linux_x86_64//:clang",
         "@llvm_linux_x86_64//:clang++",
@@ -85,6 +99,7 @@ filegroup(
         ":compiler",
         ":wrappers",
         "@llvm_linux_x86_64//:ld",
+        "@sysroot_linux_x86_64//:startup_libs",
         "@llvm_linux_x86_64//:distro_libs",
     ],
 )
@@ -94,21 +109,20 @@ filegroup(
     name = "ar",
     srcs = [
         ":wrappers",
-        "@llvm_linux_x86_64//:ar_darwin",
+        "@llvm_linux_x86_64//:ar",
         "@llvm_linux_x86_64//:distro_libs",
     ],
 )
 
 cc_toolchain_config(
     name = "config",
-    archiver = "@llvm_linux_x86_64//:ar_darwin",
+    archiver = "@llvm_linux_x86_64//:ar",
     c_compiler = "@llvm_linux_x86_64//:clang",
     cc_compiler = "@llvm_linux_x86_64//:clang++",
     compiler_features = [
         # Hermetic libraries feature required before import.
         "//third_party/rules_cc_toolchain/features:hermetic_libraries",
-        ":imports_feature",
-        "//third_party/rules_cc_toolchain/features:undefined_symbols",
+        "//cc/impls/linux_x86_64_linux_x86_64:imports_feature",
 
         # Toolchain configuration
         "//third_party/rules_cc_toolchain/features:warnings",
@@ -116,24 +130,25 @@ cc_toolchain_config(
         "//third_party/rules_cc_toolchain/features:reproducible",
         "//third_party/rules_cc_toolchain/features:language",
         "//third_party/rules_cc_toolchain/features:use_lld",
-        "//cc/features:sysroot_darwin_aarch64",
+        "//cc/features:sysroot_linux_x86_64",
+        "//cc/impls/linux_x86_64_linux_x86_64:startup_libs_feature",
         "//third_party/rules_cc_toolchain/features:coverage",
         "//cc/features:clang",
         #"//cc/features:clang19",    # TODO: Add a selection mechanism based on the Clang version
-        "//cc/features:max_install_names",
-        "//cc/features:no_elaborated_enum_base",
 
         # PIC / PIE flags
         "//third_party/rules_cc_toolchain/features:supports_pic",
         "//third_party/rules_cc_toolchain/features:position_independent_code",
+        "//third_party/rules_cc_toolchain/features:position_independent_executable",
 
         # Optimization flags
-        "//cc/features:garbage_collect_symbols_mac",
+        "//third_party/rules_cc_toolchain/features:garbage_collect_symbols",
         "//cc/features:constants_merge",
         "//cc/features:asserts_disable",
         "//third_party/rules_cc_toolchain/features:dbg",
         "//third_party/rules_cc_toolchain/features:opt",
         "//cc/features:detect_issues",
+        "//cc/features:detect_issues_ext",
 
         # C++ standard configuration
         "//third_party/rules_cc_toolchain/features:c++11",
@@ -141,15 +156,12 @@ cc_toolchain_config(
         "//third_party/rules_cc_toolchain/features:c++17",
 
         #
-        # "//cc/features:allow_shlib_undefined",  # Instead of --allow-shlib-undefined, macOS uses the -undefined flag with dynamic_lookup as an argument.
+        "//cc/features:allow_shlib_undefined",
         "//cc/features:supports_dynamic_linker",
         "//cc/features:supports_start_end_lib_feature",
     ],
-    dynamic_library_extension = ".dylib",
-    install_name = "@llvm_linux_x86_64//:install_name_tool_darwin",
     linker = "@llvm_linux_x86_64//:ld",
-    target_cpu = "aarch64",
-    target_libc = "macosx",
+    target_cpu = "x86_64",
     target_system_name = "local",
 )
 
@@ -164,5 +176,5 @@ cc_toolchain(
     strip_files = ":empty",
     supports_param_files = 1,
     toolchain_config = ":config",
-    toolchain_identifier = "toolchain_id_linux_x86_64_darwin_aarch64",
+    toolchain_identifier = "toolchain_linux_x86_64_linux_x86_64_id",
 )

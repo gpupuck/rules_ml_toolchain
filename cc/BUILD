@@ -39,7 +39,7 @@ toolchain(
         "//common:is_cuda_disabled",
         "//common:is_hermetic_cc_enabled",
     ],
-    toolchain = "//cc/impls/cpu/linux_x86_64_linux_x86_64:toolchain",
+    toolchain = "//cc/impls/linux_x86_64_linux_x86_64:toolchain",
     toolchain_type = "@bazel_tools//tools/cpp:toolchain_type",
 )
 
@@ -84,7 +84,7 @@ toolchain(
         "//common:is_cuda_disabled",
         "//common:is_hermetic_cc_enabled",
     ],
-    toolchain = "//cc/impls/cpu/linux_x86_64_linux_aarch64:toolchain",
+    toolchain = "//cc/impls/linux_x86_64_linux_aarch64:toolchain",
     toolchain_type = "@bazel_tools//tools/cpp:toolchain_type",
 )
 
@@ -107,7 +107,7 @@ toolchain(
         "//common:is_cuda_disabled",
         "//common:is_hermetic_cc_enabled",
     ],
-    toolchain = "//cc/impls/cpu/linux_x86_64_darwin_aarch64:toolchain",
+    toolchain = "//cc/impls/linux_x86_64_darwin_aarch64:toolchain",
     toolchain_type = "@bazel_tools//tools/cpp:toolchain_type",
 )
 
