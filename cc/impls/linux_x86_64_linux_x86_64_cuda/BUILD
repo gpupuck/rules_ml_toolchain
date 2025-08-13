@@ -1,12 +1,27 @@
+# Copyright 2025 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# ==============================================================================
+
+# ==============================================================================
+# Tools: Linux x86_64, Sysroot: Linux x86_64, CUDA
+# ==============================================================================
+
 load("@local_config_cuda//cuda:build_defs.bzl", "if_cuda", "if_cuda_hermetic_clang")
 load("@rules_cc//cc:defs.bzl", "cc_toolchain")
 load("//third_party/rules_cc_toolchain:toolchain_config.bzl", "cc_toolchain_config")
 load("//third_party/rules_cc_toolchain/features:cc_toolchain_import.bzl", "cc_toolchain_import")
 load("//third_party/rules_cc_toolchain/features:features.bzl", "cc_toolchain_import_feature")
-
-#---------------------------------------------------------------------------------------
-# Tools: Linux x86_64, Sysroot: Linux x86_64, CUDA
-#---------------------------------------------------------------------------------------
 
 package(
     default_visibility = [
@@ -16,27 +31,35 @@ package(
 
 CUDA_TOOLS = if_cuda_hermetic_clang(
     {
-        "gcc": "wrappers/linux/clang",
-        "cpp": "wrappers/linux/clang++",
-        "ld": "wrappers/linux/ld",
-        "ar": "wrappers/linux/ar",
-        "gcov": "wrappers/linux/idler",
-        "llvm-cov": "wrappers/linux/idler",
-        "nm": "wrappers/linux/idler",
-        "objdump": "wrappers/linux/idler",
-        "strip": "wrappers/linux/idler",
+        "gcc": "wrappers/clang",
+        "cpp": "wrappers/clang++",
+        "ld": "wrappers/ld",
+        "ar": "wrappers/ar",
+        "gcov": "wrappers/idler",
+        "llvm-cov": "wrappers/idler",
+        "nm": "wrappers/idler",
+        "objdump": "wrappers/idler",
+        "strip": "wrappers/idler",
     },
     {
-        "gcc": "wrappers/linux/nvcc_wrapper",
-        "cpp": "wrappers/linux/clang++",
-        "ld": "wrappers/linux/ld",
-        "ar": "wrappers/linux/ar",
-        "gcov": "wrappers/linux/idler",
-        "llvm-cov": "wrappers/linux/idler",
-        "nm": "wrappers/linux/idler",
-        "objdump": "wrappers/linux/idler",
-        "strip": "wrappers/linux/idler",
+        "gcc": "wrappers/nvcc_wrapper",
+        "cpp": "wrappers/clang++",
+        "ld": "wrappers/ld",
+        "ar": "wrappers/ar",
+        "gcov": "wrappers/idler",
+        "llvm-cov": "wrappers/idler",
+        "nm": "wrappers/idler",
+        "objdump": "wrappers/idler",
+        "strip": "wrappers/idler",
     },
+)
+
+filegroup(
+    name = "wrappers",
+    srcs = [
+        "//cc/impls/linux_x86_64_linux_x86_64_cuda/wrappers:all",
+    ],
+    visibility = ["//visibility:public"],
 )
 
 filegroup(
@@ -88,11 +111,11 @@ cc_toolchain_import_feature(
 
 # buildifier: leave-alone
 filegroup(
-    name = "all_linux_x86_64_linux_x86_64",
+    name = "all",
     srcs = [
         ":cuda_nvcc",
         ":imports",
-        "//cc/impls/cuda/wrappers:all",
+        ":wrappers",
         ":startup_libs",
         "@llvm_linux_x86_64//:all",
     ],
@@ -100,11 +123,11 @@ filegroup(
 
 # buildifier: leave-alone
 filegroup(
-    name = "compiler_linux_x86_64_linux_x86_64",
+    name = "compiler",
     srcs = [
         ":cuda_nvcc",
         ":imports",
-        "//cc/impls/cuda/wrappers:all",
+        ":wrappers",
         "@llvm_linux_x86_64//:clang",
         "@llvm_linux_x86_64//:clang++",
         "@llvm_linux_x86_64//:distro_libs",
@@ -113,11 +136,11 @@ filegroup(
 
 # buildifier: leave-alone
 filegroup(
-    name = "linker_linux_x86_64_linux_x86_64",
+    name = "linker",
     srcs = [
-        ":compiler_linux_x86_64_linux_x86_64",
+        ":compiler",
         ":cuda_nvcc",
-        "//cc/impls/cuda/wrappers:all",
+        ":wrappers",
         "@llvm_linux_x86_64//:ld",
         ":startup_libs",
         "@llvm_linux_x86_64//:distro_libs",
@@ -126,17 +149,17 @@ filegroup(
 
 # buildifier: leave-alone
 filegroup(
-    name = "ar_linux_x86_64_linux_x86_64",
+    name = "ar",
     srcs = [
         ":cuda_nvcc",
-        "//cc/impls/cuda/wrappers:all",
+        ":wrappers",
         "@llvm_linux_x86_64//:ar",
         "@llvm_linux_x86_64//:distro_libs",
     ],
 )
 
 cc_toolchain_config(
-    name = "toolchain_config_linux_x86_64_linux_x86_64",
+    name = "config",
     archiver = "@llvm_linux_x86_64//:ar",
     c_compiler = "@llvm_linux_x86_64//:clang",
     cc_compiler = "@llvm_linux_x86_64//:clang++",
@@ -192,15 +215,15 @@ cc_toolchain_config(
 )
 
 cc_toolchain(
-    name = "toolchain_linux_x86_64_linux_x86_64_cuda",
-    all_files = ":all_linux_x86_64_linux_x86_64",
-    ar_files = ":ar_linux_x86_64_linux_x86_64",
-    compiler_files = ":compiler_linux_x86_64_linux_x86_64",
-    dwp_files = ":all_linux_x86_64_linux_x86_64",
-    linker_files = ":linker_linux_x86_64_linux_x86_64",
+    name = "toolchain",
+    all_files = ":all",
+    ar_files = ":ar",
+    compiler_files = ":compiler",
+    dwp_files = ":all",
+    linker_files = ":linker",
     objcopy_files = ":empty",
     strip_files = ":empty",
     supports_param_files = 1,
-    toolchain_config = ":toolchain_config_linux_x86_64_linux_x86_64",
+    toolchain_config = ":config",
     toolchain_identifier = "toolchain_linux_x86_64_linux_x86_64_id",
 )

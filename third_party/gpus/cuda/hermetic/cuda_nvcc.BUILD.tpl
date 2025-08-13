@@ -79,7 +79,7 @@ cuda_nvcc_feature(
     enabled = True,
     bin = ":bin/nvcc",
     version = "%{version_of_cuda}",
-    visibility = ["@rules_ml_toolchain//cc/impls/cuda:__pkg__"],
+    visibility = ["@rules_ml_toolchain//cc/impls/linux_x86_64_linux_x86_64_cuda:__pkg__"],
 )
 
 cc_library(

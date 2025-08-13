@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Copyright 2025 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,11 +15,4 @@
 # limitations under the License.
 # ==============================================================================
 
-filegroup(
-    name = "all",
-    srcs = [
-        "//cc/impls/cpu/wrappers/darwin:all",
-        "//cc/impls/cpu/wrappers/linux:all",
-    ],
-    visibility = ["//visibility:public"],
-)
+# do nothing here
