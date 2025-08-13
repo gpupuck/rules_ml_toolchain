@@ -218,7 +218,7 @@ def _llvm_http_archive_impl(ctx):
     if ctx.attr.strip_prefix:
         strip_prefix = ctx.attr.strip_prefix
     else:
-        strip_prefix = llvm_file_name
+        strip_prefix = llvm_file_name.split(".")[0]
     ctx.extract(
         archive = llvm_file,
         stripPrefix = strip_prefix,
@@ -236,9 +236,9 @@ def _llvm_http_archive_impl(ctx):
 
     ctx.delete(llvm_file)
 
-    return _update_sha256_attr(ctx, _http_archive_attrs, download_info)
+    return _update_sha256_attr(ctx, _llvm_http_archive_attrs, download_info)
 
-_http_archive_attrs = {
+_llvm_http_archive_attrs = {
     "urls": attr.string_list(doc = _URLS_DOC),
     "sha256": attr.string(
         doc = """The expected SHA-256 of the file downloaded.
@@ -386,7 +386,7 @@ following: `"zip"`, `"war"`, `"aar"`, `"tar"`, `"tar.gz"`, `"tgz"`,
 
 llvm_http_archive = repository_rule(
     implementation = _llvm_http_archive_impl,
-    attrs = _http_archive_attrs,
+    attrs = _llvm_http_archive_attrs,
     doc =
         """Downloads a Bazel repository as a compressed archive file, decompresses it,
 and makes its targets available for binding.
