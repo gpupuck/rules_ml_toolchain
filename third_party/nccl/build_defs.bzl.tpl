@@ -230,11 +230,19 @@ _merge_archive = rule(
         ),
         "ar": attr.label(
             allow_single_file = True,
-            default = "@llvm_linux_x86_64//:bin/llvm-ar",
+            default = select({
+                "@bazel_tools//src/conditions:linux_x86_64": "@llvm_linux_x86_64//:bin/llvm-ar",
+                "@bazel_tools//src/conditions:linux_aarch64": "@llvm_linux_aarch64//:bin/llvm-ar"
+            }),
+            cfg = "exec",
         ),
         "distro_libs":  attr.label(
             allow_single_file = True,
-            default = "@llvm_linux_x86_64//:distro_libs",
+            default = select({
+                "@bazel_tools//src/conditions:linux_x86_64": "@llvm_linux_x86_64//:distro_libs",
+                "@bazel_tools//src/conditions:linux_aarch64": "@llvm_linux_aarch64//:distro_libs"
+            }),
+            cfg = "exec",
         ),
     },
     outputs = {"out": "lib%{name}.a"},
