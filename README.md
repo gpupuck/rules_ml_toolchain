@@ -75,7 +75,9 @@ You could run hermetic tests with help of command:
 #### Non-hermetic builds
 When executor and a target are the same, you still can run non-hermetic build. Command should look like:
 
-`bazel build //cc/tests/cpu:all --//common:enable_hermetic_cc=False`
+`bazel build //cc/tests/cpu:all --config=clang_local`
+
+For details, look at the `.bazelrc` file, specifically the `clang_local` configuration.
 
 ### Cross-platform builds
 Project supports cross-platform builds only on Linux x86_64 executor 

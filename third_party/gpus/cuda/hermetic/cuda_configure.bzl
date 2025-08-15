@@ -53,6 +53,10 @@ load("@cuda_nvml//:version.bzl", _nvml_version = "VERSION")
 load("@cuda_nvtx//:version.bzl", _nvtx_version = "VERSION")
 load("@llvm_linux_x86_64//:version.bzl", _llvm_hermetic_version = "VERSION")
 load(
+    "//cc:constants.bzl",
+    "USE_HERMETIC_CC_TOOLCHAIN",
+)
+load(
     "//third_party/gpus:compiler_common_tools.bzl",
     "get_cxx_inc_directories",
     "to_list_of_strings",
@@ -712,7 +716,6 @@ _CLANG_CUDA_COMPILER_PATH = "CLANG_CUDA_COMPILER_PATH"
 _HERMETIC_CUDA_COMPUTE_CAPABILITIES = "HERMETIC_CUDA_COMPUTE_CAPABILITIES"
 _TF_CUDA_COMPUTE_CAPABILITIES = "TF_CUDA_COMPUTE_CAPABILITIES"
 HERMETIC_CUDA_VERSION = "HERMETIC_CUDA_VERSION"
-USE_HERMETIC_CC_TOOLCHAIN = "USE_HERMETIC_CC_TOOLCHAIN"
 TF_CUDA_VERSION = "TF_CUDA_VERSION"
 TF_NEED_CUDA = "TF_NEED_CUDA"
 _TF_NEED_ROCM = "TF_NEED_ROCM"
