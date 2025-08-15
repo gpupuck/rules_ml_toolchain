@@ -40,6 +40,7 @@ load(
 load(
     "//cc:constants.bzl",
     "USE_HERMETIC_CC_TOOLCHAIN",
+    "USE_HERMETIC_CC_TOOLCHAIN_DEFAULT_VALUE",
 )
 load(
     "//third_party/remote_config:common.bzl",
@@ -177,11 +178,8 @@ def _get_auth(ctx, urls):
         netrc = read_user_netrc(ctx)
     return use_netrc(netrc, urls, ctx.attr.auth_patterns)
 
-def _flag_enabled(ctx, flag_name):
-    return get_host_environ(ctx, flag_name) == "1"
-
 def _use_hermetic_toolchains(ctx):
-    return _flag_enabled(ctx, USE_HERMETIC_CC_TOOLCHAIN)
+    return get_host_environ(ctx, USE_HERMETIC_CC_TOOLCHAIN, USE_HERMETIC_CC_TOOLCHAIN_DEFAULT_VALUE) == "1"
 
 def _update_sha256_attr(ctx, attrs, download_info):
     # We don't need to override the sha256 attribute if integrity is already specified.

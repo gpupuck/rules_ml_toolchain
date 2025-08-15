@@ -55,6 +55,7 @@ load("@llvm_linux_x86_64//:version.bzl", _llvm_hermetic_version = "VERSION")
 load(
     "//cc:constants.bzl",
     "USE_HERMETIC_CC_TOOLCHAIN",
+    "USE_HERMETIC_CC_TOOLCHAIN_DEFAULT_VALUE",
 )
 load(
     "//third_party/gpus:compiler_common_tools.bzl",
@@ -171,7 +172,7 @@ def _is_linux_x86_64(repository_ctx):
     return repository_ctx.os.arch == "amd64" and repository_ctx.os.name == "linux"
 
 def _use_hermetic_toolchains(repository_ctx):
-    return _flag_enabled(repository_ctx, USE_HERMETIC_CC_TOOLCHAIN)
+    return get_host_environ(repository_ctx, USE_HERMETIC_CC_TOOLCHAIN, USE_HERMETIC_CC_TOOLCHAIN_DEFAULT_VALUE) == "1"
 
 def enable_cuda(repository_ctx):
     """Returns whether to build with CUDA support."""
