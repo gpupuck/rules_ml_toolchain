@@ -14,24 +14,65 @@
 # ==============================================================================
 
 # ==============================================================================
-# Tools: Linux aarch64, Sysroot: Linux aarch64
+# Tools: Linux aarch64, Sysroot: Linux aarch64, CUDA
 # ==============================================================================
 
+load("@local_config_cuda//cuda:build_defs.bzl", "if_cuda", "if_cuda_hermetic_clang")
+load("@rules_cc//cc:defs.bzl", "cc_toolchain")
 load("//third_party/rules_cc_toolchain:toolchain_config.bzl", "cc_toolchain_config")
 load("//third_party/rules_cc_toolchain/features:cc_toolchain_import.bzl", "cc_toolchain_import")
 load("//third_party/rules_cc_toolchain/features:features.bzl", "cc_toolchain_import_feature")
 
 package(
     default_visibility = [
-        "//cc/impls/cpu:__pkg__",
+        "//cc:__pkg__",
     ],
+)
+
+CUDA_TOOLS = if_cuda_hermetic_clang(
+    {
+        "gcc": "wrappers/clang",
+        "cpp": "wrappers/clang++",
+        "ld": "wrappers/ld",
+        "ar": "wrappers/ar",
+        "gcov": "wrappers/idler",
+        "llvm-cov": "wrappers/idler",
+        "nm": "wrappers/idler",
+        "objdump": "wrappers/idler",
+        "strip": "wrappers/idler",
+    },
+    {
+        "gcc": "wrappers/nvcc_wrapper",
+        "cpp": "wrappers/clang++",
+        "ld": "wrappers/ld",
+        "ar": "wrappers/ar",
+        "gcov": "wrappers/idler",
+        "llvm-cov": "wrappers/idler",
+        "nm": "wrappers/idler",
+        "objdump": "wrappers/idler",
+        "strip": "wrappers/idler",
+    },
 )
 
 filegroup(
     name = "wrappers",
     srcs = [
-        "//cc/impls/linux_aarch64_linux_aarch64/wrappers:all",
+        "//cc/impls/linux_aarch64_linux_aarch64_cuda/wrappers:all",
     ],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "cuda_nvcc",
+    srcs = if_cuda([
+        "@cuda_nvcc//:bin",
+        "@cuda_nvcc//:nvvm",
+    ]),
+)
+
+alias(
+    name = "cuda_nvcc_feature",
+    actual = "@cuda_nvcc//:feature",
     visibility = ["//visibility:public"],
 )
 
@@ -51,11 +92,13 @@ cc_toolchain_import_feature(
 cc_toolchain_import(
     name = "imports",
     deps = [
+        "@rules_ml_toolchain//cc/cuda/clang:inject_cuda_runtime_wrapper",
         "@sysroot_linux_aarch64//:includes_c",
         "@llvm_linux_aarch64//:includes",
         "@sysroot_linux_aarch64//:includes_system",
         "@sysroot_linux_aarch64//:glibc",
         "@sysroot_linux_aarch64//:pthread",
+        "@llvm_linux_aarch64//:libclang_rt",
     ],
     visibility = ["//visibility:public"],
 )
@@ -70,6 +113,7 @@ cc_toolchain_import_feature(
 filegroup(
     name = "all",
     srcs = [
+        ":cuda_nvcc",
         ":imports",
         ":wrappers",
         ":startup_libs",
@@ -81,12 +125,12 @@ filegroup(
 filegroup(
     name = "compiler",
     srcs = [
-        ":all",
+        ":cuda_nvcc",
+        ":imports",
         ":wrappers",
         "@llvm_linux_aarch64//:clang",
         "@llvm_linux_aarch64//:clang++",
         "@llvm_linux_aarch64//:distro_libs",
-        "@llvm_linux_aarch64//:asan_ignorelist",
     ],
 )
 
@@ -95,9 +139,10 @@ filegroup(
     name = "linker",
     srcs = [
         ":compiler",
+        ":cuda_nvcc",
         ":wrappers",
         "@llvm_linux_aarch64//:ld",
-        "@sysroot_linux_aarch64//:startup_libs",
+        ":startup_libs",
         "@llvm_linux_aarch64//:distro_libs",
     ],
 )
@@ -106,6 +151,7 @@ filegroup(
 filegroup(
     name = "ar",
     srcs = [
+        ":cuda_nvcc",
         ":wrappers",
         "@llvm_linux_aarch64//:ar",
         "@llvm_linux_aarch64//:distro_libs",
@@ -118,15 +164,19 @@ cc_toolchain_config(
     c_compiler = "@llvm_linux_aarch64//:clang",
     cc_compiler = "@llvm_linux_aarch64//:clang++",
     compiler_features = [
+        ":imports_feature",
+
+        # Cuda features
+        ":cuda_nvcc_feature",
+        "//cc/cuda/features:hermetic",
+
         # Hermetic libraries feature required before import.
         "//third_party/rules_cc_toolchain/features:hermetic_libraries",
-        ":imports_feature",
 
         # Toolchain configuration
         "//third_party/rules_cc_toolchain/features:warnings",
         "//third_party/rules_cc_toolchain/features:errors",
         "//third_party/rules_cc_toolchain/features:reproducible",
-        "//third_party/rules_cc_toolchain/features:language",
         "//third_party/rules_cc_toolchain/features:use_lld",
         "//cc/features:sysroot_linux_aarch64",
         ":startup_libs_feature",
@@ -146,7 +196,7 @@ cc_toolchain_config(
         "//third_party/rules_cc_toolchain/features:dbg",
         "//third_party/rules_cc_toolchain/features:opt",
         "//cc/features:detect_issues",
-        "//cc/features:detect_issues_ext",
+        #"//cc/features:detect_issues_ext",   # Non-hermetic builds don't include these flags
 
         # C++ standard configuration
         "//third_party/rules_cc_toolchain/features:c++11",
@@ -161,6 +211,7 @@ cc_toolchain_config(
     linker = "@llvm_linux_aarch64//:ld",
     target_cpu = "aarch64",
     target_system_name = "local",
+    tool_paths = CUDA_TOOLS,
 )
 
 cc_toolchain(
@@ -174,5 +225,5 @@ cc_toolchain(
     strip_files = ":empty",
     supports_param_files = 1,
     toolchain_config = ":config",
-    toolchain_identifier = "toolchain_id_linux_aarch64_linux_aarch64",
+    toolchain_identifier = "toolchain_linux_aarch64_linux_aarch64_id",
 )
