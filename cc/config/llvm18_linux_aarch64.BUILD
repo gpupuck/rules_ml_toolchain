@@ -74,7 +74,7 @@ filegroup(
 filegroup(
     name = "distro_libs",
     srcs = [
-        "lib/libtinfo.so.5",
+        #"lib/libtinfo.so.5",
     ],
     visibility = ["//visibility:public"],
 )
