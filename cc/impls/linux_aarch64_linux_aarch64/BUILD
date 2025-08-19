@@ -30,7 +30,7 @@ package(
 filegroup(
     name = "wrappers",
     srcs = [
-        "//cc/impls/linux_x86_64_linux_aarch64/wrappers:all",
+        "//cc/impls/linux_aarch64_linux_aarch64/wrappers:all",
     ],
     visibility = ["//visibility:public"],
 )
@@ -52,7 +52,7 @@ cc_toolchain_import(
     name = "imports",
     deps = [
         "@sysroot_linux_aarch64//:includes_c",
-        "@llvm_linux_x86_64//:includes",
+        "@llvm_linux_aarch64//:includes",
         "@sysroot_linux_aarch64//:includes_system",
         "@sysroot_linux_aarch64//:glibc",
         "@sysroot_linux_aarch64//:pthread",
@@ -73,7 +73,7 @@ filegroup(
         ":imports",
         ":wrappers",
         ":startup_libs",
-        "@llvm_linux_x86_64//:all",
+        "@llvm_linux_aarch64//:all",
     ],
 )
 
@@ -83,10 +83,10 @@ filegroup(
     srcs = [
         ":all",
         ":wrappers",
-        "@llvm_linux_x86_64//:clang",
-        "@llvm_linux_x86_64//:clang++",
-        "@llvm_linux_x86_64//:distro_libs",
-        "@llvm_linux_x86_64//:asan_ignorelist",
+        "@llvm_linux_aarch64//:clang",
+        "@llvm_linux_aarch64//:clang++",
+        "@llvm_linux_aarch64//:distro_libs",
+        "@llvm_linux_aarch64//:asan_ignorelist",
     ],
 )
 
@@ -96,9 +96,9 @@ filegroup(
     srcs = [
         ":compiler",
         ":wrappers",
-        "@llvm_linux_x86_64//:ld",
+        "@llvm_linux_aarch64//:ld",
         "@sysroot_linux_aarch64//:startup_libs",
-        "@llvm_linux_x86_64//:distro_libs",
+        "@llvm_linux_aarch64//:distro_libs",
     ],
 )
 
@@ -107,16 +107,16 @@ filegroup(
     name = "ar",
     srcs = [
         ":wrappers",
-        "@llvm_linux_x86_64//:ar",
-        "@llvm_linux_x86_64//:distro_libs",
+        "@llvm_linux_aarch64//:ar",
+        "@llvm_linux_aarch64//:distro_libs",
     ],
 )
 
 cc_toolchain_config(
     name = "config",
-    archiver = "@llvm_linux_x86_64//:ar",
-    c_compiler = "@llvm_linux_x86_64//:clang",
-    cc_compiler = "@llvm_linux_x86_64//:clang++",
+    archiver = "@llvm_linux_aarch64//:ar",
+    c_compiler = "@llvm_linux_aarch64//:clang",
+    cc_compiler = "@llvm_linux_aarch64//:clang++",
     compiler_features = [
         # Hermetic libraries feature required before import.
         "//third_party/rules_cc_toolchain/features:hermetic_libraries",
@@ -158,7 +158,7 @@ cc_toolchain_config(
         "//cc/features:supports_dynamic_linker",
         "//cc/features:supports_start_end_lib_feature",
     ],
-    linker = "@llvm_linux_x86_64//:ld",
+    linker = "@llvm_linux_aarch64//:ld",
     target_cpu = "aarch64",
     target_system_name = "local",
 )
@@ -174,5 +174,5 @@ cc_toolchain(
     strip_files = ":empty",
     supports_param_files = 1,
     toolchain_config = ":config",
-    toolchain_identifier = "toolchain_id_linux_x86_64_linux_aarch64",
+    toolchain_identifier = "toolchain_id_linux_aarch64_linux_aarch64",
 )
