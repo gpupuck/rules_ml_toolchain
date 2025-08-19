@@ -21,7 +21,10 @@ load(
 )
 
 package(
-    default_visibility = ["//cc/impls/linux_x86_64_linux_x86_64_cuda:__pkg__"],
+    default_visibility = [
+        "@rules_ml_toolchain//cc/impls/linux_aarch64_linux_aarch64_cuda:__pkg__",
+        "@rules_ml_toolchain//cc/impls/linux_x86_64_linux_x86_64_cuda:__pkg__",
+    ],
 )
 
 cc_feature(
