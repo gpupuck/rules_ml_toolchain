@@ -97,7 +97,7 @@ def extract_llvm_version(text):
     return version_str
 
 def _create_empty_build_file(ctx):
-    ctx.file("BUILD", "")
+    ctx.file("BUILD", "# Empty BUILD file for non-hermetic builds")
 
 def _create_version_file(ctx, major_version):
     ctx.file(
