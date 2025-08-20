@@ -27,7 +27,7 @@ sysroot_package(
     visibility = ["//visibility:public"],
 )
 
-GCC_VERSION = 7
+GCC_VERSION = 8
 GLIBC_VERSION = "2.27"
 
 CRT_OBJECTS = [
