@@ -189,10 +189,10 @@ def _update_sha256_attr(ctx, attrs, download_info):
 def _llvm_http_archive_impl(ctx):
     """Implementation of the llvm_http_archive rule."""
 
-    if not _use_hermetic_toolchains(ctx):
-        _create_version_file(ctx, "")
-        _create_empty_build_file(ctx)
-        return _llvm_http_archive_attrs
+    #if not _use_hermetic_toolchains(ctx):
+    #    _create_version_file(ctx, "")
+    #    _create_empty_build_file(ctx)
+    #    return _llvm_http_archive_attrs
 
     all_urls = _get_all_urls(ctx)
     use_tars = ctx.getenv("USE_LLVM_TAR_ARCHIVE_FILES")
