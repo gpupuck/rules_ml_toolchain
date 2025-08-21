@@ -52,9 +52,9 @@ load("@cuda_nvdisasm//:version.bzl", _nvdisasm_version = "VERSION")
 load("@cuda_nvjitlink//:version.bzl", _nvjitlink_version = "VERSION")
 load("@cuda_nvml//:version.bzl", _nvml_version = "VERSION")
 load("@cuda_nvtx//:version.bzl", _nvtx_version = "VERSION")
+load("@cuda_nvvm//:version.bzl", _nvvm_version = "VERSION")
 load("@llvm_linux_aarch64//:version.bzl", _llvm_aarch64_hermetic_version = "VERSION")
 load("@llvm_linux_x86_64//:version.bzl", _llvm_x86_64_hermetic_version = "VERSION")
-load("@cuda_nvvm//:version.bzl", _nvvm_version = "VERSION")
 load(
     "//cc:constants.bzl",
     "USE_HERMETIC_CC_TOOLCHAIN",
@@ -722,7 +722,8 @@ def _create_cuda_repository(repository_ctx):
 
 def _create_toolchains_repository(repository_ctx):
     created = False
-    if enable_cuda(repository_ctx) or _is_linux_x86_64(repository_ctx):
+    is_hermetic_linux_aarch64 = _use_hermetic_toolchains(repository_ctx) and _is_linux_aarch64(repository_ctx)
+    if enable_cuda(repository_ctx) or _is_linux_x86_64(repository_ctx) or is_hermetic_linux_aarch64:
         created = _create_local_toolchains_repository(repository_ctx)
 
     if not created:
