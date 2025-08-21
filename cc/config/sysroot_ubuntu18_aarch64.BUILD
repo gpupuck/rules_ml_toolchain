@@ -47,10 +47,6 @@ CRT_OBJECTS = [
 
 cc_toolchain_import(
     name = "startup_libs",
-    #target_compatible_with = select({
-    #    "@platforms//os:linux": ["@platforms//cpu:aarch64"],
-    #    "//conditions:default": ["@platforms//:incompatible"],
-    #}),
     visibility = ["//visibility:public"],
     deps = [":" + obj for obj in CRT_OBJECTS],
 )
@@ -58,20 +54,16 @@ cc_toolchain_import(
 cc_toolchain_import(
     name = "includes_c",
     hdrs = glob([
-        "usr/include/c++/*/**",
-        "usr/include/aarch64-linux-gnu/c++/*/**",
-        "usr/include/c++/7/experimental/**",
+        "usr/include/c++/{gcc_version}/**".format(gcc_version = GCC_VERSION),
+        "usr/include/aarch64-linux-gnu/c++/{gcc_version}/*/**".format(gcc_version = GCC_VERSION),
+        "usr/include/c++/{gcc_version}/experimental/**".format(gcc_version = GCC_VERSION),
     ]),
     includes = [
-        "usr/include/c++/7",
-        "usr/include/aarch64-linux-gnu/c++/7",
-        "usr/include/c++/7/backward",
-        "usr/include/c++/7/experimental",
+        "usr/include/c++/{gcc_version}".format(gcc_version = GCC_VERSION),
+        "usr/include/aarch64-linux-gnu/c++/{gcc_version}".format(gcc_version = GCC_VERSION),
+        "usr/include/c++/{gcc_version}/backward".format(gcc_version = GCC_VERSION),
+        "usr/include/c++/{gcc_version}/experimental".format(gcc_version = GCC_VERSION),
     ],
-    #target_compatible_with = select({
-    #    "@platforms//os:linux": ["@platforms//cpu:aarch64"],
-    #    "//conditions:default": ["@platforms//:incompatible"],
-    #}),
     visibility = ["//visibility:public"],
 )
 
@@ -87,10 +79,6 @@ cc_toolchain_import(
         "usr/include/aarch64-linux-gnu",
         "usr/include",
     ],
-    #target_compatible_with = select({
-    #    "@platforms//os:linux": ["@platforms//cpu:aarch64"],
-    #    "//conditions:default": ["@platforms//:incompatible"],
-    #}),
     visibility = ["//visibility:public"],
 )
 
@@ -103,10 +91,6 @@ cc_toolchain_import(
     runtime_path = "/usr/lib/aarch64-linux-gnu",
     shared_library = "usr/lib/gcc/aarch64-linux-gnu/{gcc_version}/libgcc_s.so".format(gcc_version = GCC_VERSION),
     static_library = "usr/lib/gcc/aarch64-linux-gnu/{gcc_version}/libgcc.a".format(gcc_version = GCC_VERSION),
-    #target_compatible_with = select({
-    #    "@platforms//os:linux": ["@platforms//cpu:aarch64"],
-    #    "//conditions:default": ["@platforms//:incompatible"],
-    #}),
     visibility = ["//visibility:public"],
 )
 
@@ -118,10 +102,14 @@ cc_toolchain_import(
     ],
     shared_library = "usr/lib/gcc/aarch64-linux-gnu/{gcc_version}/libstdc++.so".format(gcc_version = GCC_VERSION),
     static_library = "usr/lib/gcc/aarch64-linux-gnu/{gcc_version}/libstdc++.a".format(gcc_version = GCC_VERSION),
-    #target_compatible_with = select({
-    #    "@platforms//os:linux": ["@platforms//cpu:aarch64"],
-    #    "//conditions:default": ["@platforms//:incompatible"],
-    #}),
+    visibility = ["//visibility:public"],
+)
+
+# Inclusion of libstdc++fs is required because the sysroot utilizes GCC version 8.4.
+# This requirement is obsolete for GCC versions 9 and above.
+cc_toolchain_import(
+    name = "stdc++fs",
+    static_library = "usr/lib/gcc/aarch64-linux-gnu/{gcc_version}/libstdc++fs.a".format(gcc_version = GCC_VERSION),
     visibility = ["//visibility:public"],
 )
 
@@ -129,14 +117,11 @@ cc_toolchain_import(
     name = "dynamic_linker",
     additional_libs = [
         "lib/aarch64-linux-gnu/ld-linux-aarch64.so.1",
+        "lib/aarch64-linux-gnu/ld-{glibc_version}.so".format(glibc_version = GLIBC_VERSION),
     ],
     runtime_path = "/lib64",
     shared_library = "usr/lib/aarch64-linux-gnu/libdl.so",
     static_library = "usr/lib/aarch64-linux-gnu/libdl.a",
-    #target_compatible_with = select({
-    #    "@platforms//os:linux": ["@platforms//cpu:aarch64"],
-    #    "//conditions:default": ["@platforms//:incompatible"],
-    #}),
     deps = [":libc"],
 )
 
@@ -145,10 +130,6 @@ cc_toolchain_import(
     additional_libs = ["lib/aarch64-linux-gnu/libm.so.6"],
     shared_library = "usr/lib/aarch64-linux-gnu/libm.so",
     static_library = "usr/lib/aarch64-linux-gnu/libm.a",
-    #target_compatible_with = select({
-    #    "@platforms//os:linux": ["@platforms//cpu:aarch64"],
-    #    "//conditions:default": ["@platforms//:incompatible"],
-    #}),
     visibility = ["//visibility:public"],
 )
 
@@ -161,14 +142,21 @@ cc_toolchain_import(
     ],
     shared_library = "usr/lib/aarch64-linux-gnu/libpthread.so",
     static_library = "usr/lib/aarch64-linux-gnu/libpthread.a",
-    #target_compatible_with = select({
-    #    "@platforms//os:linux": ["@platforms//cpu:aarch64"],
-    #    "//conditions:default": ["@platforms//:incompatible"],
-    #}),
     visibility = ["//visibility:public"],
     deps = [
         ":libc",
     ],
+)
+
+cc_toolchain_import(
+    name = "rt",
+    additional_libs = [
+        "lib/aarch64-linux-gnu/librt-{glibc_version}.so".format(glibc_version = GLIBC_VERSION),
+        "lib/aarch64-linux-gnu/librt.so.1",
+        "usr/lib/aarch64-linux-gnu/librt.so",
+        "usr/lib/aarch64-linux-gnu/librt.a",
+    ],
+    visibility = ["//visibility:private"],
 )
 
 cc_toolchain_import(
@@ -189,6 +177,8 @@ cc_toolchain_import(
         ":gcc",
         ":math",
         ":stdc++",
+        ":stdc++fs",
+        ":rt",
     ],
 )
 
@@ -197,10 +187,6 @@ cc_toolchain_import(
 cc_toolchain_import(
     name = "glibc",
     runtime_path = "/lib/aarch64-linux-gnu",
-    #target_compatible_with = select({
-    #    "@platforms//os:linux": ["@platforms//cpu:aarch64"],
-    #    "//conditions:default": ["@platforms//:incompatible"],
-    #}),
     visibility = ["//visibility:public"],
     deps = [
         ":dynamic_linker",
