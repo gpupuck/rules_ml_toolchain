@@ -38,6 +38,7 @@
 """
 
 load("@cuda_cccl//:version.bzl", _cccl_version = "VERSION")
+load("@cuda_crt//:version.bzl", _crt_version = "VERSION")
 load("@cuda_cublas//:version.bzl", _cublas_version = "VERSION")
 load("@cuda_cudart//:version.bzl", _cudart_version = "VERSION")
 load("@cuda_cudnn//:version.bzl", _cudnn_version = "VERSION")
@@ -53,6 +54,7 @@ load("@cuda_nvml//:version.bzl", _nvml_version = "VERSION")
 load("@cuda_nvtx//:version.bzl", _nvtx_version = "VERSION")
 load("@llvm_linux_aarch64//:version.bzl", _llvm_aarch64_hermetic_version = "VERSION")
 load("@llvm_linux_x86_64//:version.bzl", _llvm_x86_64_hermetic_version = "VERSION")
+load("@cuda_nvvm//:version.bzl", _nvvm_version = "VERSION")
 load(
     "//cc:constants.bzl",
     "USE_HERMETIC_CC_TOOLCHAIN",
@@ -369,11 +371,13 @@ def _get_cuda_config(repository_ctx):
         cusparse_version = _cusparse_version,
         cudnn_version = _cudnn_version,
         cccl_version = _cccl_version,
+        crt_version = _crt_version,
         nvcc_version = _nvcc_version,
         nvdisasm_version = _nvdisasm_version,
         nvjitlink_version = _nvjitlink_version,
         nvml_version = _nvml_version,
         nvtx_version = _nvtx_version,
+        nvvm_version = _nvvm_version,
         compute_capabilities = _compute_capabilities(repository_ctx),
         cpu_value = get_cpu_value(repository_ctx),
     )
@@ -406,6 +410,7 @@ error_gpu_disabled()
 def _cuda_include_paths(repository_ctx):
     return ["%s/include" % repository_ctx.path(f).dirname for f in [
         repository_ctx.attr.cccl_version,
+        repository_ctx.attr.crt_version,
         repository_ctx.attr.cublas_version,
         repository_ctx.attr.cudart_version,
         repository_ctx.attr.cudnn_version,
@@ -418,6 +423,7 @@ def _cuda_include_paths(repository_ctx):
         repository_ctx.attr.nvjitlink_version,
         repository_ctx.attr.nvml_version,
         repository_ctx.attr.nvtx_version,
+        repository_ctx.attr.nvvm_version,
     ]]
 
 def _create_dummy_toolchains_repository(repository_ctx):
@@ -751,6 +757,7 @@ cuda_configure = repository_rule(
     attrs = {
         "environ": attr.string_dict(),
         "cccl_version": attr.label(default = Label("@cuda_cccl//:version.bzl")),
+        "crt_version": attr.label(default = Label("@cuda_crt//:version.bzl")),
         "cublas_version": attr.label(default = Label("@cuda_cublas//:version.bzl")),
         "cudart_version": attr.label(default = Label("@cuda_cudart//:version.bzl")),
         "cudnn_version": attr.label(default = Label("@cuda_cudnn//:version.bzl")),
@@ -764,6 +771,7 @@ cuda_configure = repository_rule(
         "nvjitlink_version": attr.label(default = Label("@cuda_nvjitlink//:version.bzl")),
         "nvml_version": attr.label(default = Label("@cuda_nvml//:version.bzl")),
         "nvtx_version": attr.label(default = Label("@cuda_nvtx//:version.bzl")),
+        "nvvm_version": attr.label(default = Label("@cuda_nvvm//:version.bzl")),
         "local_config_cuda_build_file": attr.label(default = Label("//third_party/gpus:local_config_cuda.BUILD")),
         "build_defs_tpl": attr.label(default = Label("//third_party/gpus/cuda:build_defs.bzl.tpl")),
         "cuda_build_tpl": attr.label(default = Label("//third_party/gpus/cuda/hermetic:BUILD.tpl")),

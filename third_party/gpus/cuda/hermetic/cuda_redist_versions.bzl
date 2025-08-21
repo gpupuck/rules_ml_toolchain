@@ -244,6 +244,10 @@ CUDNN_REDIST_JSON_DICT = {
         "https://developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.11.0.json",
         "7a16458ea21573e18d190df0c8d68ea1e8c82faf1bcfad4a39ceb600c26639cc",
     ],
+    "9.12.0": [
+        "https://developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.12.0.json",
+        "39bb68f0ca6abdbf9bab3ecb1cb18f458d635f72d72ede98a308216fd22efab3",
+    ],
 }
 
 MIRRORED_TARS_CUDNN_REDIST_JSON_DICT = {
@@ -334,6 +338,10 @@ NVSHMEM_REDIST_JSON_DICT = {
         "https://developer.download.nvidia.com/compute/nvshmem/redist/redistrib_3.3.9.json",
         "fecaaab763c23d53f747c299491b4f4e32e0fc2e059b676772b886ada2ba711e",
     ],
+    "3.3.20": [
+        "https://developer.download.nvidia.com/compute/nvshmem/redist/redistrib_3.3.20.json",
+        "0da2b7f4553e4debef4dbbe899fe7c3bb6324a7cba181e3da6666479c7d4038e",
+    ],
 }
 
 MIRRORED_TARS_NVSHMEM_REDIST_JSON_DICT = {
@@ -350,13 +358,13 @@ MIRRORED_TARS_NVSHMEM_REDIST_JSON_DICT = {
 CUDA_13_NCCL_WHEEL_DICT = {
     "x86_64-unknown-linux-gnu": {
         "version": "2.27.7",
-        "url": "https://files.pythonhosted.org/packages/c4/cb/2cf5b8e6a669c90ac6410c3a9d86881308492765b6744de5d0ce75089999/nvidia_nccl_cu12-2.27.7-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
-        "sha256": "de5ba5562f08029a19cb1cd659404b18411ed0d6c90ac5f52f30bf99ad5809aa",
+        "url": "https://pypi.nvidia.com/nvidia-nccl-cu13/nvidia_nccl_cu13-2.27.7-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
+        "sha256": "b28a524abd8389b76a4a3f133c76a7aaa7005e47fcaa9d9603b90103927a3f93",
     },
     "aarch64-unknown-linux-gnu": {
         "version": "2.27.7",
-        "url": "https://files.pythonhosted.org/packages/b3/66/ac1f588af222bf98dfb55ce0efeefeab2a612d6d93ef60bd311d176a8346/nvidia_nccl_cu12-2.27.7-py3-none-manylinux2014_aarch64.manylinux_2_17_aarch64.whl",
-        "sha256": "4617839f3bb730c3845bf9adf92dbe0e009bc53ca5022ed941f2e23fb76e6f17",
+        "url": "https://pypi.nvidia.com/nvidia-nccl-cu13/nvidia_nccl_cu13-2.27.7-py3-none-manylinux2014_aarch64.manylinux_2_17_aarch64.whl",
+        "sha256": "5e3cc863e52bf9dd1e3ab1941bddb414098f489ae7342f6b3a274602303da123",
     },
 }
 
@@ -517,12 +525,24 @@ REDIST_VERSIONS_TO_BUILD_TEMPLATES = {
             "11": "//third_party/gpus/cuda/hermetic:cuda_cccl.BUILD.tpl",
         },
     },
+    "cuda_crt": {
+        "repo_name": "cuda_crt",
+        "version_to_template": {
+            "13": "//third_party/gpus/cuda/hermetic:cuda_crt.BUILD.tpl",
+        },
+    },
     "cuda_nvcc": {
         "repo_name": "cuda_nvcc",
         "version_to_template": {
             "13": "//third_party/gpus/cuda/hermetic:cuda_nvcc.BUILD.tpl",
             "12": "//third_party/gpus/cuda/hermetic:cuda_nvcc.BUILD.tpl",
             "11": "//third_party/gpus/cuda/hermetic:cuda_nvcc.BUILD.tpl",
+        },
+    },
+    "libnvvm": {
+        "repo_name": "cuda_nvvm",
+        "version_to_template": {
+            "13": "//third_party/gpus/cuda/hermetic:cuda_nvvm.BUILD",
         },
     },
     "cuda_nvdisasm": {
