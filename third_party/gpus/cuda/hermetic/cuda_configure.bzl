@@ -38,6 +38,7 @@
 """
 
 load("@cuda_cccl//:version.bzl", _cccl_version = "VERSION")
+load("@cuda_crt//:version.bzl", _crt_version = "VERSION")
 load("@cuda_cublas//:version.bzl", _cublas_version = "VERSION")
 load("@cuda_cudart//:version.bzl", _cudart_version = "VERSION")
 load("@cuda_cudnn//:version.bzl", _cudnn_version = "VERSION")
@@ -51,7 +52,13 @@ load("@cuda_nvdisasm//:version.bzl", _nvdisasm_version = "VERSION")
 load("@cuda_nvjitlink//:version.bzl", _nvjitlink_version = "VERSION")
 load("@cuda_nvml//:version.bzl", _nvml_version = "VERSION")
 load("@cuda_nvtx//:version.bzl", _nvtx_version = "VERSION")
+load("@cuda_nvvm//:version.bzl", _nvvm_version = "VERSION")
 load("@llvm_linux_x86_64//:version.bzl", _llvm_hermetic_version = "VERSION")
+load(
+    "//cc:constants.bzl",
+    "USE_HERMETIC_CC_TOOLCHAIN",
+    "USE_HERMETIC_CC_TOOLCHAIN_DEFAULT_VALUE",
+)
 load(
     "//third_party/gpus:compiler_common_tools.bzl",
     "get_cxx_inc_directories",
@@ -167,7 +174,7 @@ def _is_linux_x86_64(repository_ctx):
     return repository_ctx.os.arch == "amd64" and repository_ctx.os.name == "linux"
 
 def _use_hermetic_toolchains(repository_ctx):
-    return _flag_enabled(repository_ctx, USE_HERMETIC_CC_TOOLCHAIN)
+    return get_host_environ(repository_ctx, USE_HERMETIC_CC_TOOLCHAIN, USE_HERMETIC_CC_TOOLCHAIN_DEFAULT_VALUE) == "1"
 
 def enable_cuda(repository_ctx):
     """Returns whether to build with CUDA support."""
@@ -355,11 +362,13 @@ def _get_cuda_config(repository_ctx):
         cusparse_version = _cusparse_version,
         cudnn_version = _cudnn_version,
         cccl_version = _cccl_version,
+        crt_version = _crt_version,
         nvcc_version = _nvcc_version,
         nvdisasm_version = _nvdisasm_version,
         nvjitlink_version = _nvjitlink_version,
         nvml_version = _nvml_version,
         nvtx_version = _nvtx_version,
+        nvvm_version = _nvvm_version,
         compute_capabilities = _compute_capabilities(repository_ctx),
         cpu_value = get_cpu_value(repository_ctx),
     )
@@ -392,6 +401,7 @@ error_gpu_disabled()
 def _cuda_include_paths(repository_ctx):
     return ["%s/include" % repository_ctx.path(f).dirname for f in [
         repository_ctx.attr.cccl_version,
+        repository_ctx.attr.crt_version,
         repository_ctx.attr.cublas_version,
         repository_ctx.attr.cudart_version,
         repository_ctx.attr.cudnn_version,
@@ -404,6 +414,7 @@ def _cuda_include_paths(repository_ctx):
         repository_ctx.attr.nvjitlink_version,
         repository_ctx.attr.nvml_version,
         repository_ctx.attr.nvtx_version,
+        repository_ctx.attr.nvvm_version,
     ]]
 
 def _create_dummy_toolchains_repository(repository_ctx):
@@ -712,7 +723,6 @@ _CLANG_CUDA_COMPILER_PATH = "CLANG_CUDA_COMPILER_PATH"
 _HERMETIC_CUDA_COMPUTE_CAPABILITIES = "HERMETIC_CUDA_COMPUTE_CAPABILITIES"
 _TF_CUDA_COMPUTE_CAPABILITIES = "TF_CUDA_COMPUTE_CAPABILITIES"
 HERMETIC_CUDA_VERSION = "HERMETIC_CUDA_VERSION"
-USE_HERMETIC_CC_TOOLCHAIN = "USE_HERMETIC_CC_TOOLCHAIN"
 TF_CUDA_VERSION = "TF_CUDA_VERSION"
 TF_NEED_CUDA = "TF_NEED_CUDA"
 _TF_NEED_ROCM = "TF_NEED_ROCM"
@@ -727,6 +737,7 @@ cuda_configure = repository_rule(
     attrs = {
         "environ": attr.string_dict(),
         "cccl_version": attr.label(default = Label("@cuda_cccl//:version.bzl")),
+        "crt_version": attr.label(default = Label("@cuda_crt//:version.bzl")),
         "cublas_version": attr.label(default = Label("@cuda_cublas//:version.bzl")),
         "cudart_version": attr.label(default = Label("@cuda_cudart//:version.bzl")),
         "cudnn_version": attr.label(default = Label("@cuda_cudnn//:version.bzl")),
@@ -740,6 +751,7 @@ cuda_configure = repository_rule(
         "nvjitlink_version": attr.label(default = Label("@cuda_nvjitlink//:version.bzl")),
         "nvml_version": attr.label(default = Label("@cuda_nvml//:version.bzl")),
         "nvtx_version": attr.label(default = Label("@cuda_nvtx//:version.bzl")),
+        "nvvm_version": attr.label(default = Label("@cuda_nvvm//:version.bzl")),
         "local_config_cuda_build_file": attr.label(default = Label("//third_party/gpus:local_config_cuda.BUILD")),
         "build_defs_tpl": attr.label(default = Label("//third_party/gpus/cuda:build_defs.bzl.tpl")),
         "cuda_build_tpl": attr.label(default = Label("//third_party/gpus/cuda/hermetic:BUILD.tpl")),
@@ -762,3 +774,7 @@ cuda_configure(name = "local_config_cuda")
 Args:
   name: A unique name for this workspace rule.
 """  # buildifier: disable=no-effect
+
+# TODO(yuriit): Remove after moving to //gpu/cuda package
+def cuda_configure_wrapper(name):
+    cuda_configure(name = name)

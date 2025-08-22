@@ -210,3 +210,7 @@ nccl_configure(name = "local_config_nccl")
 Args:
   name: A unique name for this workspace rule.
 """  # buildifier: disable=no-effect
+
+# TODO(yuriit): Remove after moving to //gpu/nccl package
+def nccl_configure_wrapper(name):
+    nccl_configure(name = name)

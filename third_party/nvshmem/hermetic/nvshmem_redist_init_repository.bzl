@@ -55,3 +55,15 @@ def nvshmem_redist_init_repository(
         target_arch_env_var = "NVSHMEM_REDIST_TARGET_PLATFORM",
         local_source_dirs = ["include", "lib", "bin"],
     )
+
+# TODO(yuriit): Remove this function after moving to //gpu/nvshmem
+def nvshmem_redist_init_repository_wrapper(
+    nvshmem_redistributions,
+    nvshmem_redist_path_prefix,
+    mirrored_tar_nvshmem_redist_path_prefix,
+    redist_versions_to_build_templates):
+    nvshmem_redist_init_repository(
+        nvshmem_redistributions,
+        nvshmem_redist_path_prefix,
+        mirrored_tar_nvshmem_redist_path_prefix,
+        redist_versions_to_build_templates)

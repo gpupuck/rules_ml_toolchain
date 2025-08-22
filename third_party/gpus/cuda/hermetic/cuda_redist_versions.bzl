@@ -82,6 +82,18 @@ CUDA_REDIST_JSON_DICT = {
         "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_12.8.1.json",
         "249e28a83008d711d5f72880541c8be6253f6d61608461de4fcb715554a6cf17",
     ],
+    "12.9.0": [
+        "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_12.9.0.json",
+        "4e4e17a12adcf8cac40b990e1618406cd7ad52da1817819166af28a9dfe21d4a",
+    ],
+    "12.9.1": [
+        "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_12.9.1.json",
+        "8335301010b0023ee1ff61eb11e2600ca62002d76780de4089011ad77e0c7630",
+    ],
+    "13.0.0": [
+        "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_13.0.0.json",
+        "fe6a86b54450d03ae709123a52717870c49046d65d45303ce585c7aa8a83a217",
+    ],
 }
 
 MIRRORED_TARS_CUDA_REDIST_JSON_DICT = {
@@ -145,6 +157,18 @@ MIRRORED_TARS_CUDA_REDIST_JSON_DICT = {
         "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/redistrib_12.8.1_tar.json",
         "30a1b8ace0d38237f4ab3ab28d89dbc77ae2c4ebabe27ba08b3c0961cc6cc7fa",
     ],
+    "12.9.0": [
+        "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/redistrib_12.9.0_tar.json",
+        "c614ee6171763d0a5bb4997f7004409d2b9621833ac6eccfa72ecfc411701f9d",
+    ],
+    "12.9.1": [
+        "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/redistrib_12.9.1_tar.json",
+        "a6b09fa5048ca1ea206ea5a0a287f28f7eaae7cd3e08ab20d2c4d47d53ec39f5",
+    ],
+    "13.0.0": [
+        "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/redistrib_13.0.0_tar.json",
+        "0beef25312491a2c5fff36470be82d68adc870a250f59a647389b7ebcf275722",
+    ],
 }
 
 CUDNN_REDIST_JSON_DICT = {
@@ -203,6 +227,30 @@ CUDNN_REDIST_JSON_DICT = {
     "9.8.0": [
         "https://developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.8.0.json",
         "a1599fa1f8dcb81235157be5de5ab7d3936e75dfc4e1e442d07970afad3c4843",
+    ],
+    "9.9.0": [
+        "https://developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.9.0.json",
+        "614d3c5ceb02e1eb1508f0bc9231c3c03c113bb514b950a1108adb9fde801c77",
+    ],
+    "9.10.0": [
+        "https://developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.10.0.json",
+        "d06b8df4d305dd7021838ffb2a26c2a861d522f2a129c6a372fad72ca009b1f1",
+    ],
+    "9.10.1": [
+        "https://developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.10.1.json",
+        "2ac8d48d3ab4de1acdce65fa3e8ecfb14750d4e101b05fe3307d2f95f2740563",
+    ],
+    "9.10.2": [
+        "https://developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.10.2.json",
+        "73a33a12bbb8eb12b105a515b5921db2e328b3ca679f92b6184c7f32fe94a8b0",
+    ],
+    "9.11.0": [
+        "https://developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.11.0.json",
+        "7a16458ea21573e18d190df0c8d68ea1e8c82faf1bcfad4a39ceb600c26639cc",
+    ],
+    "9.12.0": [
+        "https://developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.12.0.json",
+        "39bb68f0ca6abdbf9bab3ecb1cb18f458d635f72d72ede98a308216fd22efab3",
     ],
 }
 
@@ -263,6 +311,30 @@ MIRRORED_TARS_CUDNN_REDIST_JSON_DICT = {
         "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.8.0_tar.json",
         "030378782b94597855cdf7d3068968f88460cd9c4ce9d73c77cfad64dfdea070",
     ],
+    "9.9.0": [
+        "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.9.0_tar.json",
+        "43a331efcd54041c1a0c752e7451708097d9b35cff87e594e7d45e1123435d49",
+    ],
+    "9.10.0": [
+        "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.10.0_tar.json",
+        "a12f12c38b8e4db4c1f305661072f3bed07f25a84b9a65016925aebd5238989e",
+    ],
+    "9.10.1": [
+        "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.10.1_tar.json",
+        "3f6f8c5474ffa4cc95a1d114298472c475d8cadea04acb2e00ce3ad0aabd6783",
+    ],
+    "9.10.2": [
+        "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.10.2_tar.json",
+        "10241f263ee24b57265a3c9e057c0a79a6a47ea4234ac87ba04cf228c5fdf31c",
+    ],
+    "9.11.0": [
+        "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.11.0_tar.json",
+        "fa8d0fc0fdb6d2e3f5d208f8eef93826122a91d9deec8f501c4966323dcad745",
+    ],
+    "9.12.0": [
+        "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.12.0_tar.json",
+        "925940c7204f26f0ee2a7135e17a7a13a01253f1d9ebb88a1a3dbe6b3948b465",
+    ],
 }
 
 NVSHMEM_REDIST_JSON_DICT = {
@@ -274,6 +346,10 @@ NVSHMEM_REDIST_JSON_DICT = {
         "https://developer.download.nvidia.com/compute/nvshmem/redist/redistrib_3.3.9.json",
         "fecaaab763c23d53f747c299491b4f4e32e0fc2e059b676772b886ada2ba711e",
     ],
+    "3.3.20": [
+        "https://developer.download.nvidia.com/compute/nvshmem/redist/redistrib_3.3.20.json",
+        "0da2b7f4553e4debef4dbbe899fe7c3bb6324a7cba181e3da6666479c7d4038e",
+    ],
 }
 
 MIRRORED_TARS_NVSHMEM_REDIST_JSON_DICT = {
@@ -282,21 +358,38 @@ MIRRORED_TARS_NVSHMEM_REDIST_JSON_DICT = {
         "641f7ca7048e4acfb466ce8be722f4828b2fa6b8671c28f6e8c230344484fd1c",
     ],
     "3.3.9": [
-        "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/nvshmem/redist/redistrib_3.3.9.json",
+        "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/nvshmem/redist/redistrib_3.3.9_tar.json",
         "87d22389c1e267a3a00e333d26378fabcb02ce62bc30de58ba9170966964634d",
     ],
+    "3.3.20": [
+        "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/nvshmem/redist/redistrib_3.3.20_tar.json",
+        "f8be46c78cb6340f92708092d6c33ed220d67ece919053062ebb7ae895a330c7",
+    ],
+}
+
+CUDA_13_NCCL_WHEEL_DICT = {
+    "x86_64-unknown-linux-gnu": {
+        "version": "2.27.7",
+        "url": "https://pypi.nvidia.com/nvidia-nccl-cu13/nvidia_nccl_cu13-2.27.7-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
+        "sha256": "b28a524abd8389b76a4a3f133c76a7aaa7005e47fcaa9d9603b90103927a3f93",
+    },
+    "aarch64-unknown-linux-gnu": {
+        "version": "2.27.7",
+        "url": "https://pypi.nvidia.com/nvidia-nccl-cu13/nvidia_nccl_cu13-2.27.7-py3-none-manylinux2014_aarch64.manylinux_2_17_aarch64.whl",
+        "sha256": "5e3cc863e52bf9dd1e3ab1941bddb414098f489ae7342f6b3a274602303da123",
+    },
 }
 
 CUDA_12_NCCL_WHEEL_DICT = {
     "x86_64-unknown-linux-gnu": {
-        "version": "2.26.5",
-        "url": "https://files.pythonhosted.org/packages/48/fb/ec4ac065d9b0d56f72eaf1d9b0df601e33da28197b32ca351dc05b342611/nvidia_nccl_cu12-2.26.5-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
-        "sha256": "ea5ed3e053c735f16809bee7111deac62ac35b10128a8c102960a0462ce16cbe",
+        "version": "2.27.7",
+        "url": "https://files.pythonhosted.org/packages/c4/cb/2cf5b8e6a669c90ac6410c3a9d86881308492765b6744de5d0ce75089999/nvidia_nccl_cu12-2.27.7-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
+        "sha256": "de5ba5562f08029a19cb1cd659404b18411ed0d6c90ac5f52f30bf99ad5809aa",
     },
     "aarch64-unknown-linux-gnu": {
-        "version": "2.26.5",
-        "url": "https://files.pythonhosted.org/packages/55/66/ed9d28946ead0fe1322df2f4fc6ea042340c0fe73b79a1419dc1fdbdd211/nvidia_nccl_cu12-2.26.5-py3-none-manylinux2014_aarch64.manylinux_2_17_aarch64.whl",
-        "sha256": "adb1bf4adcc5a47f597738a0700da6aef61f8ea4251b375540ae138c7d239588",
+        "version": "2.27.7",
+        "url": "https://files.pythonhosted.org/packages/b3/66/ac1f588af222bf98dfb55ce0efeefeab2a612d6d93ef60bd311d176a8346/nvidia_nccl_cu12-2.27.7-py3-none-manylinux2014_aarch64.manylinux_2_17_aarch64.whl",
+        "sha256": "4617839f3bb730c3845bf9adf92dbe0e009bc53ca5022ed941f2e23fb76e6f17",
     },
 }
 
@@ -310,22 +403,7 @@ CUDA_11_NCCL_WHEEL_DICT = {
 
 CUDA_NCCL_WHEELS = {
     "11.8": CUDA_11_NCCL_WHEEL_DICT,
-    "12.1.0": CUDA_12_NCCL_WHEEL_DICT,
-    "12.1.1": CUDA_12_NCCL_WHEEL_DICT,
-    "12.2.0": CUDA_12_NCCL_WHEEL_DICT,
-    "12.3.1": CUDA_12_NCCL_WHEEL_DICT,
-    "12.3.2": CUDA_12_NCCL_WHEEL_DICT,
-    "12.4.0": CUDA_12_NCCL_WHEEL_DICT,
-    "12.4.1": CUDA_12_NCCL_WHEEL_DICT,
-    "12.5.0": CUDA_12_NCCL_WHEEL_DICT,
-    "12.5.1": CUDA_12_NCCL_WHEEL_DICT,
-    "12.6.0": CUDA_12_NCCL_WHEEL_DICT,
-    "12.6.1": CUDA_12_NCCL_WHEEL_DICT,
-    "12.6.2": CUDA_12_NCCL_WHEEL_DICT,
-    "12.6.3": CUDA_12_NCCL_WHEEL_DICT,
-    "12.8.0": CUDA_12_NCCL_WHEEL_DICT,
-    "12.8.1": CUDA_12_NCCL_WHEEL_DICT,
-}
+} | {v: CUDA_12_NCCL_WHEEL_DICT for v in CUDA_REDIST_JSON_DICT.keys() if v.startswith("12")} | {v: CUDA_13_NCCL_WHEEL_DICT for v in CUDA_REDIST_JSON_DICT.keys() if v.startswith("13")}
 
 # Ensures PTX version compatibility w/ Clang & ptxas in cuda_configure.bzl
 PTX_VERSION_DICT = {
@@ -350,6 +428,7 @@ PTX_VERSION_DICT = {
         "12.6": "8.5",
         "12.8": "8.7",
         "12.9": "8.8",
+        "13.0": "9.0",
     },
 }
 
@@ -357,6 +436,8 @@ REDIST_VERSIONS_TO_BUILD_TEMPLATES = {
     "nvidia_driver": {
         "repo_name": "cuda_driver",
         "version_to_template": {
+            "580": "//third_party/gpus/cuda/hermetic:cuda_driver.BUILD.tpl",
+            "575": "//third_party/gpus/cuda/hermetic:cuda_driver.BUILD.tpl",
             "570": "//third_party/gpus/cuda/hermetic:cuda_driver.BUILD.tpl",
             "560": "//third_party/gpus/cuda/hermetic:cuda_driver.BUILD.tpl",
             "555": "//third_party/gpus/cuda/hermetic:cuda_driver.BUILD.tpl",
@@ -456,6 +537,12 @@ REDIST_VERSIONS_TO_BUILD_TEMPLATES = {
             "11": "//third_party/gpus/cuda/hermetic:cuda_cccl.BUILD.tpl",
         },
     },
+    "cuda_crt": {
+        "repo_name": "cuda_crt",
+        "version_to_template": {
+            "13": "//third_party/gpus/cuda/hermetic:cuda_crt.BUILD.tpl",
+        },
+    },
     "cuda_nvcc": {
         "repo_name": "cuda_nvcc",
         "version_to_template": {
@@ -464,9 +551,16 @@ REDIST_VERSIONS_TO_BUILD_TEMPLATES = {
             "11": "//third_party/gpus/cuda/hermetic:cuda_nvcc.BUILD.tpl",
         },
     },
+    "libnvvm": {
+        "repo_name": "cuda_nvvm",
+        "version_to_template": {
+            "13": "//third_party/gpus/cuda/hermetic:cuda_nvvm.BUILD",
+        },
+    },
     "cuda_nvdisasm": {
         "repo_name": "cuda_nvdisasm",
         "version_to_template": {
+            "13": "//third_party/gpus/cuda/hermetic:cuda_nvdisasm.BUILD",
             "12": "//third_party/gpus/cuda/hermetic:cuda_nvdisasm.BUILD",
         },
     },

@@ -36,3 +36,7 @@ def nvshmem_json_init_repository(
         local_path_env_var = "LOCAL_NVSHMEM_PATH",
         use_tar_file_env_var = "USE_NVSHMEM_TAR_ARCHIVE_FILES",
     )
+
+# TODO(yuriit): Remove this function after moving to //gpu/nvshmem
+def nvshmem_json_init_repository_wrapper(nvshmem_json_dict, mirrored_tars_nvshmem_json_dict):
+    nvshmem_json_init_repository(nvshmem_json_dict, mirrored_tars_nvshmem_json_dict)
