@@ -181,6 +181,20 @@ def _get_auth(ctx, urls):
 def _use_hermetic_toolchains(ctx):
     return get_host_environ(ctx, USE_HERMETIC_CC_TOOLCHAIN, USE_HERMETIC_CC_TOOLCHAIN_DEFAULT_VALUE) == "1"
 
+def _is_supported_platform(ctx):
+    url = ctx.attr.urls[0].lower()
+
+    if ctx.os.name not in url:
+        return False
+
+    archs = ["amd64", "x86_64", "x64"] if ctx.os.arch == "amd64" else [ctx.os.arch]
+
+    for arch in archs:
+        if arch in url:
+            return True
+
+    return False
+
 def _update_sha256_attr(ctx, attrs, download_info):
     # We don't need to override the sha256 attribute if integrity is already specified.
     sha256_override = {} if ctx.attr.integrity else {"sha256": download_info.sha256}
@@ -189,10 +203,12 @@ def _update_sha256_attr(ctx, attrs, download_info):
 def _llvm_http_archive_impl(ctx):
     """Implementation of the llvm_http_archive rule."""
 
-    #if not _use_hermetic_toolchains(ctx):
-    #    _create_version_file(ctx, "")
-    #    _create_empty_build_file(ctx)
-    #    return _llvm_http_archive_attrs
+    # TODO(yuriit): Remove below comment
+    print("_llvm_http_archive_impl: arch = ", ctx.os.arch, ", os = ", ctx.os.name, ", hermetic = ", _use_hermetic_toolchains(ctx))
+    if not _use_hermetic_toolchains(ctx) or not _is_supported_platform(ctx):
+        _create_version_file(ctx, "")
+        _create_empty_build_file(ctx)
+        return _llvm_http_archive_attrs
 
     all_urls = _get_all_urls(ctx)
     use_tars = ctx.getenv("USE_LLVM_TAR_ARCHIVE_FILES")

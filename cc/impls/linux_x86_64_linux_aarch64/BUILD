@@ -30,7 +30,7 @@ package(
 filegroup(
     name = "wrappers",
     srcs = [
-        "//cc/impls/linux_aarch64_linux_aarch64/wrappers:all",
+        "//cc/impls/linux_x86_64_linux_aarch64/wrappers:all",
     ],
     visibility = ["//visibility:public"],
 )
