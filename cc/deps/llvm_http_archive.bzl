@@ -203,8 +203,6 @@ def _update_sha256_attr(ctx, attrs, download_info):
 def _llvm_http_archive_impl(ctx):
     """Implementation of the llvm_http_archive rule."""
 
-    # TODO(yuriit): Remove below comment
-    print("_llvm_http_archive_impl: arch = ", ctx.os.arch, ", os = ", ctx.os.name, ", hermetic = ", _use_hermetic_toolchains(ctx))
     if not _use_hermetic_toolchains(ctx) or not _is_supported_platform(ctx):
         _create_version_file(ctx, "")
         _create_empty_build_file(ctx)

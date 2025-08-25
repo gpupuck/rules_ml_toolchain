@@ -722,8 +722,6 @@ def _create_cuda_repository(repository_ctx):
 
 def _create_toolchains_repository(repository_ctx):
     created = False
-
-    #is_hermetic_linux_aarch64 = _use_hermetic_toolchains(repository_ctx) and _is_linux_aarch64(repository_ctx)
     if enable_cuda(repository_ctx) or _is_linux_x86_64(repository_ctx):
         created = _create_local_toolchains_repository(repository_ctx)
 
