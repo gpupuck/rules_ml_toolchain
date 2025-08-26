@@ -74,14 +74,6 @@ def cc_toolchain_deps():
             mirrored_tar_sha256 = "01b8e95e34e7d0117edd085577529b375ec422130ed212d2911727545314e6c2",
             build_file = Label("//cc/config:llvm18_linux_aarch64.BUILD"),
             strip_prefix = "clang+llvm-18.1.8-aarch64-linux-gnu",
-            #            remote_file_urls = {
-            #                "lib/libtinfo.so.5": ["https://github.com/yuriit-google/sysroots/raw/f890514a360cd1959c786402a8e794218b1be93f/archives/libtinfo.so.5"],
-            #                "lib/libtinfo5-copyright.txt": ["https://raw.githubusercontent.com/yuriit-google/sysroots/ba192c408e0f82c6c9a5b92712038edaa64326d6/archives/copyright"],
-            #            },
-            #            remote_file_integrity = {
-            #                "lib/libtinfo.so.5": "sha256-Es/8cnQZDKFpOlLM2DA+cZQH5wfIVX3ft+74HyCO+qs=",
-            #                "lib/libtinfo5-copyright.txt": "sha256-Xo7pAsiQbdt3ef023Jl5ywi1H76/fAsamut4rzgq9ZA=",
-            #            },
         )
 
     # LLVM 19

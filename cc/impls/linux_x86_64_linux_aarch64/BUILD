@@ -14,7 +14,7 @@
 # ==============================================================================
 
 # ==============================================================================
-# Tools: Linux aarch64, Sysroot: Linux aarch64
+# Tools: Linux x86_64, Sysroot: Linux aarch64
 # ==============================================================================
 
 load("//third_party/rules_cc_toolchain:toolchain_config.bzl", "cc_toolchain_config")
@@ -174,5 +174,5 @@ cc_toolchain(
     strip_files = ":empty",
     supports_param_files = 1,
     toolchain_config = ":config",
-    toolchain_identifier = "toolchain_id_linux_aarch64_linux_aarch64",
+    toolchain_identifier = "toolchain_id_linux_x86_64_linux_aarch64",
 )

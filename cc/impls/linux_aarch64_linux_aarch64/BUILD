@@ -14,7 +14,7 @@
 # ==============================================================================
 
 # ==============================================================================
-# Tools: Linux x86_64, Sysroot: Linux aarch64
+# Tools: Linux aarch64, Sysroot: Linux aarch64
 # ==============================================================================
 
 load("//third_party/rules_cc_toolchain:toolchain_config.bzl", "cc_toolchain_config")
