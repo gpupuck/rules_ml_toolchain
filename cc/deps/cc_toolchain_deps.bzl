@@ -38,7 +38,7 @@ def cc_toolchain_deps():
             #mirrored_tar_sha256 = "252481a119320891a0c1ed7c73db111e809c4b83d1e42de0f7bb2a5eccb958f8",
             #urls = tf_mirror_urls("https://storage.googleapis.com/ml-sysroot-testing/ubuntu18_aarch64_sysroot_gcc8.tar.gz"),
             build_file = Label("//cc/config:sysroot_ubuntu18_aarch64.BUILD"),
-            strip_prefix = "sysroot_aarch64_ubuntu18_gcc8.4",
+            strip_prefix = "sysroot_aarch64_ubuntu18_gcc8",
         )
 
     if "sysroot_darwin_aarch64" not in native.existing_rules():
