@@ -37,12 +37,14 @@ load(
 
 cc_toolchain_deps()
 
+register_toolchains("@rules_ml_toolchain//cc:linux_aarch64_linux_aarch64")
+register_toolchains("@rules_ml_toolchain//cc:linux_aarch64_linux_aarch64_cuda")
 register_toolchains("@rules_ml_toolchain//cc:linux_x86_64_linux_x86_64")
 register_toolchains("@rules_ml_toolchain//cc:linux_x86_64_linux_x86_64_cuda")
 
 ```
 
-It must be ensured that builds for Linux x86_64 are run without the `--noincompatible_enable_cc_toolchain_resolution` 
+It must be ensured that builds for Linux x86_64 / aarch64 are run without the `--noincompatible_enable_cc_toolchain_resolution` 
 flag. Furthermore, reliance on environment variables like `CLANG_COMPILER_PATH`, `BAZEL_COMPILER`, `CC`, or `CXX` 
 must be avoided.
 
@@ -52,7 +54,7 @@ to the Bazel command. This will facilitate checking that the compiler or linker 
 ## How to run this project tests
 ### CPU Hermetic tests
 Project supports CPU hermetic builds on:
-* Linux x86_64
+* Linux x86_64 / aarch64
 * macOS aarch64
 
 The command allows you to run hermetic build tests:
@@ -70,9 +72,9 @@ When executor and a target are the same, you still can run non-hermetic build. C
 For details, look at the `.bazelrc` file, specifically the `clang_local` configuration.
 
 ### GPU Hermetic tests
-Project supports GPU hermetic builds on Linux x86_64 and requires machine with NVIDIA GPU
+Project supports GPU hermetic builds on Linux x86_64 / aarch64. Running tests requires a machine with an NVIDIA GPU.
 
-You could run hermetic tests with help of command:
+Hermetic tests could be run with the help of the command:
 ###### Build by Clang
 `bazel test //cc/tests/gpu:all --config=build_cuda_with_clang --config=cuda --config=cuda_libraries_from_stubs`
 
@@ -80,7 +82,7 @@ You could run hermetic tests with help of command:
 `bazel test //cc/tests/gpu:all --config=build_cuda_with_nvcc --config=cuda --config=cuda_libraries_from_stubs`
 
 #### Non-hermetic GPU tests
-When executor and a target are the same, you still can run non-hermetic GPU build.
+When the executor and the target are the same, a non-hermetic GPU build can still be run.
 
 ###### Build by Clang
 `bazel test //cc/tests/gpu:all --config=build_cuda_with_clang --config=cuda_clang_local --config=cuda_libraries_from_stubs`
