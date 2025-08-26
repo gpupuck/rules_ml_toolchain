@@ -34,11 +34,10 @@ def cc_toolchain_deps():
         mirrored_http_archive(
             name = "sysroot_linux_aarch64",
             sha256 = "b91995cc51e0b4c07674343cf675d65112da455adc439bc333cefb2c7ae26426",
-            urls = ["https://storage.googleapis.com/ml-sysroot-testing/ubuntu18_aarch64_sysroot_gcc8.tar.gz"],
-            #mirrored_tar_sha256 = "252481a119320891a0c1ed7c73db111e809c4b83d1e42de0f7bb2a5eccb958f8",
-            #urls = tf_mirror_urls("https://storage.googleapis.com/ml-sysroot-testing/ubuntu18_aarch64_sysroot_gcc8.tar.gz"),
+            mirrored_tar_sha256 = "a4fef46ac8f22b6d29b6384e56828b6c21ceba694dd5d5570c086379220168da",
+            urls = tf_mirror_urls("https://storage.googleapis.com/ml-sysroot-testing/sysroot_aarch64_ubuntu18_gcc8.4.tar.xz"),
             build_file = Label("//cc/config:sysroot_ubuntu18_aarch64.BUILD"),
-            strip_prefix = "sysroot_aarch64_ubuntu18_gcc8",
+            strip_prefix = "sysroot_aarch64_ubuntu18_gcc8.4",
         )
 
     if "sysroot_darwin_aarch64" not in native.existing_rules():
