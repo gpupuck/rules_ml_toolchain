@@ -187,7 +187,12 @@ def _is_supported_platform(ctx):
     if ctx.os.name not in url:
         return False
 
-    archs = ["amd64", "x86_64", "x64"] if ctx.os.arch == "amd64" else [ctx.os.arch]
+    if ctx.os.arch == "amd64":
+        archs = ["amd64", "x86_64", "x64", "x86-64"]
+    elif ctx.os.arch == "aarch64":
+        archs = ["aarch64", "arm64"]
+    else:
+        archs = [ctx.os.arch]
 
     for arch in archs:
         if arch in url:
