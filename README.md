@@ -1,18 +1,11 @@
 # Hermetic Toolchains for ML
 
-> [!WARNING]
-> This project is under active development and is not yet ready for production use.
-
-This project provides Bazel rules for ML project to achieve hermetic and cross-platform builds.
+This project provides Bazel rules for ML project to achieve hermetic builds.
 
 C++ and CUDA hermetic builds benefits:
 * Reproducibility: Every build produces identical results regardless of the developer's machine environment.
 * Consistency: Eliminates "works on my machine" issues, ensuring builds are consistent across different development environments.
 * Isolation: Builds are isolated from the host system, minimizing unexpected dependencies and side effects.
-
-C++ cross-platform builds benefits:
-* Single Source of Truth: Develop and maintain a single codebase that can be built for various target platforms (e.g., Linux, macOS).
-* Efficiency: Streamlines the build and release process for multiple platforms.
 
 # Configure C++ toolchains
 
@@ -55,14 +48,11 @@ to the Bazel command. This will facilitate checking that the compiler or linker 
 ### CPU Hermetic tests
 Project supports CPU hermetic builds on:
 * Linux x86_64 / aarch64
-* macOS aarch64
+* macOS aarch64 - *In Development*
 
 The command allows you to run hermetic build tests:
 
 `bazel test //cc/tests/cpu:all`
-
-If project doesn't support cross-platform builds for specified platform,
-it will use host utilities and host sysroot for running such build.
 
 ##### Non-hermetic CPU builds
 When executor and a target are the same, you still can run non-hermetic build. Command should look like:
@@ -92,16 +82,3 @@ When the executor and the target are the same, a non-hermetic GPU build can stil
 
 For details, look at the `.bazelrc` file, specifically the `cuda_clang_local` configuration.
 
-### Cross-platform builds
-Project supports cross-platform builds only on Linux x86_64 executor 
-and allows build for such targets:
-* Linux aarch64
-* macOS aarch64
-
-#### Build for Linux aarch64
-`bazel build //cc/tests/cpu/... --platforms=//common:linux_aarch64`
-
-#### Build for macOS aarch64
-[Prepare SDK](cc/sysroots/darwin_aarch64/README.md) before run the following command.
-
-`bazel build //cc/tests/cpu/... --platforms=//common:macos_aarch64`
