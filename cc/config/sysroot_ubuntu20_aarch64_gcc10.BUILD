@@ -98,18 +98,10 @@ cc_toolchain_import(
     name = "stdc++",
     additional_libs = [
         "usr/lib/aarch64-linux-gnu/libstdc++.so.6",
-        "usr/lib/aarch64-linux-gnu/libstdc++.so.6.0.25",
+        "usr/lib/aarch64-linux-gnu/libstdc++.so.6.0.28",
     ],
     shared_library = "usr/lib/gcc/aarch64-linux-gnu/{gcc_version}/libstdc++.so".format(gcc_version = GCC_VERSION),
     static_library = "usr/lib/gcc/aarch64-linux-gnu/{gcc_version}/libstdc++.a".format(gcc_version = GCC_VERSION),
-    visibility = ["//visibility:public"],
-)
-
-# Inclusion of libstdc++fs is required because the sysroot utilizes GCC version 8.4.
-# This requirement is obsolete for GCC versions 9 and above.
-cc_toolchain_import(
-    name = "stdc++fs",
-    static_library = "usr/lib/gcc/aarch64-linux-gnu/{gcc_version}/libstdc++fs.a".format(gcc_version = GCC_VERSION),
     visibility = ["//visibility:public"],
 )
 
@@ -138,7 +130,6 @@ cc_toolchain_import(
     additional_libs = [
         "lib/aarch64-linux-gnu/libpthread.so.0",
         "lib/aarch64-linux-gnu/libpthread-{glibc_version}.so".format(glibc_version = GLIBC_VERSION),
-        "usr/lib/aarch64-linux-gnu/libpthread_nonshared.a",
     ],
     shared_library = "usr/lib/aarch64-linux-gnu/libpthread.so",
     static_library = "usr/lib/aarch64-linux-gnu/libpthread.a",
@@ -177,7 +168,6 @@ cc_toolchain_import(
         ":gcc",
         ":math",
         ":stdc++",
-        ":stdc++fs",
         ":rt",
     ],
 )
