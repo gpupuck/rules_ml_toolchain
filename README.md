@@ -7,6 +7,12 @@ C++ and CUDA hermetic builds benefits:
 * Consistency: Eliminates "works on my machine" issues, ensuring builds are consistent across different development environments.
 * Isolation: Builds are isolated from the host system, minimizing unexpected dependencies and side effects.
 
+<!--
+C++ cross-platform builds benefits:
+* Single Source of Truth: Develop and maintain a single codebase that can be built for various target platforms (e.g., Linux, macOS).
+* Efficiency: Streamlines the build and release process for multiple platforms.
+-->
+
 # Configure C++ toolchains
 
 ### How to configure toolchains for ML project
@@ -82,3 +88,18 @@ When the executor and the target are the same, a non-hermetic GPU build can stil
 
 For details, look at the `.bazelrc` file, specifically the `cuda_clang_local` configuration.
 
+<!--
+### Cross-platform builds
+Project supports cross-platform builds only on Linux x86_64 executor 
+and allows build for such targets:
+* Linux aarch64
+* macOS aarch64
+
+#### Build for Linux aarch64
+`bazel build //cc/tests/cpu/... --platforms=//common:linux_aarch64`
+
+#### Build for macOS aarch64
+[Prepare SDK](cc/sysroots/darwin_aarch64/README.md) before run the following command.
+
+`bazel build //cc/tests/cpu/... --platforms=//common:macos_aarch64`
+-->
