@@ -27,7 +27,7 @@ sysroot_package(
     visibility = ["//visibility:public"],
 )
 
-GCC_VERSION = 9
+GCC_VERSION = 10
 GLIBC_VERSION = "2.31"
 
 # Details about C RunTime (CRT) objects:
@@ -57,8 +57,8 @@ cc_toolchain_import(
 cc_toolchain_import(
     name = "includes_c",
     hdrs = glob([
-        "usr/include/c++/*/**",
-        "usr/include/x86_64-linux-gnu/c++/*/**",
+        "usr/include/c++/{gcc_version}/**".format(gcc_version = GCC_VERSION),
+        "usr/include/x86_64-linux-gnu/c++/{gcc_version}/*/**".format(gcc_version = GCC_VERSION),
         "usr/include/c++/{gcc_version}/experimental/**".format(gcc_version = GCC_VERSION),
     ]),
     includes = [
@@ -88,7 +88,7 @@ cc_toolchain_import(
 cc_toolchain_import(
     name = "gcc",
     additional_libs = [
-        "lib/x86_64-linux-gnu/libgcc_s.so.1",  # TODO: check this (docker image has this file)
+        "lib/x86_64-linux-gnu/libgcc_s.so.1",
         "usr/lib/gcc/x86_64-linux-gnu/{gcc_version}/libgcc_eh.a".format(gcc_version = GCC_VERSION),
     ],
     shared_library = "usr/lib/gcc/x86_64-linux-gnu/{gcc_version}/libgcc_s.so".format(gcc_version = GCC_VERSION),
@@ -110,7 +110,9 @@ cc_toolchain_import(
 cc_toolchain_import(
     name = "dynamic_linker",
     additional_libs = [
+        "lib64/ld-linux-x86-64.so.2",
         "lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+        "lib/x86_64-linux-gnu/ld-{glibc_version}.so".format(glibc_version = GLIBC_VERSION),
     ],
     shared_library = "usr/lib/x86_64-linux-gnu/libdl.so",
     static_library = "usr/lib/x86_64-linux-gnu/libdl.a",
@@ -121,10 +123,11 @@ cc_toolchain_import(
     name = "math",
     additional_libs = [
         "lib/x86_64-linux-gnu/libm.so.6",
-        "usr/lib/x86_64-linux-gnu/libm-{glibc_version}.a".format(glibc_version = GLIBC_VERSION),
-        "usr/lib/x86_64-linux-gnu/libmvec-{glibc_version}.so".format(glibc_version = GLIBC_VERSION),
+        "lib/x86_64-linux-gnu/libmvec-{glibc_version}.so".format(glibc_version = GLIBC_VERSION),
         "lib/x86_64-linux-gnu/libmvec.so.1",
+        "usr/lib/x86_64-linux-gnu/libm-{glibc_version}.a".format(glibc_version = GLIBC_VERSION),
         "usr/lib/x86_64-linux-gnu/libmvec.so",
+        "usr/lib/x86_64-linux-gnu/libmvec.a",
     ],
     shared_library = "usr/lib/x86_64-linux-gnu/libm.so",
     visibility = ["//visibility:public"],
