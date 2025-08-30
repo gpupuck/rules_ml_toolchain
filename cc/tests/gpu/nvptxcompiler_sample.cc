@@ -43,6 +43,7 @@ int main() {
         return 1;
     }
 
+    std::cout << "PTX compiler was created." << std::endl;
     const char* compile_options[] = {"-arch=sm_75"};
     result = nvPTXCompilerCompile(compiler, 1, compile_options);
     if (result != NVPTXCOMPILE_SUCCESS) {
@@ -54,6 +55,8 @@ int main() {
         nvPTXCompilerDestroy(&compiler);
         return 2;
     }
+
+    std::cout << "PTX compiler works fine." << std::endl;
 
     size_t outputSize;
     nvPTXCompilerGetCompiledProgramSize(compiler, &outputSize);
