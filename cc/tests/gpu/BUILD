@@ -90,3 +90,15 @@ test_suite(
 #        "@local_config_cuda//cuda:implicit_cuda_headers_dependency",
 #    ],
 #)
+
+# cc_toolchain/tests/gpu/BUILD.bazel
+cc_binary(
+    name = "nvptxcompiler_sample_bin",
+    srcs = ["nvptxcompiler_sample.cc"],
+    tags = ["cuda-only"],
+    deps = [
+        "@cuda_cudart//:cudart",
+        "@local_config_cuda//cuda:implicit_cuda_headers_dependency",
+        "@local_config_cuda//cuda:nvptxcompiler",
+    ],
+)
