@@ -35,6 +35,7 @@ const char* ptx_code = R"(
 )";
 
 int main() {
+    std::cout << "PTX compiler test starting..." << std::endl;
     nvPTXCompilerHandle compiler = nullptr;
     nvPTXCompileResult result = nvPTXCompilerCreate(&compiler, strlen(ptx_code), ptx_code);
     if (result != NVPTXCOMPILE_SUCCESS) {
