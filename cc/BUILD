@@ -43,9 +43,31 @@ toolchain(
     toolchain_type = "@bazel_tools//tools/cpp:toolchain_type",
 )
 
-#---------------------------------------------------------------------------------------
+#=====================================================================
+# Tools: Linux aarch64, Sysroot: Linux aarch64
+#=====================================================================
+
+toolchain(
+    name = "linux_aarch64_linux_aarch64",
+    exec_compatible_with = [
+        "@platforms//cpu:aarch64",
+        "@platforms//os:linux",
+    ],
+    target_compatible_with = [
+        "@platforms//cpu:aarch64",
+        "@platforms//os:linux",
+    ],
+    target_settings = [
+        "//common:is_cuda_disabled",
+        "//common:is_hermetic_cc_enabled",
+    ],
+    toolchain = "//cc/impls/linux_aarch64_linux_aarch64:toolchain",
+    toolchain_type = "@bazel_tools//tools/cpp:toolchain_type",
+)
+
+#=====================================================================
 # Tools: Linux x86_64, Sysroot: Linux x86_64, CUDA
-#---------------------------------------------------------------------------------------
+#=====================================================================
 
 toolchain(
     name = "linux_x86_64_linux_x86_64_cuda",
@@ -65,11 +87,32 @@ toolchain(
     toolchain_type = "@bazel_tools//tools/cpp:toolchain_type",
 )
 
-#---------------------------------------------------------------------------------------
-# Tools: Linux x86_64, Sysroot: Linux aarch64
-#---------------------------------------------------------------------------------------
+#=====================================================================
+# Tools: Linux aarch64, Sysroot: Linux aarch64, CUDA
+#=====================================================================
 
-# buildifier: leave-alone
+toolchain(
+    name = "linux_aarch64_linux_aarch64_cuda",
+    exec_compatible_with = [
+        "@platforms//cpu:aarch64",
+        "@platforms//os:linux",
+    ],
+    target_compatible_with = [
+        "@platforms//cpu:aarch64",
+        "@platforms//os:linux",
+    ],
+    target_settings = [
+        "//common:is_cuda_enabled",
+        "//common:is_hermetic_cc_enabled",
+    ],
+    toolchain = "//cc/impls/linux_aarch64_linux_aarch64_cuda:toolchain",
+    toolchain_type = "@bazel_tools//tools/cpp:toolchain_type",
+)
+
+#=====================================================================
+# Tools: Linux x86_64, Sysroot: Linux aarch64
+#=====================================================================
+
 toolchain(
     name = "linux_x86_64_linux_aarch64",
     exec_compatible_with = [
@@ -88,9 +131,9 @@ toolchain(
     toolchain_type = "@bazel_tools//tools/cpp:toolchain_type",
 )
 
-#---------------------------------------------------------------------------------------
+#=====================================================================
 # Tools: Linux x86_64, Sysroot: macOS aarch64
-#---------------------------------------------------------------------------------------
+#=====================================================================
 
 # buildifier: leave-alone
 toolchain(
@@ -111,9 +154,9 @@ toolchain(
     toolchain_type = "@bazel_tools//tools/cpp:toolchain_type",
 )
 
-#---------------------------------------------------------------------------------------
+#=====================================================================
 # Tools: macOS aarch64, Sysroot: macOS aarch64
-#---------------------------------------------------------------------------------------
+#=====================================================================
 
 # buildifier: leave-alone
 toolchain(

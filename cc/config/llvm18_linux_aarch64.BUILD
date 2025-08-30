@@ -74,7 +74,7 @@ filegroup(
 filegroup(
     name = "distro_libs",
     srcs = [
-        "lib/libtinfo.so.5",
+        #"lib/libtinfo.so.5",
     ],
     visibility = ["//visibility:public"],
 )
@@ -82,7 +82,7 @@ filegroup(
 filegroup(
     name = "asan_ignorelist",
     srcs = [
-        "lib/clang/{clang_version}/share/asan_ignorelist.txt".format(clang_version = CLANG_VERSION),
+        "lib/clang/18/share/asan_ignorelist.txt"
     ],
     visibility = ["//visibility:public"],
 )
@@ -108,7 +108,7 @@ cc_toolchain_import(
 # built-in functions, and these functions are not provided by GCC 8.4.
 cc_toolchain_import(
     name = "libclang_rt",
-    static_library = "lib/clang/{clang_version}/lib/x86_64-unknown-linux-gnu/libclang_rt.builtins.a".format(clang_version = CLANG_VERSION),
+    static_library = "lib/clang/{clang_version}/lib/aarch64-unknown-linux-gnu/libclang_rt.builtins.a".format(clang_version = CLANG_VERSION),
     target_compatible_with = select({
         "@platforms//os:linux": [],
         "@platforms//os:macos": [],

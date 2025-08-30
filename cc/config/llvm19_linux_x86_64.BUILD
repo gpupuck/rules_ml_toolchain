@@ -80,7 +80,7 @@ filegroup(
 filegroup(
     name = "asan_ignorelist",
     srcs = [
-        "lib/clang/18/share/asan_ignorelist.txt"
+        "lib/clang/{clang_version}/share/asan_ignorelist.txt".format(clang_version = CLANG_VERSION),
     ],
     visibility = ["//visibility:public"],
 )

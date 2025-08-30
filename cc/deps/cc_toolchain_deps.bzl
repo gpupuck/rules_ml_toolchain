@@ -14,13 +14,13 @@
 # ==============================================================================
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
-load("llvm_http_archive.bzl", "llvm_http_archive")
 load("//common:mirrored_http_archive.bzl", "mirrored_http_archive")
 load("//third_party:repo.bzl", "tf_mirror_urls")
+load("llvm_http_archive.bzl", "llvm_http_archive")
 
 def cc_toolchain_deps():
     if "sysroot_linux_x86_64" not in native.existing_rules():
-        # Produce wheels with tag manylinux_2_27_x86_64
+        # C++17, manylinux_2_27, gcc-8
         mirrored_http_archive(
             name = "sysroot_linux_x86_64",
             sha256 = "02f418783479fbf612701e20ff9f48c1713b60545ec090da3855e77b9e27881a",
@@ -30,15 +30,38 @@ def cc_toolchain_deps():
             strip_prefix = "ubuntu18_x86_64_sysroot_gcc8_patched",
         )
 
+        # C++20, manylinux_2_31, gcc-10
+
+    #        mirrored_http_archive(
+    #            name = "sysroot_linux_x86_64",
+    #            sha256 = "39f40d44b24802f6a383ed6c98c2b0b19541b82572f00796ff8d0c01e2bc91b2",
+    #            mirrored_tar_sha256 = "a5ff7d9496a48a454ec910499f2bd4d06407f5fc6153cce75fa505cac0ac5726",
+    #            urls = tf_mirror_urls("https://storage.googleapis.com/ml-sysroot-testing/sysroot_x86_64_ubuntu20_gcc10.tar.xz"),
+    #            build_file = Label("//cc/config:sysroot_ubuntu20_x86_64_gcc10.BUILD"),
+    #            strip_prefix = "sysroot_x86_64_ubuntu20_gcc10",
+    #        )
+
     if "sysroot_linux_aarch64" not in native.existing_rules():
+        # C++17, manylinux_2_27, gcc-8
         mirrored_http_archive(
             name = "sysroot_linux_aarch64",
-            sha256 = "d883a1d664500f11bb49aa70c650a9e68d49341324c447f9abda77ec2f335ac5",
-            mirrored_tar_sha256 = "46f591a3c7f95d2d0c2d5cb64975e7222167e0033f76c96886b49130c7e53a88",
-            urls = tf_mirror_urls("https://storage.googleapis.com/ml-sysroot-testing/ubuntu18_aarch64-sysroot.tar.xz"),
+            sha256 = "0061bad04b6ec0ed49b77008ceaeaba3ef276a96fc87a598ed82e3a0c07b2442",
+            mirrored_tar_sha256 = "f52b38be5919a39fac8ec30e52eacced45caffdb00b2c1780904e57009e56096",
+            urls = tf_mirror_urls("https://storage.googleapis.com/ml-sysroot-testing/sysroot_aarch64_ubuntu18_gcc8.4.tar.xz"),
             build_file = Label("//cc/config:sysroot_ubuntu18_aarch64.BUILD"),
-            strip_prefix = "ubuntu18_aarch64-sysroot",
+            strip_prefix = "sysroot_aarch64_ubuntu18_gcc8.4",
         )
+
+        # C++20, manylinux_2_31, gcc-10
+
+    #        mirrored_http_archive(
+    #            name = "sysroot_linux_aarch64",
+    #            sha256 = "359a1bdf9e2747c32363abb24c5cecad41cebcbf1257464aeb44b9cba87dc8f0",
+    #            mirrored_tar_sha256 = "f52b38be5919a39fac8ec30e52eacced45caffdb00b2c1780904e57009e56096",
+    #            urls = tf_mirror_urls("https://storage.googleapis.com/ml-sysroot-testing/sysroot_aarch64_ubuntu20_gcc10.tar.xz"),
+    #            build_file = Label("//cc/config:sysroot_ubuntu20_aarch64_gcc10.BUILD"),
+    #            strip_prefix = "sysroot_aarch64_ubuntu20_gcc10",
+    #        )
 
     if "sysroot_darwin_aarch64" not in native.existing_rules():
         native.new_local_repository(
@@ -48,6 +71,7 @@ def cc_toolchain_deps():
         )
 
     if "llvm_linux_x86_64" not in native.existing_rules():
+        # LLVM 18
         llvm_http_archive(
             name = "llvm_linux_x86_64",
             urls = tf_mirror_urls("https://github.com/llvm/llvm-project/releases/download/llvmorg-18.1.8/clang+llvm-18.1.8-x86_64-linux-gnu-ubuntu-18.04.tar.xz"),
@@ -65,15 +89,25 @@ def cc_toolchain_deps():
             },
         )
 
-    # LLVM 19
-    #if "llvm_linux_x86_64" not in native.existing_rules():
-    #    llvm_http_archive(
-    #        name = "llvm_linux_x86_64",
-    #        urls = tf_mirror_urls("https://github.com/llvm/llvm-project/releases/download/llvmorg-19.1.7/LLVM-19.1.7-Linux-X64.tar.xz"),
-    #        sha256 = "4a5ec53951a584ed36f80240f6fbf8fdd46b4cf6c7ee87cc2d5018dc37caf679",
-    #        build_file = Label("//cc/config:llvm19_linux_x86_64.BUILD"),
-    #        strip_prefix = "LLVM-19.1.7-Linux-X64",
-    #    )
+        # LLVM 19
+
+    #        llvm_http_archive(
+    #            name = "llvm_linux_x86_64",
+    #            urls = tf_mirror_urls("https://github.com/llvm/llvm-project/releases/download/llvmorg-19.1.7/LLVM-19.1.7-Linux-X64.tar.xz"),
+    #            sha256 = "4a5ec53951a584ed36f80240f6fbf8fdd46b4cf6c7ee87cc2d5018dc37caf679",
+    #            build_file = Label("//cc/config:llvm19_linux_x86_64.BUILD"),
+    #            strip_prefix = "LLVM-19.1.7-Linux-X64",
+    #        )
+
+    if "llvm_linux_aarch64" not in native.existing_rules():
+        llvm_http_archive(
+            name = "llvm_linux_aarch64",
+            urls = tf_mirror_urls("https://github.com/llvm/llvm-project/releases/download/llvmorg-18.1.8/clang+llvm-18.1.8-aarch64-linux-gnu.tar.xz"),
+            sha256 = "dcaa1bebbfbb86953fdfbdc7f938800229f75ad26c5c9375ef242edad737d999",
+            mirrored_tar_sha256 = "01b8e95e34e7d0117edd085577529b375ec422130ed212d2911727545314e6c2",
+            build_file = Label("//cc/config:llvm18_linux_aarch64.BUILD"),
+            strip_prefix = "clang+llvm-18.1.8-aarch64-linux-gnu",
+        )
 
     if "llvm_darwin_aarch64" not in native.existing_rules():
         llvm_http_archive(
@@ -84,4 +118,3 @@ def cc_toolchain_deps():
             build_file = Label("//cc/config:llvm18_darwin_aarch64.BUILD"),
             strip_prefix = "clang+llvm-18.1.8-arm64-apple-macos11",
         )
-

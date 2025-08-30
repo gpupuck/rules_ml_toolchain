@@ -187,7 +187,7 @@ def cuda_library(copts = [], tags = [], deps = [], implementation_deps = [], **k
             "@local_config_cuda//cuda:implicit_cuda_headers_dependency",
         ]),
         implementation_deps = implementation_deps + if_cuda_hermetic_clang([
-            "@llvm_linux_x86_64//:cuda_wrappers_headers",
+            "%{hermetic_wrappers_headers}",
         ]),
         defines = [
             "CLANG_CUDA=1",

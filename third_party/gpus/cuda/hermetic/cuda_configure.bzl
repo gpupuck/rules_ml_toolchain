@@ -53,7 +53,8 @@ load("@cuda_nvjitlink//:version.bzl", _nvjitlink_version = "VERSION")
 load("@cuda_nvml//:version.bzl", _nvml_version = "VERSION")
 load("@cuda_nvtx//:version.bzl", _nvtx_version = "VERSION")
 load("@cuda_nvvm//:version.bzl", _nvvm_version = "VERSION")
-load("@llvm_linux_x86_64//:version.bzl", _llvm_hermetic_version = "VERSION")
+load("@llvm_linux_aarch64//:version.bzl", _llvm_aarch64_hermetic_version = "VERSION")
+load("@llvm_linux_x86_64//:version.bzl", _llvm_x86_64_hermetic_version = "VERSION")
 load(
     "//cc:constants.bzl",
     "USE_HERMETIC_CC_TOOLCHAIN",
@@ -172,6 +173,9 @@ def _get_cpu_compiler(repository_ctx):
 
 def _is_linux_x86_64(repository_ctx):
     return repository_ctx.os.arch == "amd64" and repository_ctx.os.name == "linux"
+
+def _is_linux_aarch64(repository_ctx):
+    return repository_ctx.os.arch == "aarch64" and repository_ctx.os.name == "linux"
 
 def _use_hermetic_toolchains(repository_ctx):
     return get_host_environ(repository_ctx, USE_HERMETIC_CC_TOOLCHAIN, USE_HERMETIC_CC_TOOLCHAIN_DEFAULT_VALUE) == "1"
@@ -314,7 +318,12 @@ def _create_cuda_ptx_copts_list(repository_ctx, cuda_version):
 
     clang_major_version = None
     if _use_hermetic_toolchains(repository_ctx):
-        clang_major_version = _llvm_hermetic_version
+        if _is_linux_x86_64(repository_ctx):
+            clang_major_version = _llvm_x86_64_hermetic_version
+        elif _is_linux_aarch64(repository_ctx):
+            clang_major_version = _llvm_aarch64_hermetic_version
+        else:
+            print("This OS or architecture isn't supported by Hermetic C++.")
 
     if not clang_major_version:
         cc = _find_cc(repository_ctx)
@@ -568,7 +577,8 @@ def _create_dummy_cuda_repository(repository_ctx):
             "%{cuda_extra_copts}": "[]",
             "%{cuda_gpu_architectures}": "[]",
             "%{cuda_version}": "0.0",
-            "%{use_hermetic_cc_toolchain}": str(_use_hermetic_toolchains(repository_ctx)),
+            "%{use_hermetic_cc_toolchain}": "False",
+            "%{hermetic_wrappers_headers}": "",
         },
     )
 
@@ -632,6 +642,15 @@ def _create_local_cuda_repository(repository_ctx):
     """Creates the repository containing files set up to build with CUDA."""
     cuda_config = _get_cuda_config(repository_ctx)
 
+    hermetic_wrappers_headers = ""
+    if _use_hermetic_toolchains(repository_ctx):
+        if _is_linux_x86_64(repository_ctx):
+            hermetic_wrappers_headers = "@llvm_linux_x86_64//:cuda_wrappers_headers"
+        elif _is_linux_aarch64(repository_ctx):
+            hermetic_wrappers_headers = "@llvm_linux_aarch64//:cuda_wrappers_headers"
+        else:
+            print("This OS or architecture isn't supported by Hermetic C++.")
+
     # Set up BUILD file for cuda/
     repository_ctx.template(
         "cuda/build_defs.bzl",
@@ -645,6 +664,7 @@ def _create_local_cuda_repository(repository_ctx):
             "%{cuda_gpu_architectures}": str(cuda_config.compute_capabilities),
             "%{cuda_version}": cuda_config.cuda_version,
             "%{use_hermetic_cc_toolchain}": str(_use_hermetic_toolchains(repository_ctx)),
+            "%{hermetic_wrappers_headers}": hermetic_wrappers_headers,
         },
     )
 

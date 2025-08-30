@@ -23,6 +23,8 @@ load(
 package(
     default_visibility = [
         "//cc/impls/darwin_aarch64_darwin_aarch64:__pkg__",
+        "//cc/impls/linux_aarch64_linux_aarch64:__pkg__",
+        "//cc/impls/linux_aarch64_linux_aarch64_cuda:__pkg__",
         "//cc/impls/linux_x86_64_darwin_aarch64:__pkg__",
         "//cc/impls/linux_x86_64_linux_aarch64:__pkg__",
         "//cc/impls/linux_x86_64_linux_x86_64:__pkg__",
