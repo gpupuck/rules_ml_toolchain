@@ -116,6 +116,25 @@ cc_toolchain_import(
     visibility = ["//visibility:public"],
 )
 
+cc_toolchain_import(
+    name = "openmp",
+    additional_libs = [
+        "lib/libgomp.so",
+        "lib/libiomp5.so",
+        "lib/libompd.so",
+        "lib/libomp.so",
+        "lib/libomptarget.rtl.amdgpu.so",
+        "lib/libomptarget.rtl.amdgpu.so.18.1",
+        "lib/libomptarget.rtl.cuda.so",
+        "lib/libomptarget.rtl.cuda.so.18.1",
+        "lib/libomptarget.rtl.x86_64.so",
+        "lib/libomptarget.rtl.x86_64.so.18.1",
+        "lib/libomptarget.so",
+        "lib/libomptarget.so.18.1",
+    ],
+    visibility = ["//visibility:public"],
+)
+
 # Use when build CUDA by Clang (NVCC doesn't need it)
 cc_library(
     name = "cuda_wrappers_headers",
