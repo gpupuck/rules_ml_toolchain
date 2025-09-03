@@ -13,9 +13,7 @@ C++ cross-platform builds benefits:
 * Efficiency: Streamlines the build and release process for multiple platforms.
 -->
 
-# Configure C++ toolchains
-
-### How to configure toolchains for ML project
+## Configure hermetic C++ toolchains
 
 Add below code before CUDA initialization in WORKSPACE file
 
@@ -37,9 +35,7 @@ load(
 cc_toolchain_deps()
 
 register_toolchains("@rules_ml_toolchain//cc:linux_x86_64_linux_x86_64")
-register_toolchains("@rules_ml_toolchain//cc:linux_x86_64_linux_x86_64_cuda")
 register_toolchains("@rules_ml_toolchain//cc:linux_aarch64_linux_aarch64")
-register_toolchains("@rules_ml_toolchain//cc:linux_aarch64_linux_aarch64_cuda")
 
 ```
 
@@ -49,6 +45,9 @@ must be avoided.
 
 For diagnosing the utility set being used during build or test execution, the `--subcommands` flag should be appended 
 to the Bazel command. This will facilitate checking that the compiler or linker are not being used from your machine.
+
+## Configure hermetic CUDA, CUDNN, NCCL and NVSHMEM
+For detailed instruction how to configure hermetic CUDA, CUDNN, NCCL and NVSHMEM [click this link](https://github.com/google-ml-infra/rules_ml_toolchain/tree/main/gpu).
 
 ## How to run this project tests
 ### CPU Hermetic tests
