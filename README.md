@@ -20,10 +20,10 @@ Add below code before CUDA initialization in WORKSPACE file
 ```
 http_archive(
     name = "rules_ml_toolchain",
-    sha256 = "f4f41445e4652e7e3c8e719121a4ed31dd161aa495f6704b6d972082a262658c",
-    strip_prefix = "rules_ml_toolchain-353817f8f851f3291be221fc72ad0fcb00a4500c",
+    sha256 = "d39ddfda7e279f60595f595e04042642ac9f199c850d3d11cb2cd34e74212f6e",
+    strip_prefix = "rules_ml_toolchain-47dd230be06bfdefde654e51d3311d01c988fac5",
     urls = [
-        "https://github.com/google-ml-infra/rules_ml_toolchain/archive/353817f8f851f3291be221fc72ad0fcb00a4500c.tar.gz",
+        "https://github.com/google-ml-infra/rules_ml_toolchain/archive/47dd230be06bfdefde654e51d3311d01c988fac5.tar.gz",
     ],
 )
 
