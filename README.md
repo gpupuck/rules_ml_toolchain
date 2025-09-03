@@ -59,7 +59,7 @@ The command allows you to run hermetic build tests:
 
 `bazel test //cc/tests/cpu:all`
 
-##### Non-hermetic CPU builds
+#### Non-hermetic CPU builds
 When executor and a target are the same, you still can run non-hermetic build. Command should look like:
 
 `bazel build //cc/tests/cpu:all --config=clang_local`
