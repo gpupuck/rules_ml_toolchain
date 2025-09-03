@@ -47,7 +47,7 @@ For diagnosing the utility set being used during build or test execution, the `-
 to the Bazel command. This will facilitate checking that the compiler or linker are not being used from your machine.
 
 ## Configure hermetic CUDA, CUDNN, NCCL and NVSHMEM
-For detailed instructions on how to configure hermetic CUDA, CUDNN, NCCL and NVSHMEM, [click this link](https://github.com/google-ml-infra/rules_ml_toolchain/tree/main/gpu).
+For detailed instructions on how to configure hermetic CUDA, CUDNN, NCCL and NVSHMEM, [click this link](gpu/).
 
 ## How to run this project tests
 ### CPU Hermetic tests
