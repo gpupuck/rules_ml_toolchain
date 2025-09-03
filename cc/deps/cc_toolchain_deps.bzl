@@ -104,7 +104,7 @@ def cc_toolchain_deps():
             name = "llvm_linux_aarch64",
             urls = tf_mirror_urls("https://github.com/llvm/llvm-project/releases/download/llvmorg-18.1.8/clang+llvm-18.1.8-aarch64-linux-gnu.tar.xz"),
             sha256 = "dcaa1bebbfbb86953fdfbdc7f938800229f75ad26c5c9375ef242edad737d999",
-            mirrored_tar_sha256 = "01b8e95e34e7d0117edd085577529b375ec422130ed212d2911727545314e6c2",
+            mirrored_tar_sha256 = "26a52cc6c658736f822546f220216178ac50d75ac1809bf8608395c8edd7c2c1",
             build_file = Label("//cc/config:llvm18_linux_aarch64.BUILD"),
             strip_prefix = "clang+llvm-18.1.8-aarch64-linux-gnu",
         )
