@@ -50,7 +50,7 @@ to the Bazel command. This will facilitate checking that the compiler or linker 
 For detailed instructions on how to configure hermetic CUDA, CUDNN, NCCL and NVSHMEM, [click this link](gpu/).
 
 ## How to run this project tests
-### CPU Hermetic tests
+### CPU hermetic tests
 Project supports CPU hermetic builds on:
 * Linux x86_64 / aarch64
 * macOS aarch64 - *In Development*
@@ -66,7 +66,7 @@ When executor and a target are the same, you still can run non-hermetic build. C
 
 For details, look at the `.bazelrc` file, specifically the `clang_local` configuration.
 
-### GPU Hermetic tests
+### CUDA and hermetic toolchains tests
 Project supports GPU hermetic builds on Linux x86_64 / aarch64. Running tests requires a machine with an NVIDIA GPU.
 
 Hermetic tests could be run with the help of the command:
@@ -76,7 +76,7 @@ Hermetic tests could be run with the help of the command:
 ###### Build by NVCC
 `bazel test //cc/tests/gpu:all --config=build_cuda_with_nvcc --config=cuda --config=cuda_libraries_from_stubs`
 
-#### Non-hermetic GPU tests
+#### CUDA and non-hermetic toolchains tests
 When the executor and the target are the same, a non-hermetic GPU build can still be run.
 
 ###### Build by Clang
