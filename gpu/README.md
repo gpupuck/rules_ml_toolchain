@@ -1,9 +1,3 @@
----
-title: Hermetic CUDA, CUDNN, NCCL and NVSHMEM overview
-redirect_from:
-- /third_party/gpus/hermetic_toolkits.md
----
-
 # Hermetic CUDA, CUDNN, NCCL and NVSHMEM overview
 
 Hermetic CUDA/CUDNN/NCCL/NVSHMEM use specific downloadable redistribution
@@ -87,8 +81,11 @@ is specified in [third_party/gpus/cuda/hermetic/cuda_redist_versions.bzl](https:
    following lines to the `WORKSPACE` file:
 
    ```
+   register_toolchains("@rules_ml_toolchain//cc:linux_x86_64_linux_x86_64_cuda")
+   register_toolchains("@rules_ml_toolchain//cc:linux_aarch64_linux_aarch64_cuda")
+   
    load(
-      "@rules_ml_toolchain//third_party/gpus/cuda/hermetic:cuda_json_init_repository.bzl",
+      "@rules_ml_toolchain///gpu/cuda:cuda_json_init_repository.bzl",
       "cuda_json_init_repository",
    )
    cuda_json_init_repository()
@@ -99,7 +96,7 @@ is specified in [third_party/gpus/cuda/hermetic/cuda_redist_versions.bzl](https:
       "CUDNN_REDISTRIBUTIONS",
    )
    load(
-      "@rules_ml_toolchain//third_party/gpus/cuda/hermetic:cuda_redist_init_repositories.bzl",
+      "@rules_ml_toolchain//gpu/cuda:cuda_redist_init_repositories.bzl",
       "cuda_redist_init_repositories",
       "cudnn_redist_init_repository",
    )
@@ -111,19 +108,19 @@ is specified in [third_party/gpus/cuda/hermetic/cuda_redist_versions.bzl](https:
    )
 
    load(
-      "@rules_ml_toolchain//third_party/gpus/cuda/hermetic:cuda_configure.bzl",
+      "@rules_ml_toolchain//gpu/cuda:cuda_configure.bzl",
       "cuda_configure",
    )
    cuda_configure(name = "local_config_cuda")
 
    load(
-      "@rules_ml_toolchain//third_party/nccl/hermetic:nccl_redist_init_repository.bzl",
+      "@rules_ml_toolchain//gpu/nccl:nccl_redist_init_repository.bzl",
       "nccl_redist_init_repository",
    )
    nccl_redist_init_repository()
 
    load(
-      "@rules_ml_toolchain//third_party/nccl/hermetic:nccl_configure.bzl",
+      "@rules_ml_toolchain//gpu/nccl:nccl_configure.bzl",
       "nccl_configure",
    )
    nccl_configure(name = "local_config_nccl")
@@ -205,7 +202,7 @@ is specified in [third_party/gpus/cuda/hermetic/cuda_redist_versions.bzl](https:
 
    ```
    load(
-    "@rules_ml_toolchain//third_party/nvshmem/hermetic:nvshmem_json_init_repository.bzl",
+    "@rules_ml_toolchain//gpu/nvshmem:nvshmem_json_init_repository.bzl",
     "nvshmem_json_init_repository",
    )
    nvshmem_json_init_repository()
@@ -215,7 +212,7 @@ is specified in [third_party/gpus/cuda/hermetic/cuda_redist_versions.bzl](https:
       "NVSHMEM_REDISTRIBUTIONS",
    )
    load(
-      "@rules_ml_toolchain//third_party/nvshmem/hermetic:nvshmem_redist_init_repository.bzl",
+      "@rules_ml_toolchain//gpu/nvshmem:nvshmem_redist_init_repository.bzl",
       "nvshmem_redist_init_repository",
    )
    nvshmem_redist_init_repository(
@@ -465,14 +462,17 @@ dependencies in Google ML projects.
    `cudnn_redist_init_repository()` and `nvshmem_redist_init_repository()`
    calls.
    ```
+   register_toolchains("@rules_ml_toolchain//cc:linux_x86_64_linux_x86_64_cuda")
+   register_toolchains("@rules_ml_toolchain//cc:linux_aarch64_linux_aarch64_cuda")
+
    load(
-      "@rules_ml_toolchain//third_party/gpus/cuda/hermetic:cuda_json_init_repository.bzl",
+      "@rules_ml_toolchain//gpu/cuda:cuda_json_init_repository.bzl",
       "cuda_json_init_repository",
    )
    cuda_json_init_repository()
 
    load(
-      "@rules_ml_toolchain//third_party/gpus/cuda/hermetic:cuda_redist_init_repositories.bzl",
+      "@rules_ml_toolchain//gpu/cuda:cuda_redist_init_repositories.bzl",
       "cuda_redist_init_repositories",
       "cudnn_redist_init_repository",
    )
@@ -486,31 +486,31 @@ dependencies in Google ML projects.
    )
 
    load(
-      "@rules_ml_toolchain//third_party/gpus/cuda/hermetic:cuda_configure.bzl",
+      "@rules_ml_toolchain//gpu/cuda:cuda_configure.bzl",
       "cuda_configure",
    )
    cuda_configure(name = "local_config_cuda")
 
    load(
-      "@rules_ml_toolchain//third_party/nccl/hermetic:nccl_redist_init_repository.bzl",
+      "@rules_ml_toolchain//gpu/nccl:nccl_redist_init_repository.bzl",
       "nccl_redist_init_repository",
    )
    nccl_redist_init_repository()
 
    load(
-      "@rules_ml_toolchain//third_party/nccl/hermetic:nccl_configure.bzl",
+      "@rules_ml_toolchain//gpu/nccl:nccl_configure.bzl",
       "nccl_configure",
    )
    nccl_configure(name = "local_config_nccl")
 
    load(
-    "@rules_ml_toolchain//third_party/nvshmem/hermetic:nvshmem_json_init_repository.bzl",
+    "@rules_ml_toolchain//gpu/nvshmem:nvshmem_json_init_repository.bzl",
     "nvshmem_json_init_repository",
    )
    nvshmem_json_init_repository()
 
    load(
-      "@rules_ml_toolchain//third_party/nvshmem/hermetic:nvshmem_redist_init_repository.bzl",
+      "@rules_ml_toolchain//gpu/nvshmem:nvshmem_redist_init_repository.bzl",
       "nvshmem_redist_init_repository",
    )
    nvshmem_redist_init_repository(
@@ -587,7 +587,7 @@ _NCCL_WHEEL_DICT = {
 }
 
 load(
-    "@rules_ml_toolchain//third_party/gpus/cuda/hermetic:cuda_redist_versions.bzl",
+    "@rules_ml_toolchain//gpu/cuda:cuda_redist_versions.bzl",
     "CUDA_REDIST_PATH_PREFIX",
     "CUDA_NCCL_WHEELS",
     "CUDA_REDIST_JSON_DICT",
@@ -605,7 +605,7 @@ load(
    "CUDNN_REDISTRIBUTIONS",
 )
 load(
-   "@rules_ml_toolchain//third_party/gpus/cuda/hermetic:cuda_redist_init_repositories.bzl",
+   "@rules_ml_toolchain//gpu/cuda:cuda_redist_init_repositories.bzl",
    "cuda_redist_init_repositories",
    "cudnn_redist_init_repository",
 )
@@ -619,7 +619,7 @@ cudnn_redist_init_repository(
 )
 
 load(
-    "@rules_ml_toolchain//third_party/nccl/hermetic:nccl_redist_init_repository.bzl",
+    "@rules_ml_toolchain//gpu/nccl:nccl_redist_init_repository.bzl",
     "nccl_redist_init_repository",
 )
 nccl_redist_init_repository(
