@@ -15,8 +15,30 @@ C++ cross-platform builds benefits:
 
 ## Configure hermetic C++ toolchains
 
-Add below code before CUDA initialization in WORKSPACE file
+Add the following code before the CUDA initialization block in WORKSPACE file:
 
+### C++17
+```
+http_archive(
+    name = "rules_ml_toolchain",
+    sha256 = "1a855dd94eebedae69d1804e8837ad70b8018358a0a03eea0bec71d7dc2b096a",
+    strip_prefix = "rules_ml_toolchain-d321763a84c900bc29b4f5459a4f81fad19b2356",
+    urls = [
+        "https://github.com/google-ml-infra/rules_ml_toolchain/archive/d321763a84c900bc29b4f5459a4f81fad19b2356.tar.gz",
+    ],
+)
+
+load(
+    "@rules_ml_toolchain//cc/deps:cc_toolchain_deps.bzl",
+    "cc_toolchain_deps",
+)
+
+cc_toolchain_deps()
+
+register_toolchains("@rules_ml_toolchain//cc:linux_x86_64_linux_x86_64")
+register_toolchains("@rules_ml_toolchain//cc:linux_aarch64_linux_aarch64")
+```
+### C++20
 ```
 http_archive(
     name = "rules_ml_toolchain",
