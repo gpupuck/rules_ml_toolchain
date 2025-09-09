@@ -210,3 +210,9 @@ load(
 nvshmem_redist_init_repository(
     nvshmem_redistributions = NVSHMEM_REDISTRIBUTIONS,
 )
+
+################################################################
+# SYCL configure
+load("//gpu/sycl:sycl_configure.bzl", "sycl_configure")
+
+sycl_configure(name = "local_config_sycl")
