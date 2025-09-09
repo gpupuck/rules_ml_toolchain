@@ -213,6 +213,6 @@ nvshmem_redist_init_repository(
 
 ################################################################
 # SYCL configure
-load("//gpu/sycl:sycl_configure.bzl", "sycl_configure")
+load("//gpu/sycl:configure.bzl", "sycl_configure")
 
 sycl_configure(name = "local_config_sycl")
