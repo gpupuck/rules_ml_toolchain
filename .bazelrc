@@ -116,7 +116,7 @@ build:ci_linux_x86_64_cuda --config=ci_linux_x86_64
 
 # This config option is used for SYCL as GPU backend.
 # SYCL Configuration (non-hermetic)
-build:sycl --crosstool_top=@local_config_sycl//cpp_non_hermetic:toolchain
+build:sycl --crosstool_top=@local_config_sycl//legacy:toolchain
 build:sycl --define=using_sycl=true
 build:sycl --define=tensorflow_mkldnn_contraction_kernel=0
 build:sycl --repo_env=TF_NEED_SYCL=1

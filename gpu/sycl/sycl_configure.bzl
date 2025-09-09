@@ -288,8 +288,8 @@ def _get_sycl_config(repository_ctx, bash_bin):
     )
 
 def _tpl_path(repository_ctx, labelname):
-    print("_tpl_path: //gpu/", labelname, ".tpl")
-    return repository_ctx.path(Label("//gpu/%s.tpl" % labelname))
+    tpl = "//gpu/sycl%s.tpl" if labelname.startswith(":") else "//gpu/sycl/%s.tpl"
+    return repository_ctx.path(Label(tpl % labelname))
 
 def _tpl(repository_ctx, tpl, substitutions = {}, out = None):
     if not out:
@@ -308,14 +308,14 @@ def _cxx_inc_convert(path):
     return path
 
 def _normalize_include_path(repository_ctx, path):
-    """Normalizes include paths before writing them to the cpp_non_hermetic.
+    """Normalizes include paths before writing them to the legacy.
 
-      If path points inside the 'cpp_non_hermetic' folder of the repository, a relative
+      If path points inside the 'legacy' folder of the repository, a relative
       path is returned.
-      If path points outside the 'cpp_non_hermetic' folder, an absolute path is returned.
+      If path points outside the 'legacy' folder, an absolute path is returned.
       """
     path = str(repository_ctx.path(path))
-    crosstool_folder = str(repository_ctx.path(".").get_child("cpp_non_hermetic"))
+    crosstool_folder = str(repository_ctx.path(".").get_child("legacy"))
 
     if path.startswith(crosstool_folder):
         # We drop the path to "$REPO/crosstool" and a trailing path separator.
@@ -431,7 +431,7 @@ def _create_dummy_repository(
     # Materialize templated files under sycl/.
     _tpl(
         repository_ctx,
-        "sycl:build_defs.bzl",
+        ":build_defs.bzl",
         {
             "%{sycl_is_configured}": "False",
             "%{sycl_build_is_configured}": "False",
@@ -440,7 +440,7 @@ def _create_dummy_repository(
 
     _tpl(
         repository_ctx,
-        "sycl:BUILD",
+        ":BUILD",
         {
             # Dummy placeholders: each expands to full item or "".
             "%{mkl_intel_ilp64_src}": "",
@@ -488,12 +488,12 @@ def _download_and_extract_archive(repository_ctx, archive_info, distribution_pat
 
 def _create_local_sycl_repository(repository_ctx):
     tpl_paths = {labelname: _tpl_path(repository_ctx, labelname) for labelname in [
-        "sycl:build_defs.bzl",
-        "sycl:BUILD",
-        "sycl/cpp_non_hermetic:BUILD.sycl",
-        "sycl/cpp_non_hermetic:sycl_cc_toolchain_config.bzl",
-        "sycl/cpp_non_hermetic:wrappers/crosstool_wrapper_driver_sycl",
-        "sycl/cpp_non_hermetic:wrappers/ar_driver_sycl",
+        ":build_defs.bzl",
+        ":BUILD",
+        "legacy:BUILD.sycl",
+        "legacy:sycl_cc_toolchain_config.bzl",
+        "legacy:wrappers/crosstool_wrapper_driver_sycl",
+        "legacy:wrappers/ar_driver_sycl",
     ]}
 
     bash_bin = get_bash_bin(repository_ctx)
@@ -578,7 +578,7 @@ def _create_local_sycl_repository(repository_ctx):
     # Set up BUILD file for sycl/
     repository_ctx.template(
         "sycl/build_defs.bzl",
-        tpl_paths["sycl:build_defs.bzl"],
+        tpl_paths[":build_defs.bzl"],
         {
             "%{sycl_is_configured}": "True",
             "%{sycl_build_is_configured}": "True",
@@ -622,7 +622,7 @@ def _create_local_sycl_repository(repository_ctx):
     }
     repository_ctx.template(
         "sycl/BUILD",
-        tpl_paths["sycl:BUILD"],
+        tpl_paths[":BUILD"],
         repository_dict,
     )
 
@@ -636,7 +636,7 @@ def _create_local_sycl_repository(repository_ctx):
 
     sycl_defines = {}
 
-    sycl_defines["%{host_compiler_path}"] = "cpp_non_hermetic/wrappers/crosstool_wrapper_driver_sycl"
+    sycl_defines["%{host_compiler_path}"] = "wrappers/crosstool_wrapper_driver_sycl"
     if is_icpx_and_clang:
         sycl_defines["%{extra_no_canonical_prefixes_flags}"] = "\"-no-canonical-prefixes\""
         sycl_defines["%{host_compiler_prefix}"] = clang_host_compiler_prefix
@@ -644,7 +644,7 @@ def _create_local_sycl_repository(repository_ctx):
         sycl_defines["%{extra_no_canonical_prefixes_flags}"] = "\"-fno-canonical-system-headers\""
         sycl_defines["%{host_compiler_prefix}"] = gcc_host_compiler_prefix
 
-    sycl_defines["%{ar_path}"] = "clang/bin/ar_driver_sycl"
+    sycl_defines["%{ar_path}"] = "wrappers/ar_driver_sycl"
     sycl_defines["%{cpu_compiler}"] = str(cc)
     sycl_defines["%{linker_bin_path}"] = "/usr/bin"
 
@@ -663,27 +663,27 @@ def _create_local_sycl_repository(repository_ctx):
 
     # Only expand template variables in the BUILD file
     repository_ctx.template(
-        "sycl/cpp_non_hermetic/BUILD",
-        tpl_paths["sycl/cpp_non_hermetic:BUILD.sycl"],
+        "legacy/BUILD",
+        tpl_paths["legacy:BUILD.sycl"],
         sycl_defines,
     )
 
     # No templating of cc_toolchain_config - use attributes and templatize the
     # BUILD file.
     repository_ctx.template(
-        "sycl/cpp_non_hermetic/cc_toolchain_config.bzl",
-        tpl_paths["sycl/cpp_non_hermetic:sycl_cc_toolchain_config.bzl"],
+        "legacy/cc_toolchain_config.bzl",
+        tpl_paths["legacy:sycl_cc_toolchain_config.bzl"],
         sycl_defines,
     )
 
     repository_ctx.template(
-        "sycl/cpp_non_hermetic/wrappers/crosstool_wrapper_driver_sycl",
-        tpl_paths["sycl/cpp_non_hermetic:wrappers/crosstool_wrapper_driver_sycl"],
+        "legacy/wrappers/crosstool_wrapper_driver_sycl",
+        tpl_paths["legacy:wrappers/crosstool_wrapper_driver_sycl"],
         sycl_defines,
     )
     repository_ctx.template(
-        "sycl/cpp_non_hermetic/wrappers/ar_driver_sycl",
-        tpl_paths["sycl/cpp_non_hermetic:wrappers/ar_driver_sycl"],
+        "legacy/wrappers/ar_driver_sycl",
+        tpl_paths["legacy:wrappers/ar_driver_sycl"],
         sycl_defines,
     )
 
