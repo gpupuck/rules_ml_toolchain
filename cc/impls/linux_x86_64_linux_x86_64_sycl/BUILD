@@ -14,7 +14,7 @@
 # ==============================================================================
 
 # ==============================================================================
-# Tools: Linux x86_64, Sysroot: Linux x86_64, CUDA
+# Tools: Linux x86_64, Sysroot: Linux x86_64, SYCL
 # ==============================================================================
 
 load("@rules_cc//cc:defs.bzl", "cc_toolchain")
@@ -28,11 +28,11 @@ package(
     ],
 )
 
-CUDA_TOOLS = {
-    "gcc": "wrappers/nvcc_wrapper",
+SYCL_TOOLS = {
+    "gcc": "wrappers/icpx_wrapper",
     "cpp": "wrappers/clang++",
     "ld": "wrappers/ld",
-    "ar": "wrappers/ar",
+    "ar": "wrappers/ar",  # TODO: Should I replace 'ar'?
     "gcov": "wrappers/idler",
     "llvm-cov": "wrappers/idler",
     "nm": "wrappers/idler",
@@ -43,32 +43,25 @@ CUDA_TOOLS = {
 filegroup(
     name = "wrappers",
     srcs = [
-        "//cc/impls/linux_x86_64_linux_x86_64_cuda/wrappers:all",
+        "//cc/impls/linux_x86_64_linux_x86_64_sycl/wrappers:all",
     ],
-    visibility = ["//visibility:public"],
 )
 
-# TODO(ybaturina): rename to "cuda_bin"
 filegroup(
-    name = "cuda_nvcc",
-    srcs = [],
-    #srcs = if_cuda([
-    #    "@cuda_nvcc//:bin",
-    #    "@cuda_nvcc//:nvvm",
-    #    "@cuda_nvvm//:cicc",
-    #]),
+    name = "oneapi",
+    srcs = [
+        "@oneapi//:all",
+    ],
 )
 
 alias(
-    name = "cuda_nvcc_feature",
-    actual = "@cuda_nvcc//:feature",
-    visibility = ["//visibility:public"],
+    name = "oneapi_feature",
+    actual = "@oneapi//:feature",
 )
 
 alias(
     name = "startup_libs",
     actual = "@sysroot_linux_x86_64//:startup_libs",
-    visibility = ["//visibility:public"],
 )
 
 cc_toolchain_import_feature(
@@ -81,7 +74,8 @@ cc_toolchain_import_feature(
 cc_toolchain_import(
     name = "imports",
     deps = [
-        "@rules_ml_toolchain//cc/cuda/clang:inject_cuda_runtime_wrapper",
+        "@oneapi//:includes_sycl",
+        "@oneapi//:includes_mkl",
         "@sysroot_linux_x86_64//:includes_c",
         "@llvm_linux_x86_64//:includes",
         "@sysroot_linux_x86_64//:includes_system",
@@ -89,7 +83,6 @@ cc_toolchain_import(
         "@sysroot_linux_x86_64//:pthread",
         "@llvm_linux_x86_64//:libclang_rt",
     ],
-    visibility = ["//visibility:public"],
 )
 
 cc_toolchain_import_feature(
@@ -102,7 +95,7 @@ cc_toolchain_import_feature(
 filegroup(
     name = "all",
     srcs = [
-        ":cuda_nvcc",
+        "@oneapi//:all",
         ":imports",
         ":wrappers",
         ":startup_libs",
@@ -114,9 +107,11 @@ filegroup(
 filegroup(
     name = "compiler",
     srcs = [
-        ":cuda_nvcc",
         ":imports",
         ":wrappers",
+        "@oneapi//:icpx",
+        "@oneapi//:clang",
+        "@oneapi//:clang++",
         "@llvm_linux_x86_64//:clang",
         "@llvm_linux_x86_64//:clang++",
         "@llvm_linux_x86_64//:distro_libs",
@@ -128,7 +123,6 @@ filegroup(
     name = "linker",
     srcs = [
         ":compiler",
-        ":cuda_nvcc",
         ":wrappers",
         "@llvm_linux_x86_64//:ld",
         ":startup_libs",
@@ -140,7 +134,6 @@ filegroup(
 filegroup(
     name = "ar",
     srcs = [
-        ":cuda_nvcc",
         ":wrappers",
         "@llvm_linux_x86_64//:ar",
         "@llvm_linux_x86_64//:distro_libs",
@@ -154,10 +147,7 @@ cc_toolchain_config(
     cc_compiler = "@llvm_linux_x86_64//:clang++",
     compiler_features = [
         ":imports_feature",
-
-        # Cuda features
-        ":cuda_nvcc_feature",
-        "//cc/cuda/features:hermetic",
+        "@oneapi//:binaries",
 
         # Hermetic libraries feature required before import.
         "//third_party/rules_cc_toolchain/features:hermetic_libraries",
@@ -200,7 +190,7 @@ cc_toolchain_config(
     linker = "@llvm_linux_x86_64//:ld",
     target_cpu = "x86_64",
     target_system_name = "local",
-    tool_paths = CUDA_TOOLS,
+    tool_paths = SYCL_TOOLS,
 )
 
 cc_toolchain(

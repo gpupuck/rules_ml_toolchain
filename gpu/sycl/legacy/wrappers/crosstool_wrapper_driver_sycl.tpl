@@ -49,7 +49,7 @@ else:
 
 def system(cmd):
   """Invokes cmd with os.system()"""
-  
+
   ret = os.system(cmd)
   if os.WIFEXITED(ret):
     return os.WEXITSTATUS(ret)
@@ -166,17 +166,17 @@ def call_compiler(argv, link = False, sycl_compile = True):
 
     seen = set()
     ordered_flags = []
-    
+
     # Track the type of each unique flag and preserve order
     for s in expanded_flags:
         if s not in seen:
             seen.add(s)
             flag_type = "whole" if s.endswith((".o", ".lo")) else "regular"
             ordered_flags.append((flag_type, shlex.quote(s)))
-    
+
     deduped_flags = []
     in_whole_archive = False
-    
+
     for flag_type, flag in ordered_flags:
         if flag_type == "whole":
             if not in_whole_archive:
@@ -188,11 +188,11 @@ def call_compiler(argv, link = False, sycl_compile = True):
                 deduped_flags.append("-Wl,--no-whole-archive")
                 in_whole_archive = False
             deduped_flags.append(flag)
-    
+
     # Close any open --whole-archive section
     if in_whole_archive:
         deduped_flags.append("-Wl,--no-whole-archive")
-    
+
     # Output file
     if args.o:
         out_files.append('-o')

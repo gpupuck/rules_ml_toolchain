@@ -20,12 +20,12 @@ config_setting(
 cc_library(
     name = "sycl_headers",
     hdrs = [
-        #{sycl_headers}
+        %{sycl_headers}
     ],
     includes = [
-        #".",
-        #"sycl/include",
-        #"sycl/include/sycl",
+        ".",
+        "sycl/include",
+        "sycl/include/sycl",
     ],
     visibility = ["//visibility:public"],
 )
@@ -33,13 +33,13 @@ cc_library(
 cc_library(
     name = "level_zero",
     srcs = [
-        #{level_zero_libs}
+        %{level_zero_libs}
     ],
     data = [
-        #{level_zero_libs}
+        %{level_zero_libs}
     ],
     hdrs = [
-        #{level_zero_headers}
+        %{level_zero_headers}
     ],
     includes = [
         ".",
@@ -52,16 +52,17 @@ cc_library(
 cc_library(
     name = "mkl",
     srcs = [
-        #{mkl_intel_ilp64_src}
-        #{mkl_sequential_src}
-        #{mkl_core_src}
-        #{mkl_sycl_srcs}
+        %{mkl_intel_ilp64_src}
+        %{mkl_sequential_src}
+        %{mkl_core_src}
+        %{mkl_sycl_srcs}
     ],
     data = [
-        #{mkl_intel_ilp64_src}
-        #{mkl_sequential_src}
-        #{mkl_core_src}
-        #{mkl_sycl_srcs}
+        %{mkl_intel_ilp64_src}
+        %{mkl_sequential_src}
+        %{mkl_core_src}
+        %{mkl_sycl_srcs}
+
     ],
     includes = [
         ".",
@@ -71,3 +72,5 @@ cc_library(
     linkstatic = 1,
     visibility = ["//visibility:public"],
 )
+
+%{copy_rules}

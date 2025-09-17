@@ -19,9 +19,6 @@ import sys
 import shlex
 import tempfile
 
-ONEAPI_LIBRARY_PATH = os.environ['ONEAPI_LIBRARY_PATH']
-ONEAPI_VERSION = os.environ['ONEAPI_VERSION']
-
 def check_is_intel_llvm(path):
   cmd = path + " -dM -E -x c /dev/null | grep '__INTEL_LLVM_COMPILER'"
   check_result = subprocess.getoutput(cmd)
@@ -29,21 +26,20 @@ def check_is_intel_llvm(path):
     return True
   return False
 
-ONEAPI_COMPILER = os.environ['ONEAPI_ICPX_PATH']
-if not os.path.exists(ONEAPI_COMPILER):
-  ONEAPI_COMPILER = os.environ['ONEAPI_CLANG_PATH']
-  if not os.path.exists(ONEAPI_COMPILER) or check_is_intel_llvm(ONEAPI_COMPILER):
-    raise RuntimeError("Compiler '{0}' and '{1}' not found or invalid. Current directory is '{2}'"
-      .format(os.environ['ONEAPI_ICPX_PATH'], os.environ['ONEAPI_CLANG_PATH'], os.getcwd()))
+SYCL_PATH = os.path.join("/usr/local/google/home/yuriit/.cache/bazel/_bazel_yuriit/6ba56e5013b2820100dcb1f8e2626f0b/external/local_config_sycl/dl_essential_root/oneapi/compiler/2025.1", "bin/icpx")
 
-CPU_COMPILER = os.environ['GCC_PATH']   # GCC_PATH is Clang compiler path
-USE_ICPX_CLANG = True
+if not os.path.exists(SYCL_PATH):
+  SYCL_PATH = os.path.join('/usr/local/google/home/yuriit/.cache/bazel/_bazel_yuriit/6ba56e5013b2820100dcb1f8e2626f0b/external/local_config_sycl/dl_essential_root/oneapi/compiler/2025.1', 'bin/compiler/clang')
+  if not os.path.exists(SYCL_PATH) or check_is_intel_llvm(SYCL_PATH):
+    raise RuntimeError("compiler not found or invalid")
 
-# %{tf_icpx_clang} is not replaced in old template
-#if ('%{tf_icpx_clang}')=="False":
-# USE_ICPX_CLANG = False
-#else:
-# USE_ICPX_CLANG = True
+CPU_COMPILER = ('/usr/lib/llvm-18/bin/clang')
+if ('%{tf_icpx_clang}')=="False":
+ USE_ICPX_CLANG = False
+else:
+ USE_ICPX_CLANG = True
+basekit_path = "/usr/local/google/home/yuriit/.cache/bazel/_bazel_yuriit/6ba56e5013b2820100dcb1f8e2626f0b/external/local_config_sycl/dl_essential_root/oneapi/"
+basekit_version = "2025.1"
 
 result = subprocess.run(["which", "ar"], capture_output=True, text=True)
 if result.returncode == 0:
@@ -53,7 +49,7 @@ else:
 
 def system(cmd):
   """Invokes cmd with os.system()"""
-  
+
   ret = os.system(cmd)
   if os.WIFEXITED(ret):
     return os.WEXITSTATUS(ret)
@@ -64,7 +60,7 @@ def GetHostCompilerOptions(argv):
   parser = ArgumentParser()
   args, leftover = parser.parse_known_args(argv)
   sycl_host_compile_flags = leftover
-  sycl_host_compile_flags.append('-std=c++17') # TODO: Why we have C++ version here?
+  sycl_host_compile_flags.append('-std=c++17')
   host_flags = ['-fsycl-host-compiler-options=\'%s\'' % (' '.join(sycl_host_compile_flags))]
   return host_flags
 
@@ -102,8 +98,8 @@ def call_compiler(argv, link = False, sycl_compile = True):
   link_flags.append('-lsycl')
   link_flags.append("-Wl,-no-as-needed")
   link_flags.append("-Wl,--enable-new-dtags")
-  for lib_path in ONEAPI_LIBRARY_PATH.split(":"):
-    link_flags.append("-L" + lib_path)
+  link_flags.append("-L/usr/local/google/home/yuriit/.cache/bazel/_bazel_yuriit/6ba56e5013b2820100dcb1f8e2626f0b/external/local_config_sycl/dl_essential_root/oneapi/compiler/2025.1/lib/")
+  link_flags.append("-L/usr/local/google/home/yuriit/.cache/bazel/_bazel_yuriit/6ba56e5013b2820100dcb1f8e2626f0b/external/local_config_sycl/dl_essential_root/oneapi/compiler/2025.1/compiler/lib/intel64_lin/")
   link_flags.append("-lOpenCL")
 
   sycl_link_flags = ['-fPIC']
@@ -139,7 +135,7 @@ def call_compiler(argv, link = False, sycl_compile = True):
       # icx -fsycl -c kernel.cpp -o kernel.compile.o
       sycl_compile_flags = [" -c {} -o {} ".format(in_file, object_file)]
       sycl_compile_flags += (flags + common_flags + compile_flags + sycl_device_only_flags)
-      compile_cmd = ('env ' + ONEAPI_COMPILER + ' ' + ' '.join(sycl_compile_flags))
+      compile_cmd = ('env ' + SYCL_PATH + ' ' + ' '.join(sycl_compile_flags))
       exit_status = system(compile_cmd)
       if exit_status != 0:
         return exit_status
@@ -148,7 +144,7 @@ def call_compiler(argv, link = False, sycl_compile = True):
       # icx -fsycl -fPIC -fsycl-link kernel.compile.o -o kernel.dev.o
       sycl_link_flags_dev = [" {} -o {} ".format(object_file, dev_file)]
       sycl_link_flags_dev += (common_flags + sycl_link_flags)
-      link_cmd = ('env ' + ONEAPI_COMPILER + ' ' + ' '.join(sycl_link_flags_dev))
+      link_cmd = ('env ' + SYCL_PATH + ' ' + ' '.join(sycl_link_flags_dev))
       exit_status = system(link_cmd)
       if exit_status != 0:
         return exit_status
@@ -170,17 +166,17 @@ def call_compiler(argv, link = False, sycl_compile = True):
 
     seen = set()
     ordered_flags = []
-    
+
     # Track the type of each unique flag and preserve order
     for s in expanded_flags:
         if s not in seen:
             seen.add(s)
             flag_type = "whole" if s.endswith((".o", ".lo")) else "regular"
             ordered_flags.append((flag_type, shlex.quote(s)))
-    
+
     deduped_flags = []
     in_whole_archive = False
-    
+
     for flag_type, flag in ordered_flags:
         if flag_type == "whole":
             if not in_whole_archive:
@@ -192,11 +188,11 @@ def call_compiler(argv, link = False, sycl_compile = True):
                 deduped_flags.append("-Wl,--no-whole-archive")
                 in_whole_archive = False
             deduped_flags.append(flag)
-    
+
     # Close any open --whole-archive section
     if in_whole_archive:
         deduped_flags.append("-Wl,--no-whole-archive")
-    
+
     # Output file
     if args.o:
         out_files.append('-o')
@@ -215,22 +211,23 @@ def call_compiler(argv, link = False, sycl_compile = True):
     if args.c:
       in_files.append('-c')
       in_files.extend(args.c[0])
-      #input_file = os.path.basename(args.c[0][0])
+      input_file = os.path.basename(args.c[0][0])
     if args.o:
       out_files.append('-o')
       out_files.extend(args.o[0])
     flags += (common_flags + in_files + out_files)
-    VERBOSE = os.environ.get("ONEAPI_VERBOSE", "0") == "1"
+    VERBOSE = os.environ.get("VERBOSE", "0") == "1"
     if USE_ICPX_CLANG:
       if VERBOSE:
-        RuntimeError(' '.join([CPU_COMPILER] + flags))
+        print(' '.join([CPU_COMPILER] + flags))
       return subprocess.call([CPU_COMPILER] + flags)
     else:
       if VERBOSE:
-        RuntimeError(' '.join([ONEAPI_COMPILER] + flags))
-      return subprocess.call([ONEAPI_COMPILER] + flags)
+        print(' '.join([SYCL_PATH] + flags))
+      return subprocess.call([SYCL_PATH] + flags)
 
 def main():
+  parser = ArgumentParser()
   parser = ArgumentParser(fromfile_prefix_chars='@')
   parser.add_argument('-sycl_compile', action='store_true')
   parser.add_argument('-link_stage', action='store_true')

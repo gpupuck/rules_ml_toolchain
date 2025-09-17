@@ -4,6 +4,7 @@
   * `GCC_HOST_COMPILER_PATH`: The GCC host compiler path
 """
 
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 load(
     "//gpu:tools.bzl",
     "make_copy_dir_rule",
@@ -11,7 +12,13 @@ load(
     "to_list_of_strings",
 )
 load("//gpu/sycl:level_zero.bzl", "level_zero_redist")
-load("//gpu/sycl:sycl_dl_essential.bzl", "sycl_redist")
+load(
+    "//gpu/sycl:sycl_redist_versions.bzl",
+    "BUILD_TEMPLATES",
+    "LEVEL_ZERO_REDIST_DICT",
+    "ONEAPI_REDIST_DICT",
+    "ZERO_LOADER_REDIST_DICT",
+)
 load(
     "//third_party/remote_config:common.bzl",
     "err_out",
@@ -42,21 +49,21 @@ def _l0_include_path(sycl_config):
 def _l0_library_path(sycl_config):
     return sycl_config.l0_library_dir
 
-def _sycl_header_path(repository_ctx, sycl_config, bash_bin):
+def _sycl_header_path(ctx, sycl_config, bash_bin):
     sycl_header_path = sycl_config.sycl_toolkit_path
     include_dir = sycl_header_path + "/include"
-    if not files_exist(repository_ctx, [include_dir], bash_bin)[0]:
+    if not files_exist(ctx, [include_dir], bash_bin)[0]:
         sycl_header_path = sycl_header_path + "/linux"
         include_dir = sycl_header_path + "/include"
-        if not files_exist(repository_ctx, [include_dir], bash_bin)[0]:
+        if not files_exist(ctx, [include_dir], bash_bin)[0]:
             auto_configure_fail("Cannot find sycl headers in {}".format(include_dir))
     return sycl_header_path
 
-def _sycl_include_path(repository_ctx, sycl_config, bash_bin):
+def _sycl_include_path(ctx, sycl_config, bash_bin):
     """Generates the cxx_builtin_include_directory entries for sycl inc dirs.
 
     Args:
-      repository_ctx: The repository context.
+      ctx: The repository context.
       sycl_config: The path to the gcc host compiler.
 
     Returns:
@@ -67,18 +74,18 @@ def _sycl_include_path(repository_ctx, sycl_config, bash_bin):
     inc_dirs = []
 
     inc_dirs.append(_mkl_include_path(sycl_config))
-    inc_dirs.append(_sycl_header_path(repository_ctx, sycl_config, bash_bin) + "/include")
-    inc_dirs.append(_sycl_header_path(repository_ctx, sycl_config, bash_bin) + "/include/sycl")
+    inc_dirs.append(_sycl_header_path(ctx, sycl_config, bash_bin) + "/include")
+    inc_dirs.append(_sycl_header_path(ctx, sycl_config, bash_bin) + "/include/sycl")
 
     return inc_dirs
 
-def enable_sycl(repository_ctx):
+def enable_sycl(ctx):
     """Returns whether to build with SYCL support."""
-    return bool(repository_ctx.getenv("TF_NEED_SYCL", "").strip())
+    return bool(ctx.getenv("TF_NEED_SYCL", "").strip())
 
-def _use_icpx_and_clang(repository_ctx):
+def _use_icpx_and_clang(ctx):
     """Returns whether to use ICPX for SYCL and Clang for C++."""
-    return repository_ctx.getenv("TF_ICPX_CLANG", "").strip()
+    return ctx.getenv("TF_ICPX_CLANG", "").strip()
 
 def auto_configure_fail(msg):
     """Output failure message when auto configuration fails."""
@@ -86,51 +93,51 @@ def auto_configure_fail(msg):
     no_color = "\033[0m"
     fail("\n%sAuto-Configuration Error:%s %s\n" % (red, no_color, msg))
 
-def find_cc(repository_ctx):
+def find_cc(ctx):
     """Find the C++ compiler."""
 
     # Return a dummy value for GCC detection here to avoid error
-    if _use_icpx_and_clang(repository_ctx):
+    if _use_icpx_and_clang(ctx):
         target_cc_name = "clang"
         cc_path_envvar = _CLANG_HOST_COMPILER_PATH
     else:
         target_cc_name = "gcc"
         cc_path_envvar = _GCC_HOST_COMPILER_PATH
     cc_name = target_cc_name
-    cc_name_from_env = get_host_environ(repository_ctx, cc_path_envvar)
+    cc_name_from_env = get_host_environ(ctx, cc_path_envvar)
     if cc_name_from_env:
         cc_name = cc_name_from_env
     if cc_name.startswith("/"):
         # Absolute path, maybe we should make this supported by our which function.
         return cc_name
-    cc = which(repository_ctx, cc_name)
+    cc = which(ctx, cc_name)
     if cc == None:
         fail(("Cannot find {}, either correct your path or set the {}" +
               " environment variable").format(target_cc_name, cc_path_envvar))
     return cc
 
-def find_sycl_root(repository_ctx, sycl_config):
-    sycl_name = str(repository_ctx.path(sycl_config.sycl_toolkit_path.strip()).realpath)
+def find_sycl_root(ctx, sycl_config):
+    sycl_name = str(ctx.path(sycl_config.sycl_toolkit_path.strip()).realpath)
     if sycl_name.startswith("/"):
         return sycl_name
     fail("Cannot find DPC++ compiler, please correct your path")
 
-def find_sycl_include_path(repository_ctx, sycl_config):
+def find_sycl_include_path(ctx, sycl_config):
     """Find DPC++ compiler."""
-    base_path = find_sycl_root(repository_ctx, sycl_config)
-    bin_path = repository_ctx.path(base_path + "/" + "bin" + "/" + "icpx")
+    base_path = find_sycl_root(ctx, sycl_config)
+    bin_path = ctx.path(base_path + "/" + "bin" + "/" + "icpx")
     icpx_extra = ""
     if not bin_path.exists:
-        bin_path = repository_ctx.path(base_path + "/" + "bin" + "/" + "compiler" + "/" + "clang")
+        bin_path = ctx.path(base_path + "/" + "bin" + "/" + "compiler" + "/" + "clang")
         if not bin_path.exists:
             fail("Cannot find DPC++ compiler, please correct your path")
     else:
         icpx_extra = "-fsycl"
-    if _use_icpx_and_clang(repository_ctx):
-        clang_path = repository_ctx.which("clang")
-        clang_install_dir = repository_ctx.execute([clang_path, "-print-resource-dir"])
-        clang_install_dir_opt = "--sysroot=" + str(repository_ctx.path(clang_install_dir.stdout.strip()).dirname)
-        cmd_out = repository_ctx.execute([
+    if _use_icpx_and_clang(ctx):
+        clang_path = ctx.which("clang")
+        clang_install_dir = ctx.execute([clang_path, "-print-resource-dir"])
+        clang_install_dir_opt = "--sysroot=" + str(ctx.path(clang_install_dir.stdout.strip()).dirname)
+        cmd_out = ctx.execute([
             bin_path,
             icpx_extra,
             clang_install_dir_opt,
@@ -142,10 +149,10 @@ def find_sycl_include_path(repository_ctx, sycl_config):
             "/dev/null",
         ])
     else:
-        gcc_path = repository_ctx.which("gcc")
-        gcc_install_dir = repository_ctx.execute([gcc_path, "-print-libgcc-file-name"])
-        gcc_install_dir_opt = "--gcc-install-dir=" + str(repository_ctx.path(gcc_install_dir.stdout.strip()).dirname)
-        cmd_out = repository_ctx.execute([
+        gcc_path = ctx.which("gcc")
+        gcc_install_dir = ctx.execute([gcc_path, "-print-libgcc-file-name"])
+        gcc_install_dir_opt = "--gcc-install-dir=" + str(ctx.path(gcc_install_dir.stdout.strip()).dirname)
+        cmd_out = ctx.execute([
             bin_path,
             icpx_extra,
             gcc_install_dir_opt,
@@ -158,11 +165,11 @@ def find_sycl_include_path(repository_ctx, sycl_config):
         ])
 
     outlist = cmd_out.stderr.split("\n")
-    real_base_path = str(repository_ctx.path(base_path).realpath).strip()
+    real_base_path = str(ctx.path(base_path).realpath).strip()
     include_dirs = []
     for l in outlist:
-        if l.startswith(" ") and l.strip().startswith("/") and str(repository_ctx.path(l.strip()).realpath) not in include_dirs:
-            include_dirs.append(str(repository_ctx.path(l.strip()).realpath))
+        if l.startswith(" ") and l.strip().startswith("/") and str(ctx.path(l.strip()).realpath) not in include_dirs:
+            include_dirs.append(str(ctx.path(l.strip()).realpath))
     return include_dirs
 
 def _lib_name(lib, version = "", static = False):
@@ -183,21 +190,21 @@ def _lib_name(lib, version = "", static = False):
             version = ".%s" % version
         return "lib%s.so%s" % (lib, version)
 
-def _sycl_lib_paths(repository_ctx, lib, basedir):
+def _sycl_lib_paths(ctx, lib, basedir):
     file_name = _lib_name(lib, version = "", static = False)
     return [
-        repository_ctx.path("%s/%s" % (basedir, file_name)),
+        ctx.path("%s/%s" % (basedir, file_name)),
     ]
 
-def _batch_files_exist(repository_ctx, libs_paths, bash_bin):
+def _batch_files_exist(ctx, libs_paths, bash_bin):
     all_paths = []
     for _, lib_paths in libs_paths:
         for lib_path in lib_paths:
             all_paths.append(lib_path)
-    return files_exist(repository_ctx, all_paths, bash_bin)
+    return files_exist(ctx, all_paths, bash_bin)
 
-def _select_sycl_lib_paths(repository_ctx, libs_paths, bash_bin):
-    test_results = _batch_files_exist(repository_ctx, libs_paths, bash_bin)
+def _select_sycl_lib_paths(ctx, libs_paths, bash_bin):
+    test_results = _batch_files_exist(ctx, libs_paths, bash_bin)
 
     libs = {}
     i = 0
@@ -211,16 +218,16 @@ def _select_sycl_lib_paths(repository_ctx, libs_paths, bash_bin):
         if selected_path == None:
             auto_configure_fail("Cannot find sycl library %s in %s" % (name, path))
 
-        libs[name] = struct(file_name = selected_path.basename, path = realpath(repository_ctx, selected_path, bash_bin))
+        libs[name] = struct(file_name = selected_path.basename, path = realpath(ctx, selected_path, bash_bin))
 
     return libs
 
-def _find_libs(repository_ctx, sycl_config, bash_bin):
+def _find_libs(ctx, sycl_config, bash_bin):
     """Returns the SYCL libraries on the system.
 
     Args:
-      repository_ctx: The repository context.
-      sycl_config: The SYCL config as returned by _get_sycl_config
+      ctx: The repository context.
+      sycl_config: The SYCL config as returned by _get_sycl_local_config
       bash_bin: the path to the bash interpreter
 
     Returns:
@@ -228,7 +235,7 @@ def _find_libs(repository_ctx, sycl_config, bash_bin):
     """
     mkl_path = _mkl_library_path(sycl_config)
     libs_paths = [
-        (name, _sycl_lib_paths(repository_ctx, name, path))
+        (name, _sycl_lib_paths(ctx, name, path))
         for name, path in [
             ("mkl_intel_ilp64", mkl_path),
             ("mkl_sequential", mkl_path),
@@ -236,38 +243,38 @@ def _find_libs(repository_ctx, sycl_config, bash_bin):
         ]
     ]
     if sycl_config.sycl_basekit_version_number < "2024":
-        libs_paths.append(("mkl_sycl", _sycl_lib_paths(repository_ctx, "mkl_sycl", mkl_path)))
+        libs_paths.append(("mkl_sycl", _sycl_lib_paths(ctx, "mkl_sycl", mkl_path)))
     else:
-        libs_paths.append(("mkl_sycl_blas", _sycl_lib_paths(repository_ctx, "mkl_sycl_blas", mkl_path)))
-        libs_paths.append(("mkl_sycl_lapack", _sycl_lib_paths(repository_ctx, "mkl_sycl_lapack", mkl_path)))
-        libs_paths.append(("mkl_sycl_sparse", _sycl_lib_paths(repository_ctx, "mkl_sycl_sparse", mkl_path)))
-        libs_paths.append(("mkl_sycl_dft", _sycl_lib_paths(repository_ctx, "mkl_sycl_dft", mkl_path)))
-        libs_paths.append(("mkl_sycl_vm", _sycl_lib_paths(repository_ctx, "mkl_sycl_vm", mkl_path)))
-        libs_paths.append(("mkl_sycl_rng", _sycl_lib_paths(repository_ctx, "mkl_sycl_rng", mkl_path)))
-        libs_paths.append(("mkl_sycl_stats", _sycl_lib_paths(repository_ctx, "mkl_sycl_stats", mkl_path)))
-        libs_paths.append(("mkl_sycl_data_fitting", _sycl_lib_paths(repository_ctx, "mkl_sycl_data_fitting", mkl_path)))
+        libs_paths.append(("mkl_sycl_blas", _sycl_lib_paths(ctx, "mkl_sycl_blas", mkl_path)))
+        libs_paths.append(("mkl_sycl_lapack", _sycl_lib_paths(ctx, "mkl_sycl_lapack", mkl_path)))
+        libs_paths.append(("mkl_sycl_sparse", _sycl_lib_paths(ctx, "mkl_sycl_sparse", mkl_path)))
+        libs_paths.append(("mkl_sycl_dft", _sycl_lib_paths(ctx, "mkl_sycl_dft", mkl_path)))
+        libs_paths.append(("mkl_sycl_vm", _sycl_lib_paths(ctx, "mkl_sycl_vm", mkl_path)))
+        libs_paths.append(("mkl_sycl_rng", _sycl_lib_paths(ctx, "mkl_sycl_rng", mkl_path)))
+        libs_paths.append(("mkl_sycl_stats", _sycl_lib_paths(ctx, "mkl_sycl_stats", mkl_path)))
+        libs_paths.append(("mkl_sycl_data_fitting", _sycl_lib_paths(ctx, "mkl_sycl_data_fitting", mkl_path)))
     l0_path = _l0_library_path(sycl_config)
-    libs_paths.append(("ze_loader", _sycl_lib_paths(repository_ctx, "ze_loader", l0_path)))
-    return _select_sycl_lib_paths(repository_ctx, libs_paths, bash_bin)
+    libs_paths.append(("ze_loader", _sycl_lib_paths(ctx, "ze_loader", l0_path)))
+    return _select_sycl_lib_paths(ctx, libs_paths, bash_bin)
 
-def find_sycl_config(repository_ctx):
+def find_sycl_config(ctx):
     """Returns SYCL config dictionary from running find_sycl_config.py"""
-    python_bin = get_python_bin(repository_ctx)
-    exec_result = execute(repository_ctx, [python_bin, repository_ctx.attr._find_sycl_config])
+    python_bin = get_python_bin(ctx)
+    exec_result = execute(ctx, [python_bin, ctx.attr._find_sycl_config])
     if exec_result.return_code:
         auto_configure_fail("Failed to run find_sycl_config.py: %s" % err_out(exec_result))
 
     # Parse the dict from stdout.
     return dict([tuple(x.split(": ")) for x in exec_result.stdout.splitlines()])
 
-def _get_sycl_config(repository_ctx, bash_bin):
+def _get_sycl_local_config(ctx, bash_bin):
     """Detects and returns information about the SYCL installation on the system.
 
     Args:
-      repository_ctx: The repository context.
+      ctx: The repository context.
       bash_bin: the path to the path interpreter
     """
-    config = find_sycl_config(repository_ctx)
+    config = find_sycl_config(ctx)
     sycl_basekit_path = config["sycl_basekit_path"]
     sycl_toolkit_path = config["sycl_toolkit_path"]
     sycl_version_number = config["sycl_version_number"]
@@ -287,16 +294,16 @@ def _get_sycl_config(repository_ctx, bash_bin):
         l0_library_dir = l0_library_dir,
     )
 
-def _tpl_path(repository_ctx, labelname):
+def _tpl_path(ctx, labelname):
     tpl = "//gpu/sycl%s.tpl" if labelname.startswith(":") else "//gpu/sycl/%s.tpl"
-    return repository_ctx.path(Label(tpl % labelname))
+    return ctx.path(Label(tpl % labelname))
 
-def _tpl(repository_ctx, tpl, substitutions = {}, out = None):
+def _tpl(ctx, tpl, substitutions = {}, out = None):
     if not out:
         out = tpl.replace(":", "/")
-    repository_ctx.template(
+    ctx.template(
         out,
-        _tpl_path(repository_ctx, tpl),
+        _tpl_path(ctx, tpl),
         substitutions,
     )
 
@@ -307,29 +314,29 @@ def _cxx_inc_convert(path):
     path = path.strip()
     return path
 
-def _normalize_include_path(repository_ctx, path):
+def _normalize_include_path(ctx, path):
     """Normalizes include paths before writing them to the legacy.
 
       If path points inside the 'legacy' folder of the repository, a relative
       path is returned.
       If path points outside the 'legacy' folder, an absolute path is returned.
       """
-    path = str(repository_ctx.path(path))
-    crosstool_folder = str(repository_ctx.path(".").get_child("legacy"))
+    path = str(ctx.path(path))
+    crosstool_folder = str(ctx.path(".").get_child("legacy"))
 
     if path.startswith(crosstool_folder):
         # We drop the path to "$REPO/crosstool" and a trailing path separator.
         return "\"" + path[len(crosstool_folder) + 1:] + "\""
     return "\"" + path + "\""
 
-def _get_cxx_inc_directories_impl(repository_ctx, cc, lang_is_cpp):
+def _get_cxx_inc_directories_impl(ctx, cc, lang_is_cpp):
     """Compute the list of default C or C++ include directories."""
     if lang_is_cpp:
         lang = "c++"
     else:
         lang = "c"
 
-    result = raw_exec(repository_ctx, [
+    result = raw_exec(ctx, [
         cc,
         "-no-canonical-prefixes",
         "-E",
@@ -354,18 +361,18 @@ def _get_cxx_inc_directories_impl(repository_ctx, cc, lang_is_cpp):
         inc_dirs = stderr[index1 + 1:index2].strip()
 
     return [
-        str(repository_ctx.path(_cxx_inc_convert(p)))
+        str(ctx.path(_cxx_inc_convert(p)))
         for p in inc_dirs.split("\n")
     ]
 
-def get_cxx_inc_directories(repository_ctx, cc):
+def get_cxx_inc_directories(ctx, cc):
     """Compute the list of default C and C++ include directories."""
 
     # For some reason `clang -xc` sometimes returns include paths that are
     # different from the ones from `clang -xc++`. (Symlink and a dir)
     # So we run the compiler with both `-xc` and `-xc++` and merge resulting lists
-    includes_cpp = _get_cxx_inc_directories_impl(repository_ctx, cc, True)
-    includes_c = _get_cxx_inc_directories_impl(repository_ctx, cc, False)
+    includes_cpp = _get_cxx_inc_directories_impl(ctx, cc, True)
+    includes_c = _get_cxx_inc_directories_impl(ctx, cc, False)
 
     includes_cpp_set = depset(includes_cpp)
     return includes_cpp + [
@@ -400,7 +407,7 @@ error_gpu_disabled()
 """
 
 def _create_dummy_repository(
-        repository_ctx,
+        ctx,
         sycl_libs = None,
         mkl_sycl_libs = None,
         copy_rules = None,
@@ -419,18 +426,18 @@ def _create_dummy_repository(
     level_zero_headers = level_zero_headers or []
 
     # Intercept attempts to build with --config=sycl when SYCL is not configured.
-    repository_ctx.file(
+    ctx.file(
         "crosstool/error_gpu_disabled.bzl",
         _DUMMY_CROSSTOOL_BZL_FILE,
     )
-    repository_ctx.file(
+    ctx.file(
         "crosstool/BUILD",
         _DUMMY_CROSSTOOL_BUILD_FILE,
     )
 
     # Materialize templated files under sycl/.
     _tpl(
-        repository_ctx,
+        ctx,
         ":build_defs.bzl",
         {
             "%{sycl_is_configured}": "False",
@@ -439,7 +446,7 @@ def _create_dummy_repository(
     )
 
     _tpl(
-        repository_ctx,
+        ctx,
         ":BUILD",
         {
             # Dummy placeholders: each expands to full item or "".
@@ -464,30 +471,46 @@ def _extract_file_name_from_url(url):
     """Extract the file name from a URL by finding the last slash '/'."""
     return url[url.rfind("/") + 1:]
 
-def _download_and_extract_archive(repository_ctx, archive_info, distribution_path):
+def _download_and_extract_archive(ctx, archive_info, distribution_path, build_file = None):
     """Downloads and extracts a tar.gz ONEAPI redistributable (cached by Bazel)."""
+
     archive_url = archive_info.get("url")
+    print("_download_and_extract_archive: distribution_path=", distribution_path, ", archive_info=", archive_info)
+
     archive_sha256 = archive_info.get("sha256")
     if not archive_url or not archive_sha256:
         fail("Missing required archive metadata: 'url' or 'sha256'")
 
-    repository_ctx.report_progress("Installing oneAPI Basekit to: %s" % distribution_path)
+    ctx.report_progress("Installing oneAPI Basekit to: %s" % distribution_path)
 
-    archive_override = repository_ctx.getenv("oneAPI_ARCHIVE_OVERRIDE")
+    archive_override = ctx.getenv("oneAPI_ARCHIVE_OVERRIDE")
     if archive_override:
-        repository_ctx.report_progress("Using overridden archive: %s" % archive_override)
-        repository_ctx.extract(archive_override, distribution_path)
+        ctx.report_progress("Using overridden archive: %s" % archive_override)
+        ctx.extract(archive_override, distribution_path)
     else:
-        repository_ctx.download_and_extract(
+        ctx.download_and_extract(
             url = archive_url,
             sha256 = archive_sha256,
             output = distribution_path,
         )
 
-    repository_ctx.report_progress("oneAPI Basekit archive extracted and installed.")
+    if build_file:
+        _buildfile(ctx, build_file)
 
-def _create_local_sycl_repository(repository_ctx):
-    tpl_paths = {labelname: _tpl_path(repository_ctx, labelname) for labelname in [
+    ctx.report_progress("oneAPI Basekit archive extracted and installed.")
+
+def _buildfile(ctx, build_file):
+    """Utility function for writing a BUILD file.
+
+    Args:
+      ctx: The repository context of the repository rule calling this utility function.
+      build_file: The file to use as the BUILD file for this repository. This attribute is an absolute label.
+    """
+
+    ctx.file("BUILD.bazel", ctx.read(build_file))
+
+def _create_local_sycl_repository(ctx):
+    tpl_paths = {labelname: _tpl_path(ctx, labelname) for labelname in [
         ":build_defs.bzl",
         ":BUILD",
         "legacy:BUILD.sycl",
@@ -496,31 +519,39 @@ def _create_local_sycl_repository(repository_ctx):
         "legacy:wrappers/ar_driver_sycl",
     ]}
 
-    bash_bin = get_bash_bin(repository_ctx)
+    bash_bin = get_bash_bin(ctx)
 
-    hermetic = repository_ctx.getenv("SYCL_BUILD_HERMETIC") == "1"
+    hermetic = ctx.getenv("SYCL_BUILD_HERMETIC") == "1"
     if hermetic:
-        oneapi_version = repository_ctx.getenv("ONEAPI_VERSION", "")
-        os_id = repository_ctx.getenv("OS", "")
+        oneapi_version = ctx.getenv("ONEAPI_VERSION", "")
+        os_id = ctx.getenv("OS", "")
         if not oneapi_version or not os_id:
             fail("ONEAPI_VERSION and OS must be set via --repo_env for hermetic build.")
-        redist_info = sycl_redist.get(os_id, {}).get(oneapi_version, {}).get("sycl_dl_essential")
+
+        redist_info = SYCL_REDIST.get(os_id, {}).get(oneapi_version, {}).get("sycl_dl_essential")
         if not redist_info:
             fail("Missing redistributable definition for %s on %s" % (oneapi_version, os_id))
-        archive_info = redist_info["archives"][0]
-        install_path = str(repository_ctx.path(redist_info["root"]))
-        _download_and_extract_archive(repository_ctx, archive_info, install_path)
 
-        # Added: Download Level Zero redistributable if defined
+        # Download oneAPI
+        ctx.report_progress("Download oneAPI...")
+        archive_info = redist_info["archives"][0]
+
+        #install_path = str(ctx.path(redist_info["root"]))
+        install_path = str(ctx.path(""))
+        print("_create_local_sycl_repository: install_path = ", install_path)
+        _download_and_extract_archive(ctx, archive_info, install_path)
+
+        #get_external_archive()
+
+        # Download Level Zero and Zero Loader if defined
         level_zero_info = level_zero_redist.get(os_id, {}).get(oneapi_version, {}).get("level_zero")
         if level_zero_info:
-            repository_ctx.report_progress("Downloading Level Zero for hermetic build.")
+            ctx.report_progress("Download Level Zero and Zero Loader...")
 
             for archive in level_zero_info["archives"]:
-                _download_and_extract_archive(repository_ctx, archive, install_path)
-
+                _download_and_extract_archive(ctx, archive, install_path)
         else:
-            repository_ctx.report_progress("No Level Zero redistributable defined for %s on %s" % (oneapi_version, os_id))
+            ctx.report_progress("No Level Zero redistributable defined for %s on %s" % (oneapi_version, os_id))
 
         sycl_config = struct(
             sycl_basekit_path = install_path + "/oneapi/",
@@ -536,47 +567,47 @@ def _create_local_sycl_repository(repository_ctx):
             l0_library_dir = install_path + "/lib",
         )
     else:
-        install_path = repository_ctx.getenv("SYCL_TOOLKIT_PATH") or "/opt/intel/oneapi/compiler/2025.1"
-        repository_ctx.report_progress("Falling back to default SYCL path: %s" % install_path)
-        sycl_config = _get_sycl_config(repository_ctx, bash_bin)
+        install_path = ctx.getenv("SYCL_TOOLKIT_PATH") or "/opt/intel/oneapi/compiler/2025.1"
+        ctx.report_progress("Falling back to default SYCL path: %s" % install_path)
+        sycl_config = _get_sycl_local_config(ctx, bash_bin)
 
     # Copy header and library files to execroot.
     copy_rules = [
         make_copy_dir_rule(
-            repository_ctx,
+            ctx,
             name = "sycl-include",
-            src_dir = _sycl_header_path(repository_ctx, sycl_config, bash_bin) + "/include",
+            src_dir = _sycl_header_path(ctx, sycl_config, bash_bin) + "/include",
             out_dir = "sycl/include",
         ),
     ]
     copy_rules.append(make_copy_dir_rule(
-        repository_ctx,
+        ctx,
         name = "mkl-include",
         src_dir = _mkl_include_path(sycl_config),
         out_dir = "sycl/include",
     ))
     copy_rules.append(make_copy_dir_rule(
-        repository_ctx,
+        ctx,
         name = "level-zero-include",
         src_dir = _l0_include_path(sycl_config),
         out_dir = "level_zero/include/level_zero",
     ))
 
-    sycl_libs = _find_libs(repository_ctx, sycl_config, bash_bin)
+    sycl_libs = _find_libs(ctx, sycl_config, bash_bin)
     sycl_lib_srcs = []
     sycl_lib_outs = []
     for lib in sycl_libs.values():
         sycl_lib_srcs.append(lib.path)
         sycl_lib_outs.append("sycl/lib/" + lib.file_name)
     copy_rules.append(make_copy_files_rule(
-        repository_ctx,
+        ctx,
         name = "sycl-lib",
         srcs = sycl_lib_srcs,
         outs = sycl_lib_outs,
     ))
 
     # Set up BUILD file for sycl/
-    repository_ctx.template(
+    ctx.template(
         "sycl/build_defs.bzl",
         tpl_paths[":build_defs.bzl"],
         {
@@ -620,19 +651,19 @@ def _create_local_sycl_repository(repository_ctx):
         "%{level_zero_libs}": level_zero_libs,
         "%{level_zero_headers}": '":level-zero-include"',
     }
-    repository_ctx.template(
+    ctx.template(
         "sycl/BUILD",
         tpl_paths[":BUILD"],
         repository_dict,
     )
 
     # Set up crosstool/
-    is_icpx_and_clang = _use_icpx_and_clang(repository_ctx)
-    cc = find_cc(repository_ctx)
+    is_icpx_and_clang = _use_icpx_and_clang(ctx)
+    cc = find_cc(ctx)
 
-    host_compiler_includes = get_cxx_inc_directories(repository_ctx, cc)
-    clang_host_compiler_prefix = get_host_environ(repository_ctx, _CLANG_HOST_COMPILER_PREFIX, "/usr/bin")
-    gcc_host_compiler_prefix = get_host_environ(repository_ctx, _GCC_HOST_COMPILER_PREFIX, "/usr/bin")
+    host_compiler_includes = get_cxx_inc_directories(ctx, cc)
+    clang_host_compiler_prefix = get_host_environ(ctx, _CLANG_HOST_COMPILER_PREFIX, "/usr/bin")
+    gcc_host_compiler_prefix = get_host_environ(ctx, _GCC_HOST_COMPILER_PREFIX, "/usr/bin")
 
     sycl_defines = {}
 
@@ -648,8 +679,8 @@ def _create_local_sycl_repository(repository_ctx):
     sycl_defines["%{cpu_compiler}"] = str(cc)
     sycl_defines["%{linker_bin_path}"] = "/usr/bin"
 
-    sycl_internal_inc_dirs = find_sycl_include_path(repository_ctx, sycl_config)
-    cxx_builtin_includes_list = sycl_internal_inc_dirs + _sycl_include_path(repository_ctx, sycl_config, bash_bin) + host_compiler_includes
+    sycl_internal_inc_dirs = find_sycl_include_path(ctx, sycl_config)
+    cxx_builtin_includes_list = sycl_internal_inc_dirs + _sycl_include_path(ctx, sycl_config, bash_bin) + host_compiler_includes
     sycl_defines["%{cxx_builtin_include_directories}"] = to_list_of_strings(cxx_builtin_includes_list)
     sycl_defines["%{unfiltered_compile_flags}"] = to_list_of_strings([
         "-DTENSORFLOW_USE_SYCL=1",
@@ -662,7 +693,7 @@ def _create_local_sycl_repository(repository_ctx):
     sycl_defines["%{basekit_version}"] = str(sycl_config.sycl_basekit_version_number)
 
     # Only expand template variables in the BUILD file
-    repository_ctx.template(
+    ctx.template(
         "legacy/BUILD",
         tpl_paths["legacy:BUILD.sycl"],
         sycl_defines,
@@ -670,18 +701,18 @@ def _create_local_sycl_repository(repository_ctx):
 
     # No templating of cc_toolchain_config - use attributes and templatize the
     # BUILD file.
-    repository_ctx.template(
+    ctx.template(
         "legacy/cc_toolchain_config.bzl",
         tpl_paths["legacy:sycl_cc_toolchain_config.bzl"],
         sycl_defines,
     )
 
-    repository_ctx.template(
+    ctx.template(
         "legacy/wrappers/crosstool_wrapper_driver_sycl",
         tpl_paths["legacy:wrappers/crosstool_wrapper_driver_sycl"],
         sycl_defines,
     )
-    repository_ctx.template(
+    ctx.template(
         "legacy/wrappers/ar_driver_sycl",
         tpl_paths["legacy:wrappers/ar_driver_sycl"],
         sycl_defines,
@@ -705,8 +736,9 @@ sycl_configure = repository_rule(
     implementation = _sycl_autoconf_imp,
     local = True,
     attrs = {
-        "_find_sycl_config": attr.label(
-            default = Label("//gpu/sycl:find_sycl_config.py"),
-        ),
+        "_find_sycl_config": attr.label(default = Label("//gpu/sycl:find_sycl_config.py")),
+        "oneapi_build": attr.label(default = Label("//gpu/sycl/oneapi.BUILD")),
+        "oneapi_level_zero_build": attr.label(default = Label("//gpu/sycl/oneapi_level_zero.BUILD")),
+        "oneapi_zero_loader_build": attr.label(default = Label("//gpu/sycl/oneapi_zero_loader.BUILD")),
     },
 )

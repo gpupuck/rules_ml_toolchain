@@ -19,11 +19,12 @@ filegroup(
     name = "all",
     srcs = [
         "ar",
+        "ar_wrapper",
         "clang",
         "clang++",
+        "icpx_wrapper",
         "idler",
         "ld",
-        "nvcc_wrapper",
     ],
     visibility = ["//visibility:public"],
 )

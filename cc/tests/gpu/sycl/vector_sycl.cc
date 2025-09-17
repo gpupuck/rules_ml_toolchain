@@ -1,0 +1,52 @@
+//
+// Created by yuriit on 9/13/25.
+//
+
+#include "vector_sycl.h"
+
+int VectorGenerateAndSum(int size) {
+
+    // Host data
+    std::vector<float> a_h(size);
+    std::vector<float> b_h(size);
+    std::vector<float> c_h(size);
+
+    // Initialize host data
+    for (int i = 0; i < size; ++i) {
+        a_h[i] = static_cast<float>(i);
+        b_h[i] = static_cast<float>(i * 2);
+    }
+
+    // Create a SYCL queue targeting a default device (e.g., GPU if available)
+    sycl::queue q;
+
+    // Create SYCL buffers for device memory
+    sycl::buffer<float, 1> a_buf(a_h.data(), sycl::range<1>(size));
+    sycl::buffer<float, 1> b_buf(b_h.data(), sycl::range<1>(size));
+    sycl::buffer<float, 1> c_buf(c_h.data(), sycl::range<1>(size));
+
+    // Submit a command group to the queue
+    q.submit([&](sycl::handler& h) {
+        // Create accessors to buffers within the command group
+        sycl::accessor a_acc(a_buf, h, sycl::read_only);
+        sycl::accessor b_acc(b_buf, h, sycl::read_only);
+        sycl::accessor c_acc(c_buf, h, sycl::write_only);
+
+        // Define the kernel for vector addition
+        h.parallel_for(sycl::range<1>(size), [=](sycl::id<1> idx) {
+            c_acc[idx] = a_acc[idx] + b_acc[idx];
+        });
+    }).wait(); // Wait for the kernel to complete
+
+    // Verify results (data is automatically copied back to host when buffer goes out of scope or accessor is created on host)
+    for (int i = 0; i < size; ++i) {
+        if (c_h[i] != (a_h[i] + b_h[i])) {
+            std::cout << "Error at index " << i << ": " << c_h[i] << " != " << (a_h[i] + b_h[i]) << std::endl;
+            return 1;
+        }
+    }
+
+    std::cout << "Vector addition successful!" << std::endl;
+
+    return 0;
+}
