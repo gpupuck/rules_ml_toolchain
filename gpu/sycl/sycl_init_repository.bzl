@@ -38,10 +38,11 @@ def sycl_init_repository(
     creates distributions.bzl file with "CUDA_REDISTRIBUTIONS" constant that is
     used in this macro."""
 
-    for dist_name, _ in redist_dict.items():
+    for dist_name, _ in redist_dict.items()[::-1]:
         build_template = build_templates[dist_name]
 
-        #print("sycl_init_repository: dist_name =", dist_name)
+        print("sycl_init_repository: dist_name = \"{}\"".format(dist_name))
+
         #print("sycl_init_repository: distrs =", redist_dict[dist_name])
         #print("sycl_init_repository: build_templates =", build_template["version_to_template"])
         dist_repo(

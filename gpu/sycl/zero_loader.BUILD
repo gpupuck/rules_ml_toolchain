@@ -15,6 +15,15 @@ package(
     ],
 )
 
+filegroup(
+    name = "all",
+    srcs = glob([
+            "lib/**/*",
+        ],
+    ),
+    visibility = ["//visibility:public"],
+)
+
 # TODO: Make libraries version insensitive
 cc_toolchain_import(
     name = "libs",
@@ -22,5 +31,17 @@ cc_toolchain_import(
         "**/*",
     ]),
     shared_library = "libze_loader.so",
+    visibility = ["//visibility:public"],
+)
+
+cc_library(
+    name = "libze_loader",
+    srcs = [
+        "lib/libze_loader.so",
+    ],
+    data = [
+        "lib/libze_loader.so",
+    ],
+    linkstatic = 1,
     visibility = ["//visibility:public"],
 )

@@ -135,9 +135,6 @@ build:sycl_hermetic --repo_env=OS=ubuntu_24.10
 
 # Enable Clang for host and icpx for SYCL
 build:icpx_clang --repo_env TF_ICPX_CLANG=1
-build:icpx_clang --action_env=CLANG_COMPILER_PATH="/usr/lib/llvm-18/bin/clang"
-build:icpx_clang --linkopt="-fuse-ld=lld"
 build:icpx_clang --linkopt="-lm"
 build:icpx_clang --host_linkopt="-lm"
-build:icpx_clang --host_linkopt="-fuse-ld=lld"
 build:icpx_clang --copt=-fclang-abi-compat=17

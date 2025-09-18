@@ -15,12 +15,23 @@ package(
     ],
 )
 
-cc_toolchain_import(
-    name = "includes",
+filegroup(
+    name = "all",
+    srcs = glob([
+            "include/**/*",
+        ],
+    ),
+    visibility = ["//visibility:public"],
+)
+
+cc_library(
+    name = "headers",
     hdrs = glob([
-        "include/**",
+        "include/**/*",
     ]),
     includes = [
-        "include/",
+        ".",
+        "include",
     ],
+    visibility = ["//visibility:public"],
 )

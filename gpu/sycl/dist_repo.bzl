@@ -217,12 +217,10 @@ def _download_distribution(ctx, dist):
 
     #if ctx.attr.override_strip_prefix:
     #    strip_prefix = ctx.attr.override_strip_prefix
-    if dist[2]:
-        strip_prefix = dist[2]
-    else:
-        strip_prefix = get_archive_name(url)
 
-    print("Extracting {}".format(file_name))  # buildifier: disable=print
+    strip_prefix = dist[2]
+
+    print("Extracting {} with strip prefix '{}'".format(file_name, strip_prefix))  # buildifier: disable=print
     ctx.extract(
         archive = file_name,
         stripPrefix = strip_prefix,
@@ -311,6 +309,7 @@ def _use_downloaded_archive(ctx):
     #create_version_file(ctx, major_version)
 
 def _dist_repo_impl(ctx):
+    #print("_dist_repo_impl: name = \"{}\"".format(ctx.name))
     local_dist_path = None  #_get_env_var(ctx, ctx.attr.local_path_env_var)
     if local_dist_path:
         #use_local_dist_path(ctx, local_dist_path, ctx.attr.local_source_dirs)

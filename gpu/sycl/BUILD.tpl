@@ -17,36 +17,19 @@ config_setting(
     },
 )
 
-cc_library(
+alias(
     name = "sycl_headers",
-    hdrs = [
-        #{sycl_headers}
-    ],
-    includes = [
-        #".",
-        #"sycl/include",
-        #"sycl/include/sycl",
-    ],
-    visibility = ["//visibility:public"],
+    actual = "@oneapi//:headers",
 )
 
-cc_library(
-    name = "level_zero",
-    srcs = [
-        #{level_zero_libs}
-    ],
-    data = [
-        #{level_zero_libs}
-    ],
-    hdrs = [
-        #{level_zero_headers}
-    ],
-    includes = [
-        ".",
-        "level_zero/include",
-    ],
-    linkstatic = 1,
-    visibility = ["//visibility:public"],
+alias(
+    name = "level_zero_headers",
+    actual = "@level_zero//:headers",
+)
+
+alias(
+    name = "libze_loader",
+    actual = "@zero_loader//:libze_loader",
 )
 
 cc_library(

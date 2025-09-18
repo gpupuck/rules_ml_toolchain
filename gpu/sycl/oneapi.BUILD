@@ -99,6 +99,19 @@ cc_toolchain_import(
     ],
 )
 
+cc_library(
+    name = "headers",
+    hdrs = glob([
+        "mkl/{oneapi_version}/include/**".format(oneapi_version = ONEAPI_VERSION),
+        "compiler/{oneapi_version}/include/**".format(oneapi_version = ONEAPI_VERSION),
+    ]),
+    includes = [
+        "mkl/{oneapi_version}/include".format(oneapi_version = ONEAPI_VERSION),
+        "compiler/{oneapi_version}/include".format(oneapi_version = ONEAPI_VERSION),
+    ],
+    visibility = ["//visibility:public"],
+)
+
 #cc_toolchain_import(
 #    name = "libs_mkl",
 #    additional_libs = glob([

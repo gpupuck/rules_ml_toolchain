@@ -11,7 +11,6 @@ load(
     "make_copy_files_rule",
     "to_list_of_strings",
 )
-load("//gpu/sycl:level_zero.bzl", "level_zero_redist")
 load(
     "//gpu/sycl:sycl_redist_versions.bzl",
     "BUILD_TEMPLATES",
@@ -582,9 +581,7 @@ def _sycl_configure_impl(ctx):
         _create_dummy_repository(ctx)
 
     hermetic = ctx.getenv("SYCL_BUILD_HERMETIC") == "1"
-    if hermetic:
-        print("SYCL hermetic")
-    else:
+    if not hermetic:
         fail("SYCL non-hermetic build hasn't supported")
 
     tpl_paths = {labelname: _tpl_path(ctx, labelname) for labelname in [

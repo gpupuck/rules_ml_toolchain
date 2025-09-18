@@ -74,8 +74,6 @@ cc_toolchain_import_feature(
 cc_toolchain_import(
     name = "imports",
     deps = [
-        "@oneapi//:includes_sycl",
-        "@oneapi//:includes_mkl",
         "@sysroot_linux_x86_64//:includes_c",
         "@llvm_linux_x86_64//:includes",
         "@sysroot_linux_x86_64//:includes_system",
@@ -96,6 +94,8 @@ filegroup(
     name = "all",
     srcs = [
         "@oneapi//:all",
+        "@level_zero//:all",
+        "@zero_loader//:all",
         ":imports",
         ":wrappers",
         ":startup_libs",

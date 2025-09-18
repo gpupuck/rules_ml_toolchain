@@ -140,6 +140,7 @@ def call_compiler(argv, link = False, sycl_compile = True):
       sycl_compile_flags = [" -c {} -o {} ".format(in_file, object_file)]
       sycl_compile_flags += (flags + common_flags + compile_flags + sycl_device_only_flags)
       compile_cmd = ('env ' + ONEAPI_COMPILER + ' ' + ' '.join(sycl_compile_flags))
+      #raise RuntimeError('env ' + ONEAPI_COMPILER + ' ' + ' '.join(sycl_compile_flags))
       exit_status = system(compile_cmd)
       if exit_status != 0:
         return exit_status
@@ -223,12 +224,10 @@ def call_compiler(argv, link = False, sycl_compile = True):
     VERBOSE = os.environ.get("ONEAPI_VERBOSE", "0") == "1"
     if USE_ICPX_CLANG:
       if VERBOSE:
-        RuntimeError(' '.join([CPU_COMPILER] + flags))
-      return subprocess.call([CPU_COMPILER] + flags)
+        return subprocess.call([CPU_COMPILER] + flags)
     else:
       if VERBOSE:
-        RuntimeError(' '.join([ONEAPI_COMPILER] + flags))
-      return subprocess.call([ONEAPI_COMPILER] + flags)
+        return subprocess.call([ONEAPI_COMPILER] + flags)
 
 def main():
   parser = ArgumentParser(fromfile_prefix_chars='@')
