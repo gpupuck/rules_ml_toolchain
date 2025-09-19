@@ -53,7 +53,7 @@ else:
 
 def system(cmd):
   """Invokes cmd with os.system()"""
-  
+
   ret = os.system(cmd)
   if os.WIFEXITED(ret):
     return os.WEXITSTATUS(ret)
@@ -140,7 +140,6 @@ def call_compiler(argv, link = False, sycl_compile = True):
       sycl_compile_flags = [" -c {} -o {} ".format(in_file, object_file)]
       sycl_compile_flags += (flags + common_flags + compile_flags + sycl_device_only_flags)
       compile_cmd = ('env ' + ONEAPI_COMPILER + ' ' + ' '.join(sycl_compile_flags))
-      #raise RuntimeError('env ' + ONEAPI_COMPILER + ' ' + ' '.join(sycl_compile_flags))
       exit_status = system(compile_cmd)
       if exit_status != 0:
         return exit_status
@@ -171,17 +170,17 @@ def call_compiler(argv, link = False, sycl_compile = True):
 
     seen = set()
     ordered_flags = []
-    
+
     # Track the type of each unique flag and preserve order
     for s in expanded_flags:
         if s not in seen:
             seen.add(s)
             flag_type = "whole" if s.endswith((".o", ".lo")) else "regular"
             ordered_flags.append((flag_type, shlex.quote(s)))
-    
+
     deduped_flags = []
     in_whole_archive = False
-    
+
     for flag_type, flag in ordered_flags:
         if flag_type == "whole":
             if not in_whole_archive:
@@ -193,11 +192,11 @@ def call_compiler(argv, link = False, sycl_compile = True):
                 deduped_flags.append("-Wl,--no-whole-archive")
                 in_whole_archive = False
             deduped_flags.append(flag)
-    
+
     # Close any open --whole-archive section
     if in_whole_archive:
         deduped_flags.append("-Wl,--no-whole-archive")
-    
+
     # Output file
     if args.o:
         out_files.append('-o')
@@ -216,7 +215,7 @@ def call_compiler(argv, link = False, sycl_compile = True):
     if args.c:
       in_files.append('-c')
       in_files.extend(args.c[0])
-      #input_file = os.path.basename(args.c[0][0])
+      input_file = os.path.basename(args.c[0][0])
     if args.o:
       out_files.append('-o')
       out_files.extend(args.o[0])
@@ -224,12 +223,15 @@ def call_compiler(argv, link = False, sycl_compile = True):
     VERBOSE = os.environ.get("ONEAPI_VERBOSE", "0") == "1"
     if USE_ICPX_CLANG:
       if VERBOSE:
-        return subprocess.call([CPU_COMPILER] + flags)
+        print(' '.join([CPU_COMPILER] + flags))
+      return subprocess.call([CPU_COMPILER] + flags)
     else:
       if VERBOSE:
-        return subprocess.call([ONEAPI_COMPILER] + flags)
+        print(' '.join([SYCL_PATH] + flags))
+      return subprocess.call([ONEAPI_COMPILER] + flags)
 
 def main():
+  parser = ArgumentParser()
   parser = ArgumentParser(fromfile_prefix_chars='@')
   parser.add_argument('-sycl_compile', action='store_true')
   parser.add_argument('-link_stage', action='store_true')

@@ -32,7 +32,7 @@ SYCL_TOOLS = {
     "gcc": "wrappers/icpx_wrapper",
     "cpp": "wrappers/clang++",
     "ld": "wrappers/ld",
-    "ar": "wrappers/ar",  # TODO: Should I replace 'ar'?
+    "ar": "wrappers/ar_wrapper",
     "gcov": "wrappers/idler",
     "llvm-cov": "wrappers/idler",
     "nm": "wrappers/idler",
