@@ -44,6 +44,7 @@ package(
 )
 
 ONEAPI_VERSION = "2025.1"   # TODO: replace by "%{oneapi_version}"
+CLANG_VERSION = "20"
 
 oneapi_feature(
     name = "binaries",
@@ -73,10 +74,67 @@ filegroup(
 )
 
 filegroup(
+    name = "ld",
+    srcs = [
+        "compiler/{oneapi_version}/bin/compiler/ld.lld".format(oneapi_version = ONEAPI_VERSION),
+    ],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "ar",
+    srcs = [
+        "compiler/{oneapi_version}/bin/compiler/llvm-ar".format(oneapi_version = ONEAPI_VERSION),
+    ],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
     name = "icpx",
     srcs = [
         "compiler/{oneapi_version}/bin/icpx".format(oneapi_version = ONEAPI_VERSION),
     ],
+)
+
+filegroup(
+    name = "asan_ignorelist",
+    srcs = [
+        "compiler/{oneapi_version}/lib/clang/{clang_version}/share/asan_ignorelist.txt"
+            .format(oneapi_version = ONEAPI_VERSION, clang_version = CLANG_VERSION),
+    ],
+    visibility = ["//visibility:public"],
+)
+
+cc_toolchain_import(
+    name = "includes",
+    hdrs = glob([
+        "compiler/{oneapi_version}/lib/clang/{clang_version}/include/**"
+            .format(oneapi_version = ONEAPI_VERSION, clang_version = CLANG_VERSION),
+    ]),
+    includes = [
+        "compiler/{oneapi_version}/lib/clang/{clang_version}"
+            .format(oneapi_version = ONEAPI_VERSION, clang_version = CLANG_VERSION),
+        "compiler/{oneapi_version}/lib/clang/{clang_version}/include"
+            .format(oneapi_version = ONEAPI_VERSION, clang_version = CLANG_VERSION),
+    ],
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "@platforms//os:macos": [],
+    }),
+    visibility = ["//visibility:public"],
+)
+
+# This library is needed for LiteRT because it uses a compiler-specific
+# built-in functions, and these functions are not provided by GCC 8.4.
+cc_toolchain_import(
+    name = "libclang_rt",
+    static_library = "compiler/{oneapi_version}/lib/clang/{clang_version}/lib/x86_64-unknown-linux-gnu/libclang_rt.builtins.a"
+        .format(oneapi_version = ONEAPI_VERSION, clang_version = CLANG_VERSION),
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "@platforms//os:macos": [],
+    }),
+    visibility = ["//visibility:public"],
 )
 
 cc_toolchain_import(

@@ -75,11 +75,11 @@ cc_toolchain_import(
     name = "imports",
     deps = [
         "@sysroot_linux_x86_64//:includes_c",
-        "@llvm_linux_x86_64//:includes",
+        "@oneapi//:includes",
         "@sysroot_linux_x86_64//:includes_system",
         "@sysroot_linux_x86_64//:glibc",
         "@sysroot_linux_x86_64//:pthread",
-        "@llvm_linux_x86_64//:libclang_rt",
+        "@oneapi//:libclang_rt",
     ],
 )
 
@@ -99,7 +99,6 @@ filegroup(
         ":imports",
         ":wrappers",
         ":startup_libs",
-        "@llvm_linux_x86_64//:all",
     ],
 )
 
@@ -112,9 +111,6 @@ filegroup(
         "@oneapi//:icpx",
         "@oneapi//:clang",
         "@oneapi//:clang++",
-        "@llvm_linux_x86_64//:clang",
-        "@llvm_linux_x86_64//:clang++",
-        "@llvm_linux_x86_64//:distro_libs",
     ],
 )
 
@@ -124,9 +120,8 @@ filegroup(
     srcs = [
         ":compiler",
         ":wrappers",
-        "@llvm_linux_x86_64//:ld",
+        "@oneapi//:ld",
         ":startup_libs",
-        "@llvm_linux_x86_64//:distro_libs",
     ],
 )
 
@@ -135,16 +130,15 @@ filegroup(
     name = "ar",
     srcs = [
         ":wrappers",
-        "@llvm_linux_x86_64//:ar",
-        "@llvm_linux_x86_64//:distro_libs",
+        "@oneapi//:ar",
     ],
 )
 
 cc_toolchain_config(
     name = "config",
-    archiver = "@llvm_linux_x86_64//:ar",
-    c_compiler = "@llvm_linux_x86_64//:clang",
-    cc_compiler = "@llvm_linux_x86_64//:clang++",
+    archiver = "@oneapi//:ar",
+    c_compiler = "@oneapi//:clang",
+    cc_compiler = "@oneapi//:clang++",
     compiler_features = [
         ":imports_feature",
         "@oneapi//:binaries",
@@ -187,7 +181,7 @@ cc_toolchain_config(
         "//cc/features:supports_dynamic_linker",
         "//cc/features:supports_start_end_lib_feature",
     ],
-    linker = "@llvm_linux_x86_64//:ld",
+    linker = "@oneapi//:ld",
     target_cpu = "x86_64",
     target_system_name = "local",
     tool_paths = SYCL_TOOLS,
