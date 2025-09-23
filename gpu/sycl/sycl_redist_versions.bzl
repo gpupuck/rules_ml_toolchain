@@ -20,7 +20,7 @@ REDIST_DICT = {
         "ubuntu_24.10_2025.1": [
             "https://tensorflow-file-hosting.s3.us-east-1.amazonaws.com/level-zero-1.21.10.tar.gz",
             "e0ff1c6cb9b551019579a2dd35c3a611240c1b60918c75345faf9514142b9c34",
-            "",
+            "level-zero-1.21.10",
         ],
     },
     "zero_loader": {
