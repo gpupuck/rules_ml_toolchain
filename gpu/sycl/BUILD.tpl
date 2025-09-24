@@ -16,26 +16,3 @@ config_setting(
         "define": "using_sycl=true",
     },
 )
-
-#cc_library(
-#    name = "mkl",
-#    srcs = [
-        #{mkl_intel_ilp64_src}
-        #{mkl_sequential_src}
-        #{mkl_core_src}
-        #{mkl_sycl_srcs}
-#    ],
-#    data = [
-        #{mkl_intel_ilp64_src}
-        #{mkl_sequential_src}
-        #{mkl_core_src}
-        #{mkl_sycl_srcs}
-#    ],
-#    includes = [
-#        ".",
-#        "sycl/include",
-#    ],
-#    linkopts = ["-Wl,-Bstatic,-lsvml,-lirng,-limf,-lirc,-lirc_s,-Bdynamic"],
-#    linkstatic = 1,
-#    visibility = ["//visibility:public"],
-#)
