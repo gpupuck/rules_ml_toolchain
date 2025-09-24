@@ -293,11 +293,12 @@ def _get_sycl_local_config(ctx, bash_bin):
 
 def _tpl_path(ctx, labelname):
     tpl = "//gpu/sycl%s.tpl" if labelname.startswith(":") else "//gpu/sycl/%s.tpl"
+    print("_tpl_path: tpl =", tpl % labelname)
     return ctx.path(Label(tpl % labelname))
 
 def _tpl(ctx, tpl, substitutions = {}, out = None):
     if not out:
-        out = tpl.replace(":", "/")
+        out = tpl.replace(":", "/") if not tpl.startswith(":") else tpl
     ctx.template(
         out,
         _tpl_path(ctx, tpl),
@@ -424,27 +425,32 @@ def _create_dummy_repository(
 
     # Intercept attempts to build with --config=sycl when SYCL is not configured.
     ctx.file(
-        "crosstool/error_gpu_disabled.bzl",
+        "error_gpu_disabled.bzl",
         _DUMMY_CROSSTOOL_BZL_FILE,
     )
     ctx.file(
-        "crosstool/BUILD",
+        "BUILD",
         _DUMMY_CROSSTOOL_BUILD_FILE,
     )
 
-    # Materialize templated files under sycl/.
-    _tpl(
-        ctx,
+    tpl_paths = {labelname: _tpl_path(ctx, labelname) for labelname in [
         ":build_defs.bzl",
+        ":BUILD",
+    ]}
+
+    # Materialize templated files under sycl/
+    ctx.template(
+        "sycl/build_defs.bzl",
+        tpl_paths[":build_defs.bzl"],
         {
             "%{sycl_is_configured}": "False",
             "%{sycl_build_is_configured}": "False",
         },
     )
 
-    _tpl(
-        ctx,
-        ":BUILD",
+    ctx.template(
+        "sycl/BUILD",
+        tpl_paths[":BUILD"],
         {
             # Dummy placeholders: each expands to full item or "".
             "%{mkl_intel_ilp64_src}": "",
@@ -579,6 +585,7 @@ def _sycl_configure_impl(ctx):
     """Implementation of the sycl_configure rule"""
     if not enable_sycl(ctx):
         _create_dummy_repository(ctx)
+        return
 
     hermetic = ctx.getenv("SYCL_BUILD_HERMETIC") == "1"
     if not hermetic:

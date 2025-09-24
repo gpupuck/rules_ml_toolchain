@@ -13,7 +13,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
  limitations under the License.
 ============================================================================== */
 
-#include "vector_sycl.cu.h"
+#include "vector_sycl.h"
 #include "gtest/gtest.h"
 
 TEST(VectorSyclTest, VectorSyclTest) {

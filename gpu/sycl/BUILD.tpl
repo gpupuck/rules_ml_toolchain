@@ -17,40 +17,25 @@ config_setting(
     },
 )
 
-alias(
-    name = "sycl_headers",
-    actual = "@oneapi//:headers",
-)
-
-alias(
-    name = "level_zero_headers",
-    actual = "@level_zero//:headers",
-)
-
-alias(
-    name = "libze_loader",
-    actual = "@zero_loader//:libze_loader",
-)
-
-cc_library(
-    name = "mkl",
-    srcs = [
+#cc_library(
+#    name = "mkl",
+#    srcs = [
         #{mkl_intel_ilp64_src}
         #{mkl_sequential_src}
         #{mkl_core_src}
         #{mkl_sycl_srcs}
-    ],
-    data = [
+#    ],
+#    data = [
         #{mkl_intel_ilp64_src}
         #{mkl_sequential_src}
         #{mkl_core_src}
         #{mkl_sycl_srcs}
-    ],
-    includes = [
-        ".",
-        "sycl/include",
-    ],
-    linkopts = ["-Wl,-Bstatic,-lsvml,-lirng,-limf,-lirc,-lirc_s,-Bdynamic"],
-    linkstatic = 1,
-    visibility = ["//visibility:public"],
-)
+#    ],
+#    includes = [
+#        ".",
+#        "sycl/include",
+#    ],
+#    linkopts = ["-Wl,-Bstatic,-lsvml,-lirng,-limf,-lirc,-lirc_s,-Bdynamic"],
+#    linkstatic = 1,
+#    visibility = ["//visibility:public"],
+#)

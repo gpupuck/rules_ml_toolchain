@@ -157,6 +157,17 @@ cc_toolchain_import(
     ],
 )
 
+cc_toolchain_import(
+    name = "libs_mkl",
+    additional_libs = glob([
+        "mkl/{oneapi_version}/lib/libmkl_intel_ilp64.s*".format(oneapi_version = ONEAPI_VERSION),
+        "mkl/{oneapi_version}/lib/libmkl_sequential.s*".format(oneapi_version = ONEAPI_VERSION),
+        "mkl/{oneapi_version}/lib/libmkl_core.s*".format(oneapi_version = ONEAPI_VERSION),
+        "mkl/{oneapi_version}/lib/libmkl_sycl_*".format(oneapi_version = ONEAPI_VERSION),
+    ]),
+    visibility = ["//visibility:public"],
+)
+
 cc_library(
     name = "headers",
     hdrs = glob([
@@ -170,13 +181,38 @@ cc_library(
     visibility = ["//visibility:public"],
 )
 
-#cc_toolchain_import(
-#    name = "libs_mkl",
-#    additional_libs = glob([
-#        "{oneapi_version}/lib/**".format(oneapi_version = ONEAPI_VERSION),
-#    ]),
-#)
-
+cc_library(
+    name = "libs",
+    srcs = glob([
+        "mkl/{oneapi_version}/lib/libmkl_intel_ilp64.so".format(oneapi_version = ONEAPI_VERSION),
+        "mkl/{oneapi_version}/lib/libmkl_sequential.so".format(oneapi_version = ONEAPI_VERSION),
+        "mkl/{oneapi_version}/lib/libmkl_core.so".format(oneapi_version = ONEAPI_VERSION),
+        "mkl/{oneapi_version}/lib/libmkl_sycl_stats.so".format(oneapi_version = ONEAPI_VERSION),
+        "mkl/{oneapi_version}/lib/libmkl_sycl_data_fitting.so".format(oneapi_version = ONEAPI_VERSION),
+        "mkl/{oneapi_version}/lib/libmkl_sycl_vm.so".format(oneapi_version = ONEAPI_VERSION),
+        "mkl/{oneapi_version}/lib/libmkl_sycl_lapack.so".format(oneapi_version = ONEAPI_VERSION),
+        "mkl/{oneapi_version}/lib/libmkl_sycl_dft.so".format(oneapi_version = ONEAPI_VERSION),
+        "mkl/{oneapi_version}/lib/libmkl_sycl_sparse.so".format(oneapi_version = ONEAPI_VERSION),
+        "mkl/{oneapi_version}/lib/libmkl_sycl_rng.so".format(oneapi_version = ONEAPI_VERSION),
+        "mkl/{oneapi_version}/lib/libmkl_sycl_blas.so".format(oneapi_version = ONEAPI_VERSION),
+    ]),
+    data = glob([
+        "mkl/{oneapi_version}/lib/libmkl_intel_ilp64.so".format(oneapi_version = ONEAPI_VERSION),
+        "mkl/{oneapi_version}/lib/libmkl_sequential.so".format(oneapi_version = ONEAPI_VERSION),
+        "mkl/{oneapi_version}/lib/libmkl_core.so".format(oneapi_version = ONEAPI_VERSION),
+        "mkl/{oneapi_version}/lib/libmkl_sycl_stats.so".format(oneapi_version = ONEAPI_VERSION),
+        "mkl/{oneapi_version}/lib/libmkl_sycl_data_fitting.so".format(oneapi_version = ONEAPI_VERSION),
+        "mkl/{oneapi_version}/lib/libmkl_sycl_vm.so".format(oneapi_version = ONEAPI_VERSION),
+        "mkl/{oneapi_version}/lib/libmkl_sycl_lapack.so".format(oneapi_version = ONEAPI_VERSION),
+        "mkl/{oneapi_version}/lib/libmkl_sycl_dft.so".format(oneapi_version = ONEAPI_VERSION),
+        "mkl/{oneapi_version}/lib/libmkl_sycl_sparse.so".format(oneapi_version = ONEAPI_VERSION),
+        "mkl/{oneapi_version}/lib/libmkl_sycl_rng.so".format(oneapi_version = ONEAPI_VERSION),
+        "mkl/{oneapi_version}/lib/libmkl_sycl_blas.so".format(oneapi_version = ONEAPI_VERSION),
+    ]),
+    linkopts = ["-Wl,-Bstatic,-lsvml,-lirng,-limf,-lirc,-lirc_s,-Bdynamic"],
+    linkstatic = 1,
+    visibility = ["//visibility:public"],
+)
 
 #filegroup(
 #    name = "all",

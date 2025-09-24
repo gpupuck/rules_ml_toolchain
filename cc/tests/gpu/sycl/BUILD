@@ -25,6 +25,17 @@ cc_test(
     ],
     deps = [
         ":vector_sycl",
+        "@gtest//:gtest_main",
+    ],
+)
+
+#############################################
+# Test compiler Builtins
+cc_test(
+    name = "builtins_test",
+    srcs = ["builtins_test.cc"],
+    deps = [
+        "@gtest//:gtest_main",
     ],
 )
 
@@ -33,6 +44,7 @@ cc_test(
 test_suite(
     name = "all",
     tests = [
+        ":builtins_test",
         ":vector_sycl_test",
     ],
 )

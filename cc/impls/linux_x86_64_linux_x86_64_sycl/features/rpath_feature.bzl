@@ -33,7 +33,7 @@ def _iterate_flag_group(iterate_over, flags = [], flag_groups = []):
         flags = flags,
     )
 
-def _linking_rpath_feature(ctx):
+def _rpath_feature(ctx):
     return _feature(
         name = ctx.label.name,
         enabled = ctx.attr.enabled,
@@ -82,8 +82,8 @@ def _linking_rpath_feature(ctx):
         ],
     )
 
-cc_linking_rpath_feature = rule(
-    _linking_rpath_feature,
+cc_rpath_feature = rule(
+    _rpath_feature,
     attrs = {
         "enabled": attr.bool(default = False),
         "provides": attr.string_list(),

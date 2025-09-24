@@ -9,7 +9,7 @@
 #include <iostream>
 #include <vector>
 
-namespace sycl = cl::sycl;
+//namespace sycl = cl::sycl;
 
 int VectorGenerateAndSum(int size);
 

@@ -79,6 +79,7 @@ cc_toolchain_import(
         "@sysroot_linux_x86_64//:includes_system",
         "@sysroot_linux_x86_64//:glibc",
         "@sysroot_linux_x86_64//:pthread",
+        "@oneapi//:libs_mkl",
         "@oneapi//:libclang_rt",
     ],
 )
@@ -94,6 +95,7 @@ filegroup(
     name = "all",
     srcs = [
         "@oneapi//:all",
+        "@llvm_linux_x86_64//:all",
         "@level_zero//:all",
         "@zero_loader//:all",
         ":imports",
@@ -111,6 +113,8 @@ filegroup(
         "@oneapi//:icpx",
         "@oneapi//:clang",
         "@oneapi//:clang++",
+        "@llvm_linux_x86_64//:clang",
+        "@llvm_linux_x86_64//:clang++",
     ],
 )
 
@@ -121,6 +125,7 @@ filegroup(
         ":compiler",
         ":wrappers",
         "@oneapi//:ld",
+        "@llvm_linux_x86_64//:ld",
         ":startup_libs",
     ],
 )
@@ -131,6 +136,7 @@ filegroup(
     srcs = [
         ":wrappers",
         "@oneapi//:ar",
+        "@llvm_linux_x86_64//:ar",
     ],
 )
 
@@ -180,6 +186,8 @@ cc_toolchain_config(
         "//cc/features:allow_shlib_undefined",
         "//cc/features:supports_dynamic_linker",
         "//cc/features:supports_start_end_lib_feature",
+        "//cc/impls/linux_x86_64_linux_x86_64_sycl/features:no_as_needed",
+        "//cc/impls/linux_x86_64_linux_x86_64_sycl/features:runtime_library_search_directories",
     ],
     linker = "@oneapi//:ld",
     target_cpu = "x86_64",

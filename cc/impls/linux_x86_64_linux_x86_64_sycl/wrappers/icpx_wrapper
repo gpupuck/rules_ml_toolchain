@@ -87,6 +87,7 @@ def call_compiler(argv, link = False, sycl_compile = True):
   sycl_device_only_flags.append('-Xclang -cl-mad-enable')
   sycl_device_only_flags.append('-cl-fp32-correctly-rounded-divide-sqrt')
   sycl_device_only_flags.append('-fsycl-device-code-split=per_source')
+  sycl_device_only_flags.append('-fsycl-unnamed-lambda')
 
   common_flags = []
   # ref: https://github.com/intel/llvm/blob/sycl/clang/docs/UsersManual.rst#controlling-floating-point-behavior

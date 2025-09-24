@@ -44,8 +44,9 @@ def sycl_library(copts = [], linkopts = [], tags = [], deps = [], **kwargs):
                       linkopts = sycl_default_linkopts() + linkopts,
                       tags = tags + ["gpu"],
                       deps = deps + if_sycl_is_configured([
-                        "@local_config_sycl//sycl:sycl_headers",
-                        "@local_config_sycl//sycl:level_zero_headers",
-                        "@local_config_sycl//sycl:libze_loader",
+                        "@oneapi//:headers",
+                        "@level_zero//:headers",
+                        "@oneapi//:libs",
+                        "@zero_loader//:libze_loader",
                       ]),
                       **kwargs)
