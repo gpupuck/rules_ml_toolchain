@@ -6,12 +6,6 @@
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 load(
-    "//gpu:tools.bzl",
-    "make_copy_dir_rule",
-    "make_copy_files_rule",
-    "to_list_of_strings",
-)
-load(
     "//gpu/sycl:sycl_redist_versions.bzl",
     "BUILD_TEMPLATES",
     "REDIST_DICT",
