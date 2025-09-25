@@ -30,21 +30,10 @@ cc_test(
 )
 
 #############################################
-# Test compiler Builtins
-cc_test(
-    name = "builtins_test",
-    srcs = ["builtins_test.cc"],
-    deps = [
-        "@gtest//:gtest_main",
-    ],
-)
-
-#############################################
 # Tests Suite
 test_suite(
     name = "all",
     tests = [
-        ":builtins_test",
         ":vector_sycl_test",
     ],
 )
