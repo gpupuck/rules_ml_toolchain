@@ -16,7 +16,6 @@
 """Repository rule for SYCL autoconfiguration.
 `sycl_configure` depends on the following environment variables:
   * `TF_NEED_SYCL`: Whether to enable building with SYCL.
-  * `GCC_HOST_COMPILER_PATH`: The GCC host compiler path
 """
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
@@ -30,6 +29,7 @@ def enable_sycl(ctx):
     """Returns whether to build with SYCL support."""
     return bool(ctx.getenv("TF_NEED_SYCL", "").strip())
 
+# TODO: Add support of TF_ICPX_CLANG environment variable
 def _use_icpx_and_clang(ctx):
     """Returns whether to use ICPX for SYCL and Clang for C++."""
     return ctx.getenv("TF_ICPX_CLANG", "").strip()
