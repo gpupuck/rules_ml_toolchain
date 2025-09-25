@@ -40,19 +40,6 @@ def create_dummy_build_file(ctx, use_comment_symbols = True):
         },
     )
 
-def create_cuda_nvcc_build_file(ctx, use_comment_symbols = True):
-    cuda_version = (_get_env_var(ctx, "HERMETIC_CUDA_VERSION") or
-                    _get_env_var(ctx, "TF_CUDA_VERSION"))
-    ctx.template(
-        "BUILD",
-        ctx.attr.build_templates[0],
-        {
-            "%{multiline_comment}": "'''" if use_comment_symbols else "",
-            "%{comment}": "#" if use_comment_symbols else "",
-            "%{version_of_cuda}": cuda_version,
-        },
-    )
-
 def _get_build_template(ctx, major_lib_version):
     template = None
     for i in range(0, len(ctx.attr.versions)):
@@ -78,16 +65,10 @@ def create_build_file(
             ctx.attr.build_templates[0],
         )
 
-        if ctx.name == "cuda_nvcc":
-            create_cuda_nvcc_build_file(
-                ctx,
-                use_comment_symbols = True if "_version}" in build_template_content else False,
-            )
-        else:
-            create_dummy_build_file(
-                ctx,
-                use_comment_symbols = True if "_version}" in build_template_content else False,
-            )
+        create_dummy_build_file(
+            ctx,
+            use_comment_symbols = True if "_version}" in build_template_content else False,
+        )
 
         return
     build_template = _get_build_template(
@@ -178,16 +159,6 @@ def use_local_redist_path(ctx, local_redist_path, dirs):
     )
     create_version_file(ctx, major_version)
 
-def get_archive_name(url):
-    # buildifier: disable=function-docstring-return
-    # buildifier: disable=function-docstring-args
-    """Returns the archive name without extension."""
-    filename = _get_file_name(url)
-    for extension in _SUPPORTED_ARCHIVE_EXTENSIONS:
-        if filename.endswith(extension):
-            return filename[:-len(extension)]
-    return filename
-
 def _get_file_name(url):
     last_slash_index = url.rfind("/")
     return url[last_slash_index + 1:]
@@ -195,16 +166,6 @@ def _get_file_name(url):
 def _download_distribution(ctx, dist):
     # buildifier: disable=function-docstring-args
     """Downloads and extracts Intel distribution."""
-
-    # If url is not relative, then appending prefix is not needed.
-    #    if not (url.startswith("http") or url.startswith("file:///")):
-    #        if url.endswith(".tar"):
-    #            url = mirrored_tar_path_prefix + url
-    #        else:
-    #            url = path_prefix + url
-    #    archive_name = get_archive_name(url)
-    #    file_name = _get_file_name(url)
-    #    urls = [url] if url.endswith(".tar") else tf_mirror_urls(url)
 
     url = dist[0]
     file_name = _get_file_name(url)
@@ -215,9 +176,6 @@ def _download_distribution(ctx, dist):
         sha256 = dist[1],
     )
 
-    #if ctx.attr.override_strip_prefix:
-    #    strip_prefix = ctx.attr.override_strip_prefix
-
     strip_prefix = dist[2]
 
     print("Extracting {} with strip prefix '{}'".format(file_name, strip_prefix))  # buildifier: disable=print
@@ -227,32 +185,6 @@ def _download_distribution(ctx, dist):
     )
 
     ctx.delete(file_name)
-
-def _get_platform_architecture(ctx):
-    # buildifier: disable=function-docstring-return
-    # buildifier: disable=function-docstring-args
-    """Returns the platform architecture for the redistribution."""
-    target_arch = _get_env_var(ctx, ctx.attr.target_arch_env_var)
-
-    # We use NVCC compiler as the host compiler.
-    if target_arch and ctx.name != "cuda_nvcc":
-        if target_arch in OS_ARCH_DICT.keys():
-            host_arch = target_arch
-        else:
-            fail(
-                "Unsupported architecture: {arch}, use one of {supported}".format(
-                    arch = target_arch,
-                    supported = OS_ARCH_DICT.keys(),
-                ),
-            )
-    else:
-        host_arch = ctx.os.arch
-
-    if host_arch == "aarch64":
-        uname_result = ctx.execute(["uname", "-a"]).stdout
-        if _TEGRA in uname_result:
-            return "{}-{}".format(_TEGRA, host_arch)
-    return host_arch
 
 def _get_oneapi_version(ctx):
     return ctx.getenv("ONEAPI_VERSION", "")
@@ -294,27 +226,14 @@ def _use_downloaded_archive(ctx):
 
     _download_distribution(ctx, dist)
 
-    #if not dist or not build_template:
-    # If no toolkit version is found, comment out cc_import targets.
-    # TODO: Create dummy build files
-    #create_dummy_build_file(ctx)
-    #create_version_file(ctx, major_version)
-    #    return
-
-    #lib_name_to_version_dict = "get_lib_name_to_version_dict(ctx)"
     build_template = ctx.attr.build_templates[dist_key]
     _build_file(ctx, Label(build_template))
 
-    #_create_repository_symlinks(ctx)
-    #create_version_file(ctx, major_version)
-
 def _dist_repo_impl(ctx):
-    #print("_dist_repo_impl: name = \"{}\"".format(ctx.name))
-    local_dist_path = None  #_get_env_var(ctx, ctx.attr.local_path_env_var)
+    local_dist_path = None
     if local_dist_path:
-        #use_local_dist_path(ctx, local_dist_path, ctx.attr.local_source_dirs)
-        fail("SYCL non-hermetic build hasn't supported")
         # TODO: Implement SYCL non-hermetic build
+        fail("SYCL non-hermetic build hasn't supported")
 
     else:
         _use_downloaded_archive(ctx)
@@ -322,21 +241,7 @@ def _dist_repo_impl(ctx):
 dist_repo = repository_rule(
     implementation = _dist_repo_impl,
     attrs = {
-        #"urls": attr.string_list(mandatory = True),
-        #"sha256": attr.string(mandatory = False),
-        #"strip_prefix": attr.string(),
-        #"build_file": attr.label(),
-        #"version": attr.string_list(),
         "distrs": attr.string_list_dict(mandatory = True),
         "build_templates": attr.string_dict(mandatory = True),
-        #"versions": attr.string_list(mandatory = True),
-        #"override_strip_prefix": attr.string(),
-        #"redist_path_prefix": attr.string(),
-        #"mirrored_tar_redist_path_prefix": attr.string(mandatory = False),
-        #"local_path_env_var": attr.string(mandatory = True),
-        #"use_tar_file_env_var": attr.string(mandatory = True),
-        #"target_arch_env_var": attr.string(mandatory = True),
-        #"local_source_dirs": attr.string_list(mandatory = False),
-        #"repository_symlinks": attr.label_keyed_string_dict(mandatory = False),
     },
 )

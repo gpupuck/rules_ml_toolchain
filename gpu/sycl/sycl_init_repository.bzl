@@ -41,24 +41,8 @@ def sycl_init_repository(
     for dist_name, _ in redist_dict.items()[::-1]:
         build_template = build_templates[dist_name]
 
-        print("sycl_init_repository: dist_name = \"{}\"".format(dist_name))
-
-        #print("sycl_init_repository: distrs =", redist_dict[dist_name])
-        #print("sycl_init_repository: build_templates =", build_template["version_to_template"])
         dist_repo(
             name = dist_name,
             distrs = redist_dict[dist_name],
             build_templates = build_template["version_to_template"],
-            #sha256 = hash,
-            #strip_prefix = strip_prefix,
-            #build_file = Label(build_file),
-            #versions = versions,
-            #            #url_dict = url_dict,
-            #            #redist_path_prefix = cuda_redist_path_prefix,
-            #            #mirrored_tar_redist_path_prefix = mirrored_tar_cuda_redist_path_prefix,
-            #            redist_version_env_vars = ["HERMETIC_CUDA_VERSION", "TF_CUDA_VERSION"],
-            #            local_path_env_var = "LOCAL_CUDA_PATH",
-            #            use_tar_file_env_var = "USE_CUDA_TAR_ARCHIVE_FILES",
-            #            target_arch_env_var = "CUDA_REDIST_TARGET_PLATFORM",
-            #            local_source_dirs = ["include", "lib", "bin", "nvvm"],
         )
