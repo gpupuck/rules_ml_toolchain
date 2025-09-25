@@ -119,14 +119,12 @@ build:ci_linux_x86_64_cuda --config=ci_linux_x86_64
 # This config option is used for SYCL as GPU backend.
 # #############################################################################
 # Non-hermetic SYCL Configuration
+build:sycl --@rules_ml_toolchain//common:enable_sycl=True
 build:sycl --define=using_sycl=true
 build:sycl --define=tensorflow_mkldnn_contraction_kernel=0
 build:sycl --repo_env=TF_NEED_SYCL=1
 build:sycl --cxxopt=-std=c++17
-build:sycl --host_cxxopt=-std=c++17
 build:sycl --repo_env=SYCL_BUILD_HERMETIC=0
-build:sycl --@rules_ml_toolchain//common:enable_sycl=True
-build:sycl --crosstool_top=@local_config_sycl//legacy:toolchain  # TODO: Remove this line
 
 # Hermetic SYCL Configuration
 build:sycl_hermetic --config=sycl
@@ -136,6 +134,6 @@ build:sycl_hermetic --repo_env=OS=ubuntu_24.10
 
 # Enable Clang for host and icpx for SYCL
 build:icpx_clang --repo_env TF_ICPX_CLANG=1
-build:icpx_clang --linkopt="-lm"
-build:icpx_clang --host_linkopt="-lm"
 build:icpx_clang --copt=-fclang-abi-compat=17
+build:icpx_clang --copt=-fsycl-unnamed-lambda
+
