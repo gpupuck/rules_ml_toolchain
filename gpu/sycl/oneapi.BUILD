@@ -41,8 +41,8 @@ filegroup(
     srcs = glob([
             "advisor/2021.15/**",
             "ccl/2021.15/**",
-            "common/2025.1/**",
-            "compiler/2025.1/**",
+            "common/{oneapi_version}/**".format(oneapi_version = ONEAPI_VERSION),
+            "compiler/{oneapi_version}/**".format(oneapi_version = ONEAPI_VERSION),
             "dal/2025.5/env/**",
             "dal/2025.5/etc/**",
             "dal/2025.5/include/**",
@@ -62,21 +62,21 @@ filegroup(
             "ipp/2022.1/lib/pkgconfig/**",
             "ipp/2022.1/opt/**",
             "ipp/2022.1/share/**",
-            "ippcp/2025.1/env/**",
-            "ippcp/2025.1/etc/**",
-            "ippcp/2025.1/include/**",
-            "ippcp/2025.1/lib/lib*",
-            "ippcp/2025.1/lib/nonpic/**",
-            "ippcp/2025.1/lib/pkgconfig/**",
-            "ippcp/2025.1/opt/**",
-            "ippcp/2025.1/share/**",
-            "mkl/2025.1/bin/**",
-            "mkl/2025.1/env/**",
-            "mkl/2025.1/etc/**",
-            "mkl/2025.1/include/**",
-            "mkl/2025.1/lib/lib*",
-            "mkl/2025.1/lib/pkgconfig/**",
-            "mkl/2025.1/share/**",
+            "ippcp/{oneapi_version}/env/**".format(oneapi_version = ONEAPI_VERSION),
+            "ippcp/{oneapi_version}/etc/**".format(oneapi_version = ONEAPI_VERSION),
+            "ippcp/{oneapi_version}/include/**".format(oneapi_version = ONEAPI_VERSION),
+            "ippcp/{oneapi_version}/lib/lib*".format(oneapi_version = ONEAPI_VERSION),
+            "ippcp/{oneapi_version}/lib/nonpic/**".format(oneapi_version = ONEAPI_VERSION),
+            "ippcp/{oneapi_version}/lib/pkgconfig/**".format(oneapi_version = ONEAPI_VERSION),
+            "ippcp/{oneapi_version}/opt/**".format(oneapi_version = ONEAPI_VERSION),
+            "ippcp/{oneapi_version}/share/**".format(oneapi_version = ONEAPI_VERSION),
+            "mkl/{oneapi_version}/bin/**".format(oneapi_version = ONEAPI_VERSION),
+            "mkl/{oneapi_version}/env/**".format(oneapi_version = ONEAPI_VERSION),
+            "mkl/{oneapi_version}/etc/**".format(oneapi_version = ONEAPI_VERSION),
+            "mkl/{oneapi_version}/include/**".format(oneapi_version = ONEAPI_VERSION),
+            "mkl/{oneapi_version}/lib/lib*".format(oneapi_version = ONEAPI_VERSION),
+            "mkl/{oneapi_version}/lib/pkgconfig/**".format(oneapi_version = ONEAPI_VERSION),
+            "mkl/{oneapi_version}/share/**".format(oneapi_version = ONEAPI_VERSION),
             "mpi/2021.15/bin/**",
             "mpi/2021.15/env/**",
             "mpi/2021.15/etc/**",
@@ -124,6 +124,20 @@ filegroup(
     name = "clang++",
     srcs = [
         "compiler/{oneapi_version}/bin/compiler/clang++".format(oneapi_version = ONEAPI_VERSION),
+    ],
+)
+
+filegroup(
+    name = "clang-offload-bundler",
+    srcs = [
+        "compiler/{oneapi_version}/bin/compiler/clang-offload-bundler".format(oneapi_version = ONEAPI_VERSION),
+    ],
+)
+
+filegroup(
+    name = "llvm-objcopy",
+    srcs = [
+        "compiler/{oneapi_version}/bin/compiler/llvm-objcopy".format(oneapi_version = ONEAPI_VERSION),
     ],
 )
 
@@ -212,7 +226,15 @@ cc_toolchain_import(
 )
 
 cc_toolchain_import(
-    name = "libs_mkl",
+    name = "core",
+    additional_libs = glob([
+        "compiler/{oneapi_version}/lib/*".format(oneapi_version = ONEAPI_VERSION),
+    ]),
+    visibility = ["//visibility:public"],
+)
+
+cc_toolchain_import(
+    name = "mkl",
     additional_libs = glob([
         "mkl/{oneapi_version}/lib/libmkl_intel_ilp64.s*".format(oneapi_version = ONEAPI_VERSION),
         "mkl/{oneapi_version}/lib/libmkl_sequential.s*".format(oneapi_version = ONEAPI_VERSION),

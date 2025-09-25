@@ -79,7 +79,8 @@ cc_toolchain_import(
         "@sysroot_linux_x86_64//:includes_system",
         "@sysroot_linux_x86_64//:glibc",
         "@sysroot_linux_x86_64//:pthread",
-        "@oneapi//:libs_mkl",
+        "@oneapi//:core",
+        "@oneapi//:mkl",
         "@oneapi//:libclang_rt",
     ],
 )
@@ -113,6 +114,8 @@ filegroup(
         "@oneapi//:icpx",
         "@oneapi//:clang",
         "@oneapi//:clang++",
+        "@oneapi//:clang-offload-bundler",
+        "@oneapi//:llvm-objcopy",
         "@llvm_linux_x86_64//:clang",
         "@llvm_linux_x86_64//:clang++",
     ],
