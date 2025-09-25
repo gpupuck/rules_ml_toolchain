@@ -211,6 +211,10 @@ def _build_file(ctx, build_file):
     print("_build_file: build_file =", build_file)
     ctx.file("BUILD.bazel", ctx.read(build_file))
 
+def _handle_level_zero(ctx):
+    # Symlink for includes backward compatibility (example: #include <level_zero/ze_api.h>)
+    ctx.symlink("include", "level_zero")
+
 def _use_downloaded_archive(ctx):
     # buildifier: disable=function-docstring-args
     """ Downloads redistribution and initializes hermetic repository."""
@@ -225,6 +229,9 @@ def _use_downloaded_archive(ctx):
         )
 
     _download_distribution(ctx, dist)
+
+    if ctx.name == "level_zero":
+        _handle_level_zero(ctx)
 
     build_template = ctx.attr.build_templates[dist_key]
     _build_file(ctx, Label(build_template))

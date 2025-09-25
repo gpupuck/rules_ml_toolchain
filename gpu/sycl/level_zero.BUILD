@@ -37,14 +37,14 @@ filegroup(
     visibility = ["//visibility:public"],
 )
 
+# Use level_zero symlink for includes backward compatibility (example: #include <level_zero/ze_api.h>)
 cc_library(
     name = "headers",
     hdrs = glob([
-        "include/**/*",
+        "level_zero/**/*",
     ]),
     includes = [
         ".",
-        "include",
     ],
     visibility = ["//visibility:public"],
 )
