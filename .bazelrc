@@ -120,7 +120,6 @@ build:ci_linux_x86_64_cuda --config=ci_linux_x86_64
 # #############################################################################
 # Non-hermetic SYCL Configuration
 build:sycl --@rules_ml_toolchain//common:enable_sycl=True
-build:sycl --define=using_sycl=true
 build:sycl --define=tensorflow_mkldnn_contraction_kernel=0
 build:sycl --repo_env=TF_NEED_SYCL=1
 build:sycl --cxxopt=-std=c++17
