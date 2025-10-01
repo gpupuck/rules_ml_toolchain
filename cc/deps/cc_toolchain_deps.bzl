@@ -80,6 +80,18 @@ def cc_toolchain_deps():
                 "18": "@llvm18_linux_x86_64",
                 "21": "@llvm21_linux_x86_64",
             },
+            build_file_tpl = Label("//cc/llvm:llvm_linux_x86_64.BUILD.tpl"),
+        )
+
+    if "llvm_linux_arch64 not in native.existing_rules():
+        llvm(
+            name = "llvm_linux_arch64",
+            default_version = "18",
+            versions = {
+                "18": "@llvm18_linux_arch64",
+                "21": "@llvm21_linux_arch64",
+            },
+            build_file_tpl = Label("//cc/llvm:llvm_linux_arch64.BUILD.tpl"),
         )
 
     if "llvm18_linux_x86_64" not in native.existing_rules():
