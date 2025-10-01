@@ -15,6 +15,7 @@
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 load("@bazel_tools//tools/build_defs/repo:local.bzl", "new_local_repository")
+load("//cc/llvm:llvm.bzl", "llvm")
 load("//common:mirrored_http_archive.bzl", "mirrored_http_archive")
 load("//third_party:repo.bzl", "tf_mirror_urls")
 load("llvm_http_archive.bzl", "llvm_http_archive")
@@ -72,9 +73,19 @@ def cc_toolchain_deps():
         )
 
     if "llvm_linux_x86_64" not in native.existing_rules():
+        llvm(
+            name = "llvm_linux_x86_64",
+            default_version = "18",
+            versions = {
+                "18": "@llvm18_linux_x86_64",
+                "21": "@llvm21_linux_x86_64",
+            },
+        )
+
+    if "llvm18_linux_x86_64" not in native.existing_rules():
         # LLVM 18
         llvm_http_archive(
-            name = "llvm_linux_x86_64",
+            name = "llvm18_linux_x86_64",
             urls = tf_mirror_urls("https://github.com/llvm/llvm-project/releases/download/llvmorg-18.1.8/clang+llvm-18.1.8-x86_64-linux-gnu-ubuntu-18.04.tar.xz"),
             sha256 = "54ec30358afcc9fb8aa74307db3046f5187f9fb89fb37064cdde906e062ebf36",
             mirrored_tar_sha256 = "01b8e95e34e7d0117edd085577529b375ec422130ed212d2911727545314e6c2",
