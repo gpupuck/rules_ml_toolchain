@@ -7,9 +7,9 @@ on:
       tag_name:
         required: true
         type: string
-    secrets:
-      publish_token:
+      environment:
         required: true
+        type: string
   # In case of problems, let release engineers retry by manually dispatching
   # the workflow from the GitHub UI
   workflow_dispatch:
@@ -20,16 +20,17 @@ on:
         type: string
 jobs:
   publish:
-    uses: bazel-contrib/publish-to-bcr/.github/workflows/publish.yaml@v0.2.3
+    uses: MichaelHudgins/publish-to-bcr/.github/workflows/publish.yaml@e5228a53eedcfb005e348aa66e8694fa832e9703
     with:
       tag_name: ${{ inputs.tag_name }}
       # GitHub repository which is a fork of the upstream where the Pull Request will be opened.
       registry_fork: Google-ML-Infra-Bazel/bazel-central-registry
       draft: false
+      environment: ${{ inputs.environment }}
     permissions:
       attestations: write
       contents: write
       id-token: write
     secrets:
       # Necessary to push to the BCR fork, and to open a pull request against a registry
-      publish_token: ${{ secrets.publish_token || secrets.BCR_PUBLISH_TOKEN }}
+      publish_token: ${{ secrets.BCR_PUBLISH_TOKEN }}

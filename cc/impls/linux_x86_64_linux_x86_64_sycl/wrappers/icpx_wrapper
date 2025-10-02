@@ -75,25 +75,13 @@ def system(cmd):
   else:
     return -os.WTERMSIG(ret)
 
-def GetHostCompilerOptions(argv):
-  parser = ArgumentParser()
-  args, leftover = parser.parse_known_args(argv)
-  sycl_host_compile_flags = leftover
-  sycl_host_compile_flags.append('-std=c++17') # TODO: Why we have C++ version here?
-  host_flags = ['-fsycl-host-compiler-options=\'%s\'' % (' '.join(sycl_host_compile_flags))]
-  return host_flags
-
 def call_compiler(argv, link = False, sycl_compile = True):
   parser = ArgumentParser()
   parser.add_argument('-c', nargs=1, action='append')
   parser.add_argument('-o', nargs=1, action='append')
-  parser.add_argument('-iquote', nargs='*', action='append')
-  parser.add_argument('-isystem', nargs='*', action='append')
   args, leftover = parser.parse_known_args(argv)
 
-  flags = (parse_list_arg(args, "-iquote") +
-           parse_list_arg(args, "-isystem") +
-           leftover)
+  flags = leftover
 
   sycl_device_only_flags = ['-fsycl']
   sycl_device_only_flags.append('-fno-sycl-unnamed-lambda')
@@ -130,8 +118,6 @@ def call_compiler(argv, link = False, sycl_compile = True):
   sycl_link_flags.append("-fsycl")
   sycl_link_flags.append('-fsycl-max-parallel-link-jobs=8')
   sycl_link_flags.append('-fsycl-link')
-
-  # host_flags = GetHostCompilerOptions(flags+common_flags)
 
   in_files, out_files = [], []
   if sycl_compile:
@@ -250,26 +236,23 @@ def call_compiler(argv, link = False, sycl_compile = True):
         print(' '.join([SYCL_PATH] + flags))
       return subprocess.call([ONEAPI_COMPILER] + flags)
 
-def parse_list_arg(args, name):
-  if args is None or name is None:
-    return []
+def standardize_key_val_args(argv, key):
+  mod_args = []
+  last = None
+  for arg in argv:
+    if last:
+      mod_args.append(last + arg)
+      last = None
+      continue
 
-  prop_name = name.lstrip("-")
-  val = getattr(args, prop_name)
-  if val is None:
-    return []
+    if arg == key:
+      last = key
+    elif arg.startswith(key):
+      mod_args.append(arg.replace(' ', ''))
+    else:
+      mod_args.append(arg)
 
-  args_list = []
-  for outer in val:
-    for inner in outer:
-      if inner.startswith(name):
-        args_list.append(name + (inner[len(name):].strip()))
-      elif inner.startswith("'" + name) and inner.endswith("'"):
-        args_list.append(name + (inner[len(name) + 1:len(inner) - 1].strip()))
-      else:
-        args_list.append(name + inner)
-
-  return args_list
+  return mod_args
 
 def main():
   parser = ArgumentParser(fromfile_prefix_chars='@')
@@ -277,7 +260,7 @@ def main():
   parser.add_argument('-link_stage', action='store_true')
   args, leftover = parser.parse_known_args(sys.argv[1:])
 
-  return call_compiler(leftover, link=args.link_stage, sycl_compile=args.sycl_compile)
+  return call_compiler(standardize_key_val_args(leftover, "-isystem"), link=args.link_stage, sycl_compile=args.sycl_compile)
 
 if __name__ == '__main__':
   sys.exit(main())

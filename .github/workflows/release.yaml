@@ -2,16 +2,6 @@
 name: Release
 
 on:
-  # Can be triggered from the tag.yaml workflow
-  # workflow_call:
-  #   inputs:
-  #     tag_name:
-  #       required: true
-  #       type: string
-  #   secrets:
-  #     publish_token:
-  #       required: true
-  # Or, developers can manually push a tag from their clone
   push:
     tags:
       # Detect tags that look like a release.
@@ -28,11 +18,11 @@ jobs:
     with:
       prerelease: false
       release_files: rules_ml_toolchain-*.tar.gz
-      tag_name: ${{ inputs.tag_name || github.ref_name }}
+      tag_name: ${{ github.ref_name }}
   publish:
     needs: release
     uses: ./.github/workflows/publish.yaml
     with:
-      tag_name: ${{ inputs.tag_name || github.ref_name }}
-    secrets:
-      publish_token: ${{ secrets.publish_token || secrets.BCR_PUBLISH_TOKEN }}
+      tag_name: ${{ github.ref_name }}
+      environment: release
+    secrets: inherit

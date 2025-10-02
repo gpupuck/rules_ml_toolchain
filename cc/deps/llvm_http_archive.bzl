@@ -42,6 +42,7 @@ load(
     "USE_HERMETIC_CC_TOOLCHAIN",
     "USE_HERMETIC_CC_TOOLCHAIN_DEFAULT_VALUE",
 )
+load("//common:tar_extraction_utils.bzl", "extract_tar_with_non_hermetic_tar_tool")
 load(
     "//third_party/remote_config:common.bzl",
     "get_host_environ",
@@ -257,10 +258,13 @@ def _llvm_http_archive_impl(ctx):
         strip_prefix = ctx.attr.strip_prefix
     else:
         strip_prefix = llvm_file_name.split(".")[0]
-    ctx.extract(
-        archive = llvm_file,
-        stripPrefix = strip_prefix,
-    )
+    if first_url.endswith(".tar.xz") or first_url.endswith(".tar"):
+        extract_tar_with_non_hermetic_tar_tool(ctx, llvm_file, strip_prefix)
+    else:
+        ctx.extract(
+            archive = llvm_file,
+            stripPrefix = strip_prefix,
+        )
     buildfile(ctx)
 
     _download_remote_files(ctx)
