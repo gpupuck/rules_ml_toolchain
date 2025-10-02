@@ -25,6 +25,7 @@ def cc_toolchain_deps():
         mirrored_http_archive(
             name = "sysroot_linux_x86_64",
             sha256 = "7d9300ec03d008e96f0098dfcd4e9974dd64f2d5fccdd0f1a2b2d4af63301a04",
+            mirrored_tar_sha256 = "8680378000cf63647db5421377fbdb6a4fe98e0207b87f7cfec51883bde587aa",
             urls = tf_mirror_urls("https://storage.googleapis.com/ml-sysroot-testing/ubuntu18_x86_64_sysroot_gcc8_patched-0.1.0.tar.xz"),
             build_file = Label("//cc/config:sysroot_ubuntu18_x86_64.BUILD"),
             strip_prefix = "ubuntu18_x86_64_sysroot_gcc8_patched-0.1.0",
@@ -46,6 +47,7 @@ def cc_toolchain_deps():
         mirrored_http_archive(
             name = "sysroot_linux_aarch64",
             sha256 = "31a285faccb6996c16acde8ef6841841d591f73196dc5b7bdd9cf55b7f0c35a1",
+            mirrored_tar_sha256 = "23989e1c4184b472ffcacf04cfeb7c9e108cb4126aeadb8a326597795b47f175",
             urls = tf_mirror_urls("https://storage.googleapis.com/ml-sysroot-testing/sysroot_aarch64_ubuntu18_gcc8.4-0.1.0.tar.xz"),
             build_file = Label("//cc/config:sysroot_ubuntu18_aarch64.BUILD"),
             strip_prefix = "sysroot_aarch64_ubuntu18_gcc8.4-0.1.0",
