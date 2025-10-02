@@ -134,8 +134,18 @@ def cc_toolchain_deps():
         )
 
     if "llvm_darwin_aarch64" not in native.existing_rules():
-        llvm_http_archive(
+        llvm(
             name = "llvm_darwin_aarch64",
+            default_version = "18",
+            versions = {
+                "@llvm18_darwin_aarch64//:all": "18",
+            },
+            build_file_tpl = Label("//cc/llvm:llvm_darwin.BUILD.tpl"),
+        )
+
+    if "llvm18_darwin_aarch64" not in native.existing_rules():
+        llvm_http_archive(
+            name = "llvm18_darwin_aarch64",
             urls = tf_mirror_urls("https://github.com/llvm/llvm-project/releases/download/llvmorg-18.1.8/clang+llvm-18.1.8-arm64-apple-macos11.tar.xz"),
             sha256 = "4573b7f25f46d2a9c8882993f091c52f416c83271db6f5b213c93f0bd0346a10",
             mirrored_tar_sha256 = "abf9636295730364bfe4cfa6b491dc8476587bd6d7271e3011dafdb5e382bcdf",
