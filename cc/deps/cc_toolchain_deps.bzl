@@ -77,21 +77,10 @@ def cc_toolchain_deps():
             name = "llvm_linux_x86_64",
             default_version = "18",
             versions = {
-                "18": "@llvm18_linux_x86_64",
-                "21": "@llvm21_linux_x86_64",
+                "@llvm18_linux_x86_64//:all": "18",
+                "@llvm21_linux_x86_64//:all": "21",
             },
-            build_file_tpl = Label("//cc/llvm:llvm_linux_x86_64.BUILD.tpl"),
-        )
-
-    if "llvm_linux_arch64 not in native.existing_rules():
-        llvm(
-            name = "llvm_linux_arch64",
-            default_version = "18",
-            versions = {
-                "18": "@llvm18_linux_arch64",
-                "21": "@llvm21_linux_arch64",
-            },
-            build_file_tpl = Label("//cc/llvm:llvm_linux_arch64.BUILD.tpl"),
+            build_file_tpl = Label("//cc/llvm:llvm_linux.BUILD.tpl"),
         )
 
     if "llvm18_linux_x86_64" not in native.existing_rules():
@@ -115,17 +104,28 @@ def cc_toolchain_deps():
 
         # LLVM 19
 
-    #        llvm_http_archive(
-    #            name = "llvm_linux_x86_64",
-    #            urls = tf_mirror_urls("https://github.com/llvm/llvm-project/releases/download/llvmorg-19.1.7/LLVM-19.1.7-Linux-X64.tar.xz"),
-    #            sha256 = "4a5ec53951a584ed36f80240f6fbf8fdd46b4cf6c7ee87cc2d5018dc37caf679",
-    #            build_file = Label("//cc/config:llvm19_linux_x86_64.BUILD"),
-    #            strip_prefix = "LLVM-19.1.7-Linux-X64",
-    #        )
+        #        llvm_http_archive(
+        #            name = "llvm_linux_x86_64",
+        #            urls = tf_mirror_urls("https://github.com/llvm/llvm-project/releases/download/llvmorg-19.1.7/LLVM-19.1.7-Linux-X64.tar.xz"),
+        #            sha256 = "4a5ec53951a584ed36f80240f6fbf8fdd46b4cf6c7ee87cc2d5018dc37caf679",
+        #            build_file = Label("//cc/config:llvm19_linux_x86_64.BUILD"),
+        #            strip_prefix = "LLVM-19.1.7-Linux-X64",
+        #        )
 
     if "llvm_linux_aarch64" not in native.existing_rules():
-        llvm_http_archive(
+        llvm(
             name = "llvm_linux_aarch64",
+            default_version = "18",
+            versions = {
+                "@llvm18_linux_aarch64//:all": "18",
+                "@llvm21_linux_aarch64//:all": "21",
+            },
+            build_file_tpl = Label("//cc/llvm:llvm_linux.BUILD.tpl"),
+        )
+
+    if "llvm18_linux_aarch64" not in native.existing_rules():
+        llvm_http_archive(
+            name = "llvm18_linux_aarch64",
             urls = tf_mirror_urls("https://github.com/llvm/llvm-project/releases/download/llvmorg-18.1.8/clang+llvm-18.1.8-aarch64-linux-gnu.tar.xz"),
             sha256 = "dcaa1bebbfbb86953fdfbdc7f938800229f75ad26c5c9375ef242edad737d999",
             mirrored_tar_sha256 = "26a52cc6c658736f822546f220216178ac50d75ac1809bf8608395c8edd7c2c1",
