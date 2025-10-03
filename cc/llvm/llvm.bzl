@@ -21,12 +21,14 @@ load(
 _LLVM_VERSION = "LLVM_VERSION"
 
 def _get_platform_arch(ctx):
+    """Gets current platform architecture"""
     if ctx.os.arch == "amd64":
         return "x86_64"
     else:
         return ctx.os.arch
 
 def _is_compatible_arch(ctx):
+    """Checks if LLVM compatible with current platform"""
     return ctx.attr.name.endswith(_get_platform_arch(ctx))
 
 def _get_llvm_version_flag(ctx):
@@ -34,6 +36,7 @@ def _get_llvm_version_flag(ctx):
     return get_host_environ(ctx, _LLVM_VERSION)
 
 def _get_llvm_version(ctx):
+    """Returns the LLVM version from the LLVM_VERSION repository environment variable, defaulting otherwise"""
     ver = _get_llvm_version_flag(ctx)
     if not ver and ctx.attr.default_version:
         ver = ctx.attr.default_version
@@ -44,6 +47,7 @@ def _get_llvm_version(ctx):
     return ver
 
 def _get_llvm_label(ctx, ver):
+    """Returns the LLVM label for the specified version"""
     llvm_dict = ctx.attr.versions
     for llvm_label in llvm_dict.keys():
         if llvm_dict[llvm_label] == ver:
@@ -52,6 +56,7 @@ def _get_llvm_label(ctx, ver):
     return None
 
 def _create_version_file(ctx, major_version):
+    """Writes the LLVM version to the version.bzl file"""
     ctx.file(
         "version.bzl",
         "VERSION = \"{}\"".format(major_version),
