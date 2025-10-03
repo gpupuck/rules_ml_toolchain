@@ -37,9 +37,7 @@ def _get_llvm_version_flag(ctx):
 
 def _get_llvm_version(ctx):
     """Returns the LLVM version from the LLVM_VERSION repository environment variable, defaulting otherwise"""
-    ver = _get_llvm_version_flag(ctx)
-    if not ver and ctx.attr.default_version:
-        ver = ctx.attr.default_version
+    ver = _get_llvm_version_flag(ctx) or ctx.attr.default_version
 
     if not ver:
         fail("Specify LLVM version in .bazelrc file. Example: --repo_env=LLVM_VERSION=21")
@@ -71,7 +69,8 @@ def _llvm_impl(ctx):
     ver = _get_llvm_version(ctx)
     llvm_label = _get_llvm_label(ctx, ver)
     if not llvm_label:
-        fail("Ensure LLVM {} support is added prior to use.".format(ver))
+        fail("Ensure LLVM {} support is added prior to use. Supported versions: {}"
+            .format(ver, ", ".join(ctx.attr.versions.values())))
 
     _create_version_file(ctx, ver)
 
