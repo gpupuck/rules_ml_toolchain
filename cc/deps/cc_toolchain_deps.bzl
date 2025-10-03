@@ -70,6 +70,8 @@ def cc_toolchain_deps():
             path = "cc/sysroots/darwin_aarch64/MacOSX.sdk",
         )
 
+    #################################################################################################################
+    # Linux x86_64
     if "llvm_linux_x86_64" not in native.existing_rules():
         llvm(
             name = "llvm_linux_x86_64",
@@ -77,13 +79,14 @@ def cc_toolchain_deps():
             versions = {
                 "@llvm18_linux_x86_64//:all": "18",
                 "@llvm19_linux_x86_64//:all": "19",
+                "@llvm20_linux_x86_64//:all": "20",
                 "@llvm21_linux_x86_64//:all": "21",
             },
             build_file_tpl = Label("//cc/llvm:llvm_linux.BUILD.tpl"),
         )
 
     if "llvm18_linux_x86_64" not in native.existing_rules():
-        # LLVM 18
+        # LLVM 18 Linux x86_64
         llvm_http_archive(
             name = "llvm18_linux_x86_64",
             urls = tf_mirror_urls("https://github.com/llvm/llvm-project/releases/download/llvmorg-18.1.8/clang+llvm-18.1.8-x86_64-linux-gnu-ubuntu-18.04.tar.xz"),
@@ -102,36 +105,54 @@ def cc_toolchain_deps():
         )
 
     if "llvm19_linux_x86_64" not in native.existing_rules():
-        # LLVM 19
+        # LLVM 19 Linux x86_64
         llvm_http_archive(
             name = "llvm19_linux_x86_64",
             urls = tf_mirror_urls("https://github.com/llvm/llvm-project/releases/download/llvmorg-19.1.7/LLVM-19.1.7-Linux-X64.tar.xz"),
             sha256 = "4a5ec53951a584ed36f80240f6fbf8fdd46b4cf6c7ee87cc2d5018dc37caf679",
+            mirrored_tar_sha256 = "ecb0a20f3976ccb6f20fe98baeef45cd80c59d7aec971098094518283f1157ff",
             build_file = Label("//cc/config:llvm19_linux_x86_64.BUILD"),
             strip_prefix = "LLVM-19.1.7-Linux-X64",
         )
 
+    if "llvm20_linux_x86_64" not in native.existing_rules():
+        # LLVM 20 Linux x86_64
+        llvm_http_archive(
+            name = "llvm20_linux_x86_64",
+            urls = tf_mirror_urls("https://github.com/llvm/llvm-project/releases/download/llvmorg-20.1.8/LLVM-20.1.8-Linux-X64.tar.xz"),
+            sha256 = "1ead36b3dfcb774b57be530df42bec70ab2d239fbce9889447c7a29a4ddc1ae6",
+            mirrored_tar_sha256 = "57152ed2a054a06dc3fc7abe35da02696fe80d07884de94621726e1ae8d9a53f",
+            build_file = Label("//cc/config:llvm20_linux_x86_64.BUILD"),
+            strip_prefix = "LLVM-20.1.8-Linux-X64",
+        )
+
     if "llvm21_linux_x86_64" not in native.existing_rules():
-        # LLVM 21
+        # LLVM 21 Linux x86_64
         llvm_http_archive(
             name = "llvm21_linux_x86_64",
             urls = tf_mirror_urls("https://github.com/llvm/llvm-project/releases/download/llvmorg-21.1.2/LLVM-21.1.2-Linux-X64.tar.xz"),
             sha256 = "38dc1e278b8d688d9f4f1077da1dcda623d9e0dd89ffcf03bc18d3492bbd9cb6",
+            mirrored_tar_sha256 = "563f5d0ed531053cf2d726b09b3e023820ff8d771b9ba0f17a2cb32059d96fe8",
             build_file = Label("//cc/config:llvm21_linux_x86_64.BUILD"),
             strip_prefix = "LLVM-21.1.2-Linux-X64",
         )
 
+    ################################################################
+    # Linux aarch64
+    ################################################################
     if "llvm_linux_aarch64" not in native.existing_rules():
         llvm(
             name = "llvm_linux_aarch64",
             default_version = "18",
             versions = {
                 "@llvm18_linux_aarch64//:all": "18",
+                "@llvm20_linux_aarch64//:all": "20",
             },
             build_file_tpl = Label("//cc/llvm:llvm_linux.BUILD.tpl"),
         )
 
     if "llvm18_linux_aarch64" not in native.existing_rules():
+        # LLVM 18 Linux aarch64
         llvm_http_archive(
             name = "llvm18_linux_aarch64",
             urls = tf_mirror_urls("https://github.com/llvm/llvm-project/releases/download/llvmorg-18.1.8/clang+llvm-18.1.8-aarch64-linux-gnu.tar.xz"),
@@ -141,6 +162,20 @@ def cc_toolchain_deps():
             strip_prefix = "clang+llvm-18.1.8-aarch64-linux-gnu",
         )
 
+    if "llvm20_linux_aarch64" not in native.existing_rules():
+        # LLVM 20 Linux aarch64
+        llvm_http_archive(
+            name = "llvm20_linux_aarch64",
+            urls = tf_mirror_urls("https://github.com/llvm/llvm-project/releases/download/llvmorg-20.1.8/LLVM-20.1.8-Linux-ARM64.tar.xz"),
+            sha256 = "b855cc17d935fdd83da82206b7a7cfc680095efd1e9e8182c4a05e761958bef8",
+            mirrored_tar_sha256 = "3c932449de47078a5a5c39499e1d741da6df29e767502803c1c7194022720a07",
+            build_file = Label("//cc/config:llvm20_linux_aarch64.BUILD"),
+            strip_prefix = "LLVM-20.1.8-Linux-ARM64",
+        )
+
+    ################################################################
+    # Darwin (macOS) aarch64
+    ################################################################
     if "llvm_darwin_aarch64" not in native.existing_rules():
         llvm(
             name = "llvm_darwin_aarch64",
@@ -159,4 +194,14 @@ def cc_toolchain_deps():
             mirrored_tar_sha256 = "abf9636295730364bfe4cfa6b491dc8476587bd6d7271e3011dafdb5e382bcdf",
             build_file = Label("//cc/config:llvm18_darwin_aarch64.BUILD"),
             strip_prefix = "clang+llvm-18.1.8-arm64-apple-macos11",
+        )
+
+    if "llvm20_darwin_aarch64" not in native.existing_rules():
+        llvm_http_archive(
+            name = "llvm20_darwin_aarch64",
+            urls = tf_mirror_urls("https://github.com/llvm/llvm-project/releases/download/llvmorg-20.1.8/LLVM-20.1.8-macOS-ARM64.tar.xz"),
+            sha256 = "a9a22f450d35f1f73cd61ab6a17c6f27d8f6051d56197395c1eb397f0c9bbec4",
+            mirrored_tar_sha256 = "19f015fd93ef0a9963e4cebe02b051e6d357b4ab86bb060ca8ad5141d7284289",
+            build_file = Label("//cc/config:llvm20_darwin_aarch64.BUILD"),
+            strip_prefix = "LLVM-20.1.8-macOS-ARM64",
         )

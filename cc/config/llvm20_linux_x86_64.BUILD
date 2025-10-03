@@ -20,7 +20,7 @@ load(
 
 exports_files(glob(["bin/*"]))
 
-CLANG_VERSION = "18"
+CLANG_VERSION = "20"
 
 filegroup(
     name = "all",
@@ -73,7 +73,7 @@ filegroup(
 # Stub for LLVM 18 Linux x86_64, leave it for backward compatibility
 filegroup(
     name = "distro_libs",
-    srcs = [ ],
+    srcs = [],
     visibility = ["//visibility:public"],
 )
 
@@ -106,7 +106,7 @@ cc_toolchain_import(
 # built-in functions, and these functions are not provided by GCC 8.4.
 cc_toolchain_import(
     name = "libclang_rt",
-    static_library = "lib/clang/{clang_version}/lib/aarch64-unknown-linux-gnu/libclang_rt.builtins.a".format(clang_version = CLANG_VERSION),
+    static_library = "lib/clang/{clang_version}/lib/x86_64-unknown-linux-gnu/libclang_rt.builtins.a".format(clang_version = CLANG_VERSION),
     target_compatible_with = select({
         "@platforms//os:linux": [],
         "@platforms//os:macos": [],

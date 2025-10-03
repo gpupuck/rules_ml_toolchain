@@ -20,7 +20,7 @@ load(
 
 exports_files(glob(["bin/*"]))
 
-CLANG_VERSION = "18"
+CLANG_VERSION = "20"
 
 filegroup(
     name = "all",
@@ -73,7 +73,7 @@ filegroup(
 # Stub for LLVM 18 Linux x86_64, leave it for backward compatibility
 filegroup(
     name = "distro_libs",
-    srcs = [ ],
+    srcs = [],
     visibility = ["//visibility:public"],
 )
 

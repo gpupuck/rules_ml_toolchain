@@ -20,7 +20,7 @@ load(
 
 exports_files(glob(["bin/*"]))
 
-CLANG_VERSION = "18"
+CLANG_VERSION = "20"
 
 filegroup(
     name = "all",
@@ -54,12 +54,6 @@ filegroup(
 
 filegroup(
     name = "ar",
-    srcs = ["bin/llvm-ar"],
-    visibility = ["//visibility:public"],
-)
-
-filegroup(
-    name = "ar_darwin",
     srcs = ["bin/llvm-libtool-darwin"],
     visibility = ["//visibility:public"],
 )
@@ -67,13 +61,6 @@ filegroup(
 filegroup(
     name = "install_name_tool_darwin",
     srcs = ["bin/llvm-install-name-tool"],
-    visibility = ["//visibility:public"],
-)
-
-# Stub for LLVM 18 Linux x86_64, leave it for backward compatibility
-filegroup(
-    name = "distro_libs",
-    srcs = [ ],
     visibility = ["//visibility:public"],
 )
 
@@ -88,8 +75,9 @@ filegroup(
 cc_toolchain_import(
     name = "includes",
     hdrs = glob([
-        "lib/clang/{clang_version}/include/**".format(clang_version = CLANG_VERSION),
-        "lib/clang/{clang_version}/include/cuda_wrappers/**".format(clang_version = CLANG_VERSION),
+        "lib/clang/*/*.h",
+        "lib/clang/*/include/*.h",
+        "lib/clang/*/include/**/*.h",
     ]),
     includes = [
         "lib/clang/{clang_version}".format(clang_version = CLANG_VERSION),
@@ -99,26 +87,5 @@ cc_toolchain_import(
         "@platforms//os:linux": [],
         "@platforms//os:macos": [],
     }),
-    visibility = ["//visibility:public"],
-)
-
-# This library is needed for LiteRT because it uses a compiler-specific
-# built-in functions, and these functions are not provided by GCC 8.4.
-cc_toolchain_import(
-    name = "libclang_rt",
-    static_library = "lib/clang/{clang_version}/lib/aarch64-unknown-linux-gnu/libclang_rt.builtins.a".format(clang_version = CLANG_VERSION),
-    target_compatible_with = select({
-        "@platforms//os:linux": [],
-        "@platforms//os:macos": [],
-    }),
-    visibility = ["//visibility:public"],
-)
-
-# Use when build CUDA by Clang (NVCC doesn't need it)
-cc_library(
-    name = "cuda_wrappers_headers",
-    includes = [
-        "lib/clang/{clang_version}/include/cuda_wrappers".format(clang_version = CLANG_VERSION),
-    ],
     visibility = ["//visibility:public"],
 )
