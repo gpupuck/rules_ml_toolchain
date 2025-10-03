@@ -76,6 +76,7 @@ def cc_toolchain_deps():
             default_version = "18",
             versions = {
                 "@llvm18_linux_x86_64//:all": "18",
+                "@llvm19_linux_x86_64//:all": "19",
                 "@llvm21_linux_x86_64//:all": "21",
             },
             build_file_tpl = Label("//cc/llvm:llvm_linux.BUILD.tpl"),
@@ -100,15 +101,25 @@ def cc_toolchain_deps():
             },
         )
 
+    if "llvm19_linux_x86_64" not in native.existing_rules():
         # LLVM 19
+        llvm_http_archive(
+            name = "llvm19_linux_x86_64",
+            urls = tf_mirror_urls("https://github.com/llvm/llvm-project/releases/download/llvmorg-19.1.7/LLVM-19.1.7-Linux-X64.tar.xz"),
+            sha256 = "4a5ec53951a584ed36f80240f6fbf8fdd46b4cf6c7ee87cc2d5018dc37caf679",
+            build_file = Label("//cc/config:llvm19_linux_x86_64.BUILD"),
+            strip_prefix = "LLVM-19.1.7-Linux-X64",
+        )
 
-        #        llvm_http_archive(
-        #            name = "llvm_linux_x86_64",
-        #            urls = tf_mirror_urls("https://github.com/llvm/llvm-project/releases/download/llvmorg-19.1.7/LLVM-19.1.7-Linux-X64.tar.xz"),
-        #            sha256 = "4a5ec53951a584ed36f80240f6fbf8fdd46b4cf6c7ee87cc2d5018dc37caf679",
-        #            build_file = Label("//cc/config:llvm19_linux_x86_64.BUILD"),
-        #            strip_prefix = "LLVM-19.1.7-Linux-X64",
-        #        )
+    if "llvm21_linux_x86_64" not in native.existing_rules():
+        # LLVM 21
+        llvm_http_archive(
+            name = "llvm21_linux_x86_64",
+            urls = tf_mirror_urls("https://github.com/llvm/llvm-project/releases/download/llvmorg-21.1.2/LLVM-21.1.2-Linux-X64.tar.xz"),
+            sha256 = "38dc1e278b8d688d9f4f1077da1dcda623d9e0dd89ffcf03bc18d3492bbd9cb6",
+            build_file = Label("//cc/config:llvm21_linux_x86_64.BUILD"),
+            strip_prefix = "LLVM-21.1.2-Linux-X64",
+        )
 
     if "llvm_linux_aarch64" not in native.existing_rules():
         llvm(
@@ -116,7 +127,6 @@ def cc_toolchain_deps():
             default_version = "18",
             versions = {
                 "@llvm18_linux_aarch64//:all": "18",
-                "@llvm21_linux_aarch64//:all": "21",
             },
             build_file_tpl = Label("//cc/llvm:llvm_linux.BUILD.tpl"),
         )
