@@ -66,7 +66,7 @@ def _llvm_impl(ctx):
     ver = _get_llvm_version(ctx)
     llvm_label = _get_llvm_label(ctx, ver)
     if not llvm_label:
-        fail("Add support of LLVM % before use it")
+        fail("Ensure LLVM {} support is added prior to use.".format(ver))
 
     _create_version_file(ctx, ver)
 
