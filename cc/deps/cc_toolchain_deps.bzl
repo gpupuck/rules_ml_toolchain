@@ -192,6 +192,7 @@ def cc_toolchain_deps():
             default_version = "18",
             versions = {
                 "@llvm18_darwin_aarch64//:all": "18",
+                "@llvm20_darwin_aarch64//:all": "20",
             },
             build_file_tpl = Label("//cc/llvm:llvm_darwin.BUILD.tpl"),
         )
