@@ -70,19 +70,17 @@ filegroup(
     visibility = ["//visibility:public"],
 )
 
-# LLVM18 needs libtinfo.so.5 library as part of ubuntu 18 distributive
+# Stub for LLVM 18 Linux x86_64, leave it for backward compatibility
 filegroup(
     name = "distro_libs",
-    srcs = [
-        #"lib/libtinfo.so.5",
-    ],
+    srcs = [ ],
     visibility = ["//visibility:public"],
 )
 
 filegroup(
     name = "asan_ignorelist",
     srcs = [
-        "lib/clang/18/share/asan_ignorelist.txt"
+        "lib/clang/{clang_version}/share/asan_ignorelist.txt".format(clang_version = CLANG_VERSION),
     ],
     visibility = ["//visibility:public"],
 )

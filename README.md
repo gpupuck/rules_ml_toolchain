@@ -15,15 +15,37 @@ C++ cross-platform builds benefits:
 
 ## Configure hermetic C++ toolchains
 
-Add below code before CUDA initialization in WORKSPACE file
+Add the following code before the CUDA initialization block in WORKSPACE file:
 
+### C++17
 ```
 http_archive(
     name = "rules_ml_toolchain",
-    sha256 = "d39ddfda7e279f60595f595e04042642ac9f199c850d3d11cb2cd34e74212f6e",
-    strip_prefix = "rules_ml_toolchain-47dd230be06bfdefde654e51d3311d01c988fac5",
+    sha256 = "1a855dd94eebedae69d1804e8837ad70b8018358a0a03eea0bec71d7dc2b096a",
+    strip_prefix = "rules_ml_toolchain-d321763a84c900bc29b4f5459a4f81fad19b2356",
     urls = [
-        "https://github.com/google-ml-infra/rules_ml_toolchain/archive/47dd230be06bfdefde654e51d3311d01c988fac5.tar.gz",
+        "https://github.com/google-ml-infra/rules_ml_toolchain/archive/d321763a84c900bc29b4f5459a4f81fad19b2356.tar.gz",
+    ],
+)
+
+load(
+    "@rules_ml_toolchain//cc/deps:cc_toolchain_deps.bzl",
+    "cc_toolchain_deps",
+)
+
+cc_toolchain_deps()
+
+register_toolchains("@rules_ml_toolchain//cc:linux_x86_64_linux_x86_64")
+register_toolchains("@rules_ml_toolchain//cc:linux_aarch64_linux_aarch64")
+```
+### C++20
+```
+http_archive(
+    name = "rules_ml_toolchain",
+    sha256 = "7421260948827896a51c785e51885de279bb769a32eeeabf18c633f6589c3371",
+    strip_prefix = "rules_ml_toolchain-c275b48326c8c3bdc1147d790c8ede2ff16eb3c3",
+    urls = [
+        "https://github.com/google-ml-infra/rules_ml_toolchain/archive/c275b48326c8c3bdc1147d790c8ede2ff16eb3c3.tar.gz",
     ],
 )
 

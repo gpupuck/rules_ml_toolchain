@@ -26,6 +26,8 @@ load(
 ```
 """
 
+load("//common:tar_extraction_utils.bzl", "extract_tar_with_non_hermetic_tar_tool")
+
 def _mirrored_http_archive_impl(repository_ctx):
     """Implementation of the mirrored_http_archive rule."""
     
@@ -73,10 +75,13 @@ def _mirrored_http_archive_impl(repository_ctx):
         strip_prefix = repository_ctx.attr.strip_prefix
     else:
         strip_prefix = mirrored_file_name.split(".")[0]
-    repository_ctx.extract(
-        archive = mirrored_file,
-        stripPrefix = strip_prefix,
-    )
+    if first_url.endswith(".tar.xz") or first_url.endswith(".tar"):
+       extract_tar_with_non_hermetic_tar_tool(repository_ctx, mirrored_file, strip_prefix)
+    else:
+        repository_ctx.extract(
+            archive = mirrored_file,
+            stripPrefix = strip_prefix,
+        )
     repository_ctx.file(
         "BUILD.bazel", 
         repository_ctx.read(repository_ctx.attr.build_file),
