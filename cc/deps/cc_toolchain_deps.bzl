@@ -16,11 +16,11 @@
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 load("@bazel_tools//tools/build_defs/repo:local.bzl", "new_local_repository")
 load("//cc/llvm:llvm.bzl", "llvm")
+load("//cc/llvm:sysroot.bzl", "sysroot")
 load("//common:mirrored_http_archive.bzl", "mirrored_http_archive")
 load("//common:tar_extraction_utils.bzl", "tool_archive")
 load("//third_party:repo.bzl", "tf_mirror_urls")
 load("llvm_http_archive.bzl", "llvm_http_archive")
-
 
 def cc_toolchain_deps():
     tool_archive(
@@ -43,10 +43,24 @@ def cc_toolchain_deps():
         linux_aarch64_strip_prefix = "xz_aarch64-5.8.1",
     )
 
+    ################################################################
+    # Linux x86_64 sysroot
+    ################################################################
     if "sysroot_linux_x86_64" not in native.existing_rules():
+        sysroot(
+            name = "sysroot_linux_x86_64",
+            default_version = "manylinux_2_27",
+            versions = {
+                "@sysroot_x86_64_linux_2_27//:startup_libs": "manylinux_2_27",
+                "@sysroot_x86_64_linux_2_31//:startup_libs": "manylinux_2_31",
+            },
+            build_file_tpl = Label("//cc/llvm:sysroot_linux.BUILD.tpl"),
+        )
+
+    if "sysroot_x86_64_linux_2_27" not in native.existing_rules():
         # C++17, manylinux_2_27, gcc-8
         mirrored_http_archive(
-            name = "sysroot_linux_x86_64",
+            name = "sysroot_x86_64_linux_2_27",
             sha256 = "7d9300ec03d008e96f0098dfcd4e9974dd64f2d5fccdd0f1a2b2d4af63301a04",
             mirrored_tar_sha256 = "8680378000cf63647db5421377fbdb6a4fe98e0207b87f7cfec51883bde587aa",
             urls = tf_mirror_urls("https://storage.googleapis.com/ml-sysroot-testing/ubuntu18_x86_64_sysroot_gcc8_patched-0.1.0.tar.xz"),
@@ -54,21 +68,34 @@ def cc_toolchain_deps():
             strip_prefix = "ubuntu18_x86_64_sysroot_gcc8_patched-0.1.0",
         )
 
+    if "sysroot_x86_64_linux_2_31" not in native.existing_rules():
         # C++20, manylinux_2_31, gcc-10
+        mirrored_http_archive(
+            name = "sysroot_x86_64_linux_2_31",
+            sha256 = "38eef0988829e5eed22edd266f0e62aa4b6d80512f3ab06712e9d9e395c1b01e",
+            urls = tf_mirror_urls("https://storage.googleapis.com/ml-sysroot-testing/sysroot_x86_64_ubuntu20_gcc10-0.1.0.tar.xz"),
+            build_file = Label("//cc/config:sysroot_ubuntu20_x86_64_gcc10.BUILD"),
+            strip_prefix = "sysroot_x86_64_ubuntu20_gcc10",
+        )
 
-    #        mirrored_http_archive(
-    #            name = "sysroot_linux_x86_64",
-    #            sha256 = "39f40d44b24802f6a383ed6c98c2b0b19541b82572f00796ff8d0c01e2bc91b2",
-    #            mirrored_tar_sha256 = "a5ff7d9496a48a454ec910499f2bd4d06407f5fc6153cce75fa505cac0ac5726",
-    #            urls = tf_mirror_urls("https://storage.googleapis.com/ml-sysroot-testing/sysroot_x86_64_ubuntu20_gcc10.tar.xz"),
-    #            build_file = Label("//cc/config:sysroot_ubuntu20_x86_64_gcc10.BUILD"),
-    #            strip_prefix = "sysroot_x86_64_ubuntu20_gcc10",
-    #        )
-
+    ################################################################
+    # Linux aarch64 sysroot
+    ################################################################
     if "sysroot_linux_aarch64" not in native.existing_rules():
+        sysroot(
+            name = "sysroot_linux_aarch64",
+            default_version = "manylinux_2_27",
+            versions = {
+                "@sysroot_aarch64_linux_2_27//:startup_libs": "manylinux_2_27",
+                "@sysroot_aarch64_linux_2_31//:startup_libs": "manylinux_2_31",
+            },
+            build_file_tpl = Label("//cc/llvm:sysroot_linux.BUILD.tpl"),
+        )
+
+    if "sysroot_aarch64_linux_2_27" not in native.existing_rules():
         # C++17, manylinux_2_27, gcc-8
         mirrored_http_archive(
-            name = "sysroot_linux_aarch64",
+            name = "sysroot_aarch64_linux_2_27",
             sha256 = "31a285faccb6996c16acde8ef6841841d591f73196dc5b7bdd9cf55b7f0c35a1",
             mirrored_tar_sha256 = "23989e1c4184b472ffcacf04cfeb7c9e108cb4126aeadb8a326597795b47f175",
             urls = tf_mirror_urls("https://storage.googleapis.com/ml-sysroot-testing/sysroot_aarch64_ubuntu18_gcc8.4-0.1.0.tar.xz"),
@@ -76,17 +103,19 @@ def cc_toolchain_deps():
             strip_prefix = "sysroot_aarch64_ubuntu18_gcc8.4-0.1.0",
         )
 
+    if "sysroot_aarch64_linux_2_31" not in native.existing_rules():
         # C++20, manylinux_2_31, gcc-10
+        mirrored_http_archive(
+            name = "sysroot_aarch64_linux_2_31",
+            sha256 = "cd34038f6cc8635e6c3cbe078fc6306b638c3bfec432112b8ad4aba04792d291",
+            urls = tf_mirror_urls("https://storage.googleapis.com/ml-sysroot-testing/sysroot_aarch64_ubuntu20_gcc10-0.1.0.tar.xz"),
+            build_file = Label("//cc/config:sysroot_ubuntu20_aarch64_gcc10.BUILD"),
+            strip_prefix = "sysroot_aarch64_ubuntu20_gcc10",
+        )
 
-    #        mirrored_http_archive(
-    #            name = "sysroot_linux_aarch64",
-    #            sha256 = "359a1bdf9e2747c32363abb24c5cecad41cebcbf1257464aeb44b9cba87dc8f0",
-    #            mirrored_tar_sha256 = "f52b38be5919a39fac8ec30e52eacced45caffdb00b2c1780904e57009e56096",
-    #            urls = tf_mirror_urls("https://storage.googleapis.com/ml-sysroot-testing/sysroot_aarch64_ubuntu20_gcc10.tar.xz"),
-    #            build_file = Label("//cc/config:sysroot_ubuntu20_aarch64_gcc10.BUILD"),
-    #            strip_prefix = "sysroot_aarch64_ubuntu20_gcc10",
-    #        )
-
+    ################################################################
+    # Darwin (macOS) aarch64 sysroot
+    ################################################################
     if "sysroot_darwin_aarch64" not in native.existing_rules():
         new_local_repository(
             name = "sysroot_darwin_aarch64",
@@ -94,8 +123,9 @@ def cc_toolchain_deps():
             path = "cc/sysroots/darwin_aarch64/MacOSX.sdk",
         )
 
-    #################################################################################################################
-    # Linux x86_64
+    ################################################################
+    # Linux x86_64 LLVM
+    ################################################################
     if "llvm_linux_x86_64" not in native.existing_rules():
         llvm(
             name = "llvm_linux_x86_64",
@@ -162,7 +192,7 @@ def cc_toolchain_deps():
         )
 
     ################################################################
-    # Linux aarch64
+    # Linux aarch64 LLVM
     ################################################################
     if "llvm_linux_aarch64" not in native.existing_rules():
         llvm(
@@ -198,7 +228,7 @@ def cc_toolchain_deps():
         )
 
     ################################################################
-    # Darwin (macOS) aarch64
+    # Darwin (macOS) aarch64 LLVM
     ################################################################
     if "llvm_darwin_aarch64" not in native.existing_rules():
         llvm(
@@ -206,6 +236,7 @@ def cc_toolchain_deps():
             default_version = "18",
             versions = {
                 "@llvm18_darwin_aarch64//:all": "18",
+                "@llvm20_darwin_aarch64//:all": "20",
             },
             build_file_tpl = Label("//cc/llvm:llvm_darwin.BUILD.tpl"),
         )
