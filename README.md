@@ -42,10 +42,10 @@ register_toolchains("@rules_ml_toolchain//cc:linux_aarch64_linux_aarch64")
 ```
 http_archive(
     name = "rules_ml_toolchain",
-    sha256 = "7421260948827896a51c785e51885de279bb769a32eeeabf18c633f6589c3371",
-    strip_prefix = "rules_ml_toolchain-c275b48326c8c3bdc1147d790c8ede2ff16eb3c3",
+    sha256 = "ad54919c8bbbec2085b15fb35e4b7d0772ebf0b24fe29407832e7c4a51f8d79e",
+    strip_prefix = "rules_ml_toolchain-f50ef94b3a49300d80c6a67a93d45630d5610c64",
     urls = [
-        "https://github.com/google-ml-infra/rules_ml_toolchain/archive/c275b48326c8c3bdc1147d790c8ede2ff16eb3c3.tar.gz",
+        "https://github.com/google-ml-infra/rules_ml_toolchain/archive/f50ef94b3a49300d80c6a67a93d45630d5610c64.tar.gz",
     ],
 )
 
