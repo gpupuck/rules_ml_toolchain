@@ -29,7 +29,7 @@ def _get_platform_arch(ctx):
 
 def _is_compatible_arch(ctx):
     """Checks if SYSROOT compatible with current platform"""
-    return ctx.attr.name.endswith(_get_platform_arch(ctx))
+    return _get_platform_arch(ctx) in ctx.attr.name
 
 def _get_sysroot_version_flag(ctx):
     """Returns SYSROOT version put as environment variable"""
