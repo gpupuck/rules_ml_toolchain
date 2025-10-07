@@ -425,6 +425,14 @@ following: `"zip"`, `"war"`, `"aar"`, `"tar"`, `"tar.gz"`, `"tgz"`,
             "be (something like BUILD.new-repo-name may work well for " +
             "distinguishing it from the repository's actual BUILD files. ",
     ),
+    "xz_tool": attr.label(
+        default = Label("@xz//:bin/xz"),
+        allow_single_file = True,
+    ),
+    "tar_tool": attr.label(
+        default = Label("@tar//:bin/tar"),
+        allow_single_file = True,
+    ),
 }
 
 llvm_http_archive = repository_rule(

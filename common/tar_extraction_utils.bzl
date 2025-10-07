@@ -21,15 +21,16 @@ load(
     "which",
 )
 
+
 def extract_tar_with_non_hermetic_tar_tool(repository_ctx, file_name, strip_prefix):
-    if repository_ctx.os.name != "linux":
+    if not (repository_ctx.os.name == "linux" and hasattr(repository_ctx.attr, "tar_tool")):
         repository_ctx.extract(
             archive = file_name,
             stripPrefix = strip_prefix,
         )
         return
-
-    tar_tool_path = _get_tool_path(repository_ctx, "tar")
+    tar_name = repository_ctx.path(repository_ctx.attr.tar_tool)
+    tar_tool_path = _get_tool_path(repository_ctx, tar_name)
     if not tar_tool_path:
         repository_ctx.extract(
             archive = file_name,
@@ -37,8 +38,16 @@ def extract_tar_with_non_hermetic_tar_tool(repository_ctx, file_name, strip_pref
         )
         return
     if file_name.endswith(".xz"):
+        if hasattr(repository_ctx.attr, "xz_tool"):
+            xz_name = repository_ctx.path(repository_ctx.attr.xz_tool)
+        else:
+            repository_ctx.extract(
+                archive = file_name,
+                stripPrefix = strip_prefix,
+            )
+            return
         # Multithreading was introduced in version 5.8.1.
-        xz_tool_path = _get_tool_path(repository_ctx, "xz", [5, 8, 1])
+        xz_tool_path = _get_tool_path(repository_ctx, xz_name, [5, 8, 1])
         if not xz_tool_path:
             repository_ctx.extract(
                 archive = file_name,
@@ -63,6 +72,33 @@ def extract_tar_with_non_hermetic_tar_tool(repository_ctx, file_name, strip_pref
             archive = file_name,
             stripPrefix = strip_prefix,
         )
+
+def _tool_archive_impl(repository_ctx):
+    if repository_ctx.os.arch == "aarch64":
+        repository_ctx.download_and_extract(
+            sha256 = repository_ctx.attr.linux_aarch64_sha256,
+            stripPrefix = repository_ctx.attr.linux_aarch64_strip_prefix,
+            url = repository_ctx.attr.linux_aarch64_urls,
+        )
+    else:
+        repository_ctx.download_and_extract(
+            sha256 = repository_ctx.attr.linux_x86_64_sha256,
+            stripPrefix = repository_ctx.attr.linux_x86_64_strip_prefix,
+            url = repository_ctx.attr.linux_x86_64_urls,
+        )
+    repository_ctx.file("BUILD.bazel", "")
+
+tool_archive = repository_rule(
+    implementation = _tool_archive_impl,
+    attrs = {
+        "linux_x86_64_urls": attr.string_list(),
+        "linux_x86_64_sha256": attr.string(),
+        "linux_x86_64_strip_prefix": attr.string(),
+        "linux_aarch64_urls": attr.string_list(),
+        "linux_aarch64_sha256": attr.string(),
+        "linux_aarch64_strip_prefix": attr.string(),
+    },
+)
 
 def _is_above_min_version(actual_ver, min_ver):
     for i in range(0, len(min_ver)):

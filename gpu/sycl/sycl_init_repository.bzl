@@ -25,7 +25,6 @@ load(
     "//third_party/gpus:nvidia_common_rules.bzl",
     "get_redistribution_urls",
     "get_version_and_template_lists",
-    "redist_init_repository",
 )
 
 def sycl_init_repository(

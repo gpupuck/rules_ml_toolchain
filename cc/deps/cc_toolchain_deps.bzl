@@ -16,10 +16,32 @@
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 load("@bazel_tools//tools/build_defs/repo:local.bzl", "new_local_repository")
 load("//common:mirrored_http_archive.bzl", "mirrored_http_archive")
+load("//common:tar_extraction_utils.bzl", "tool_archive")
 load("//third_party:repo.bzl", "tf_mirror_urls")
 load("llvm_http_archive.bzl", "llvm_http_archive")
 
+
 def cc_toolchain_deps():
+    tool_archive(
+        name = "tar",
+        linux_x86_64_sha256 = "d3be6744685d7a90adc16e3d5342ba9b28fc388422629a1bea146b3798229af6",
+        linux_x86_64_urls = ["https://storage.googleapis.com/ml-sysroot-testing/tar_x86_64-1.35.tar.xz"],
+        linux_x86_64_strip_prefix = "tar_x86_64-1.35",
+        linux_aarch64_sha256 = "fa729b264b5445e2d1a1398f11f81b5412998fc618e42c3a8d86efe5e7f199cb",
+        linux_aarch64_urls = ["https://storage.googleapis.com/ml-sysroot-testing/tar_aarch64-1.35.tar.xz"],
+        linux_aarch64_strip_prefix = "tar_aarch64-1.35",
+    )
+
+    tool_archive(
+        name = "xz",
+        linux_x86_64_sha256 = "59b9f6681b2aa395a07908d6875ce47eae8e2a5af496449b827bd0370947d355",
+        linux_x86_64_urls = ["https://storage.googleapis.com/ml-sysroot-testing/xz_x86_64-5.8.1.tar.xz"],
+        linux_x86_64_strip_prefix = "xz_x86_64-5.8.1",
+        linux_aarch64_sha256 = "ef876d6fec29dcd7f90bf5417da6882ce76b4fb4db666925286e184acbcb1081",
+        linux_aarch64_urls = ["https://storage.googleapis.com/ml-sysroot-testing/xz_aarch64-5.8.1.tar.xz"],
+        linux_aarch64_strip_prefix = "xz_aarch64-5.8.1",
+    )
+
     if "sysroot_linux_x86_64" not in native.existing_rules():
         # C++17, manylinux_2_27, gcc-8
         mirrored_http_archive(
