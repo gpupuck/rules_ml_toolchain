@@ -53,16 +53,8 @@ def _get_sysroot_label(ctx, ver):
 
     return None
 
-def _create_version_file(ctx, major_version):
-    """Writes the SYSROOT version to the version.bzl file"""
-    ctx.file(
-        "version.bzl",
-        "VERSION = \"{}\"".format(major_version),
-    )
-
 def _sysroot_impl(ctx):
     if not _is_compatible_arch(ctx):
-        _create_version_file(ctx, "")
         ctx.file("BUILD", "")
         return
 
@@ -71,8 +63,6 @@ def _sysroot_impl(ctx):
     if not sysroot_label:
         fail("Ensure SYSROOT {} support is added prior to use. Supported versions: {}"
             .format(ver, ", ".join(ctx.attr.versions.values())))
-
-    _create_version_file(ctx, ver)
 
     ctx.template(
         "BUILD",

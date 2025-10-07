@@ -51,16 +51,16 @@ def cc_toolchain_deps():
             name = "sysroot_linux_x86_64",
             default_version = "manylinux_2_27",
             versions = {
-                "@sysroot_x86_64_linux_2_27//:startup_libs": "manylinux_2_27",
-                "@sysroot_x86_64_linux_2_31//:startup_libs": "manylinux_2_31",
+                "@sysroot_linux_x86_64_glibc_2_27//:startup_libs": "manylinux_2_27",
+                "@sysroot_linux_x86_64_glibc_2_31//:startup_libs": "manylinux_2_31",
             },
             build_file_tpl = Label("//cc/llvm:sysroot_linux.BUILD.tpl"),
         )
 
-    if "sysroot_x86_64_linux_2_27" not in native.existing_rules():
+    if "sysroot_linux_x86_64_glibc_2_27" not in native.existing_rules():
         # C++17, manylinux_2_27, gcc-8
         mirrored_http_archive(
-            name = "sysroot_x86_64_linux_2_27",
+            name = "sysroot_linux_x86_64_glibc_2_27",
             sha256 = "7d9300ec03d008e96f0098dfcd4e9974dd64f2d5fccdd0f1a2b2d4af63301a04",
             mirrored_tar_sha256 = "8680378000cf63647db5421377fbdb6a4fe98e0207b87f7cfec51883bde587aa",
             urls = tf_mirror_urls("https://storage.googleapis.com/ml-sysroot-testing/ubuntu18_x86_64_sysroot_gcc8_patched-0.1.0.tar.xz"),
@@ -68,10 +68,10 @@ def cc_toolchain_deps():
             strip_prefix = "ubuntu18_x86_64_sysroot_gcc8_patched-0.1.0",
         )
 
-    if "sysroot_x86_64_linux_2_31" not in native.existing_rules():
+    if "sysroot_linux_x86_64_glibc_2_31" not in native.existing_rules():
         # C++20, manylinux_2_31, gcc-10
         mirrored_http_archive(
-            name = "sysroot_x86_64_linux_2_31",
+            name = "sysroot_linux_x86_64_glibc_2_31",
             sha256 = "38eef0988829e5eed22edd266f0e62aa4b6d80512f3ab06712e9d9e395c1b01e",
             urls = tf_mirror_urls("https://storage.googleapis.com/ml-sysroot-testing/sysroot_x86_64_ubuntu20_gcc10-0.1.0.tar.xz"),
             build_file = Label("//cc/config:sysroot_ubuntu20_x86_64_gcc10.BUILD"),
@@ -86,16 +86,16 @@ def cc_toolchain_deps():
             name = "sysroot_linux_aarch64",
             default_version = "manylinux_2_27",
             versions = {
-                "@sysroot_aarch64_linux_2_27//:startup_libs": "manylinux_2_27",
-                "@sysroot_aarch64_linux_2_31//:startup_libs": "manylinux_2_31",
+                "@sysroot_linux_aarch64_glibc_2_27//:startup_libs": "manylinux_2_27",
+                "@sysroot_linux_aarch64_glibc_2_31//:startup_libs": "manylinux_2_31",
             },
             build_file_tpl = Label("//cc/llvm:sysroot_linux.BUILD.tpl"),
         )
 
-    if "sysroot_aarch64_linux_2_27" not in native.existing_rules():
+    if "sysroot_linux_aarch64_glibc_2_27" not in native.existing_rules():
         # C++17, manylinux_2_27, gcc-8
         mirrored_http_archive(
-            name = "sysroot_aarch64_linux_2_27",
+            name = "sysroot_linux_aarch64_glibc_2_27",
             sha256 = "31a285faccb6996c16acde8ef6841841d591f73196dc5b7bdd9cf55b7f0c35a1",
             mirrored_tar_sha256 = "23989e1c4184b472ffcacf04cfeb7c9e108cb4126aeadb8a326597795b47f175",
             urls = tf_mirror_urls("https://storage.googleapis.com/ml-sysroot-testing/sysroot_aarch64_ubuntu18_gcc8.4-0.1.0.tar.xz"),
@@ -103,10 +103,10 @@ def cc_toolchain_deps():
             strip_prefix = "sysroot_aarch64_ubuntu18_gcc8.4-0.1.0",
         )
 
-    if "sysroot_aarch64_linux_2_31" not in native.existing_rules():
+    if "sysroot_linux_aarch64_glibc_2_31" not in native.existing_rules():
         # C++20, manylinux_2_31, gcc-10
         mirrored_http_archive(
-            name = "sysroot_aarch64_linux_2_31",
+            name = "sysroot_linux_aarch64_glibc_2_31",
             sha256 = "cd34038f6cc8635e6c3cbe078fc6306b638c3bfec432112b8ad4aba04792d291",
             urls = tf_mirror_urls("https://storage.googleapis.com/ml-sysroot-testing/sysroot_aarch64_ubuntu20_gcc10-0.1.0.tar.xz"),
             build_file = Label("//cc/config:sysroot_ubuntu20_aarch64_gcc10.BUILD"),
