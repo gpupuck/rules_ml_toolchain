@@ -100,6 +100,14 @@ mirrored_http_archive = repository_rule(
             mandatory = True,
         ),
         "strip_prefix": attr.string(),
+        "xz_tool": attr.label(
+            default = Label("@xz//:bin/xz"),
+            allow_single_file = True,
+        ),
+        "tar_tool": attr.label(
+            default = Label("@tar//:bin/tar"),
+            allow_single_file = True,
+        ),
     },
     doc = """Downloads a compressed archive file, decompresses it,
         and makes its targets available for binding. For tar.xz it can use a

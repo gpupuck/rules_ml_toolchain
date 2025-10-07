@@ -455,6 +455,14 @@ _redist_repo = repository_rule(
         "target_arch_env_var": attr.string(mandatory = True),
         "local_source_dirs": attr.string_list(mandatory = False),
         "repository_symlinks": attr.label_keyed_string_dict(mandatory = False),
+        "xz_tool": attr.label(
+            default = Label("@xz//:bin/xz"),
+            allow_single_file = True,
+        ),
+        "tar_tool": attr.label(
+            default = Label("@tar//:bin/tar"),
+            allow_single_file = True,
+        ),
     },
     environ = ["HERMETIC_CUDA_VERSION", "TF_CUDA_VERSION"],
 )
