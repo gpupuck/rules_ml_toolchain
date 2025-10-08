@@ -20,7 +20,6 @@ load("//cc/llvm:sysroot.bzl", "sysroot")
 load("//common:mirrored_http_archive.bzl", "mirrored_http_archive")
 load("//common:tar_extraction_utils.bzl", "tool_archive")
 load("//third_party:repo.bzl", "tf_mirror_urls")
-load("llvm_http_archive.bzl", "llvm_http_archive")
 
 def cc_toolchain_deps():
     tool_archive(
@@ -141,7 +140,7 @@ def cc_toolchain_deps():
 
     if "llvm18_linux_x86_64" not in native.existing_rules():
         # LLVM 18 Linux x86_64
-        llvm_http_archive(
+        mirrored_http_archive(
             name = "llvm18_linux_x86_64",
             urls = tf_mirror_urls("https://github.com/llvm/llvm-project/releases/download/llvmorg-18.1.8/clang+llvm-18.1.8-x86_64-linux-gnu-ubuntu-18.04.tar.xz"),
             sha256 = "54ec30358afcc9fb8aa74307db3046f5187f9fb89fb37064cdde906e062ebf36",
@@ -160,7 +159,7 @@ def cc_toolchain_deps():
 
     if "llvm19_linux_x86_64" not in native.existing_rules():
         # LLVM 19 Linux x86_64
-        llvm_http_archive(
+        mirrored_http_archive(
             name = "llvm19_linux_x86_64",
             urls = tf_mirror_urls("https://github.com/llvm/llvm-project/releases/download/llvmorg-19.1.7/LLVM-19.1.7-Linux-X64.tar.xz"),
             sha256 = "4a5ec53951a584ed36f80240f6fbf8fdd46b4cf6c7ee87cc2d5018dc37caf679",
@@ -171,7 +170,7 @@ def cc_toolchain_deps():
 
     if "llvm20_linux_x86_64" not in native.existing_rules():
         # LLVM 20 Linux x86_64
-        llvm_http_archive(
+        mirrored_http_archive(
             name = "llvm20_linux_x86_64",
             urls = tf_mirror_urls("https://github.com/llvm/llvm-project/releases/download/llvmorg-20.1.8/LLVM-20.1.8-Linux-X64.tar.xz"),
             sha256 = "1ead36b3dfcb774b57be530df42bec70ab2d239fbce9889447c7a29a4ddc1ae6",
@@ -182,7 +181,7 @@ def cc_toolchain_deps():
 
     if "llvm21_linux_x86_64" not in native.existing_rules():
         # LLVM 21 Linux x86_64
-        llvm_http_archive(
+        mirrored_http_archive(
             name = "llvm21_linux_x86_64",
             urls = tf_mirror_urls("https://github.com/llvm/llvm-project/releases/download/llvmorg-21.1.2/LLVM-21.1.2-Linux-X64.tar.xz"),
             sha256 = "38dc1e278b8d688d9f4f1077da1dcda623d9e0dd89ffcf03bc18d3492bbd9cb6",
@@ -207,7 +206,7 @@ def cc_toolchain_deps():
 
     if "llvm18_linux_aarch64" not in native.existing_rules():
         # LLVM 18 Linux aarch64
-        llvm_http_archive(
+        mirrored_http_archive(
             name = "llvm18_linux_aarch64",
             urls = tf_mirror_urls("https://github.com/llvm/llvm-project/releases/download/llvmorg-18.1.8/clang+llvm-18.1.8-aarch64-linux-gnu.tar.xz"),
             sha256 = "dcaa1bebbfbb86953fdfbdc7f938800229f75ad26c5c9375ef242edad737d999",
@@ -218,7 +217,7 @@ def cc_toolchain_deps():
 
     if "llvm20_linux_aarch64" not in native.existing_rules():
         # LLVM 20 Linux aarch64
-        llvm_http_archive(
+        mirrored_http_archive(
             name = "llvm20_linux_aarch64",
             urls = tf_mirror_urls("https://github.com/llvm/llvm-project/releases/download/llvmorg-20.1.8/LLVM-20.1.8-Linux-ARM64.tar.xz"),
             sha256 = "b855cc17d935fdd83da82206b7a7cfc680095efd1e9e8182c4a05e761958bef8",
@@ -242,7 +241,7 @@ def cc_toolchain_deps():
         )
 
     if "llvm18_darwin_aarch64" not in native.existing_rules():
-        llvm_http_archive(
+        mirrored_http_archive(
             name = "llvm18_darwin_aarch64",
             urls = tf_mirror_urls("https://github.com/llvm/llvm-project/releases/download/llvmorg-18.1.8/clang+llvm-18.1.8-arm64-apple-macos11.tar.xz"),
             sha256 = "4573b7f25f46d2a9c8882993f091c52f416c83271db6f5b213c93f0bd0346a10",
@@ -252,7 +251,7 @@ def cc_toolchain_deps():
         )
 
     if "llvm20_darwin_aarch64" not in native.existing_rules():
-        llvm_http_archive(
+        mirrored_http_archive(
             name = "llvm20_darwin_aarch64",
             urls = tf_mirror_urls("https://github.com/llvm/llvm-project/releases/download/llvmorg-20.1.8/LLVM-20.1.8-macOS-ARM64.tar.xz"),
             sha256 = "a9a22f450d35f1f73cd61ab6a17c6f27d8f6051d56197395c1eb397f0c9bbec4",
