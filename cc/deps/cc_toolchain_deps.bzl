@@ -48,10 +48,10 @@ def cc_toolchain_deps():
     if "sysroot_linux_x86_64" not in native.existing_rules():
         sysroot(
             name = "sysroot_linux_x86_64",
-            default_version = "manylinux_2_27",
-            versions = {
-                "@sysroot_linux_x86_64_glibc_2_27//:startup_libs": "manylinux_2_27",
-                "@sysroot_linux_x86_64_glibc_2_31//:startup_libs": "manylinux_2_31",
+            default_dist = "linux_x86_64_glibc_2_27",
+            dists = {
+                "@sysroot_linux_x86_64_glibc_2_27//:startup_libs": "linux_x86_64_glibc_2_27",
+                "@sysroot_linux_x86_64_glibc_2_31//:startup_libs": "linux_x86_64_glibc_2_31",
             },
             build_file_tpl = Label("//cc/llvm:sysroot_linux.BUILD.tpl"),
         )
@@ -83,10 +83,10 @@ def cc_toolchain_deps():
     if "sysroot_linux_aarch64" not in native.existing_rules():
         sysroot(
             name = "sysroot_linux_aarch64",
-            default_version = "manylinux_2_27",
-            versions = {
-                "@sysroot_linux_aarch64_glibc_2_27//:startup_libs": "manylinux_2_27",
-                "@sysroot_linux_aarch64_glibc_2_31//:startup_libs": "manylinux_2_31",
+            default_dist = "linux_aarch64_glibc_2_27",
+            dists = {
+                "@sysroot_linux_aarch64_glibc_2_27//:startup_libs": "linux_aarch64_glibc_2_27",
+                "@sysroot_linux_aarch64_glibc_2_31//:startup_libs": "linux_aarch64_glibc_2_31",
             },
             build_file_tpl = Label("//cc/llvm:sysroot_linux.BUILD.tpl"),
         )

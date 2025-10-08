@@ -18,7 +18,7 @@ load(
     "get_host_environ",
 )
 
-_SYSROOT = "SYSROOT"
+_SYSROOT_DIST = "SYSROOT_DIST"
 
 def _get_platform_arch(ctx):
     """Gets current platform architecture"""
@@ -28,25 +28,25 @@ def _get_platform_arch(ctx):
         return ctx.os.arch
 
 def _is_compatible_arch(ctx):
-    """Checks if SYSROOT compatible with current platform"""
+    """Checks if sysroot distribution compatible with current platform"""
     return _get_platform_arch(ctx) in ctx.attr.name
 
-def _get_sysroot_version_flag(ctx):
-    """Returns SYSROOT version put as environment variable"""
-    return get_host_environ(ctx, _SYSROOT)
+def _get_sysroot_dist_flag(ctx):
+    """Returns sysroot distribution put as environment variable"""
+    return get_host_environ(ctx, _SYSROOT_DIST)
 
-def _get_sysroot_version(ctx):
-    """Returns the SYSROOT version from the SYSROOT repository environment variable, defaulting otherwise"""
-    ver = _get_sysroot_version_flag(ctx) or ctx.attr.default_version
+def _get_sysroot_dist(ctx):
+    """Returns the sysroot distribution from the SYSROOT_DIST repository environment variable, defaulting otherwise"""
+    ver = _get_sysroot_dist_flag(ctx) or ctx.attr.default_dist
 
     if not ver:
-        fail("Specify SYSROOT version in .bazelrc file. Example: --repo_env=SYSROOT=manylinux_2_31")
+        fail("Specify SYSROOT_DIST in .bazelrc file. Example: --repo_env=SYSROOT_DIST=linux_x86_64_glibc_2_31")
 
     return ver
 
 def _get_sysroot_label(ctx, ver):
-    """Returns the SYSROOT label for the specified version"""
-    sysroot_dict = ctx.attr.versions
+    """Returns the sysroot label for the specified version"""
+    sysroot_dict = ctx.attr.dists
     for sysroot_label in sysroot_dict.keys():
         if sysroot_dict[sysroot_label] == ver:
             return sysroot_label
@@ -58,11 +58,11 @@ def _sysroot_impl(ctx):
         ctx.file("BUILD", "")
         return
 
-    ver = _get_sysroot_version(ctx)
+    ver = _get_sysroot_dist(ctx)
     sysroot_label = _get_sysroot_label(ctx, ver)
     if not sysroot_label:
-        fail("Ensure SYSROOT {} support is added prior to use. Supported versions: {}"
-            .format(ver, ", ".join(ctx.attr.versions.values())))
+        fail("Ensure SYSROOT_DIST {} support is added prior to use. Supported distributions: {}"
+            .format(ver, ", ".join(ctx.attr.dists.values())))
 
     ctx.template(
         "BUILD",
@@ -75,8 +75,8 @@ def _sysroot_impl(ctx):
 sysroot = repository_rule(
     implementation = _sysroot_impl,
     attrs = {
-        "default_version": attr.string(),
-        "versions": attr.label_keyed_string_dict(
+        "default_dist": attr.string(),
+        "dists": attr.label_keyed_string_dict(
             allow_files = True,
             mandatory = True,
         ),
