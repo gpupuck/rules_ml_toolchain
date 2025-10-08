@@ -71,7 +71,7 @@ def cc_toolchain_deps():
         # C++20, manylinux_2_31, gcc-10
         mirrored_http_archive(
             name = "sysroot_linux_x86_64_glibc_2_31",
-            sha256 = "38eef0988829e5eed22edd266f0e62aa4b6d80512f3ab06712e9d9e395c1b01e",
+            sha256 = "18e7dcfc87e6562c85cad9806db79fd3feb943db3ff98ab8c170e308655dfc99",
             urls = tf_mirror_urls("https://storage.googleapis.com/ml-sysroot-testing/sysroot_x86_64_ubuntu20_gcc10-0.1.0.tar.xz"),
             build_file = Label("//cc/config:sysroot_ubuntu20_x86_64_gcc10.BUILD"),
             strip_prefix = "sysroot_x86_64_ubuntu20_gcc10",
@@ -106,7 +106,7 @@ def cc_toolchain_deps():
         # C++20, manylinux_2_31, gcc-10
         mirrored_http_archive(
             name = "sysroot_linux_aarch64_glibc_2_31",
-            sha256 = "cd34038f6cc8635e6c3cbe078fc6306b638c3bfec432112b8ad4aba04792d291",
+            sha256 = "3f2b534bf8305f0bc750ef570673fabc04c160e72b5eae5948284edda43d11cc",
             urls = tf_mirror_urls("https://storage.googleapis.com/ml-sysroot-testing/sysroot_aarch64_ubuntu20_gcc10-0.1.0.tar.xz"),
             build_file = Label("//cc/config:sysroot_ubuntu20_aarch64_gcc10.BUILD"),
             strip_prefix = "sysroot_aarch64_ubuntu20_gcc10",
