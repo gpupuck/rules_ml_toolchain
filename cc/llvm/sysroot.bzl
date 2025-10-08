@@ -20,17 +20,6 @@ load(
 
 _SYSROOT_DIST = "SYSROOT_DIST"
 
-def _get_platform_arch(ctx):
-    """Gets current platform architecture"""
-    if ctx.os.arch == "amd64":
-        return "x86_64"
-    else:
-        return ctx.os.arch
-
-def _is_compatible_arch(ctx):
-    """Checks if sysroot distribution compatible with current platform"""
-    return _get_platform_arch(ctx) in ctx.attr.name
-
 def _get_sysroot_dist_flag(ctx):
     """Returns sysroot distribution put as environment variable"""
     return get_host_environ(ctx, _SYSROOT_DIST)
@@ -54,10 +43,6 @@ def _get_sysroot_label(ctx, ver):
     return None
 
 def _sysroot_impl(ctx):
-    if not _is_compatible_arch(ctx):
-        ctx.file("BUILD", "")
-        return
-
     ver = _get_sysroot_dist(ctx)
     sysroot_label = _get_sysroot_label(ctx, ver)
     if not sysroot_label:
