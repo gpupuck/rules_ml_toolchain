@@ -15,42 +15,42 @@
 
 alias(
     name = "sysroot",
-    actual = "@%{sysroot_repo_name}//:sysroot",
+    actual = "@@%{sysroot_repo_name}//:sysroot",
     visibility = ["//visibility:public"],
 )
 
 alias(
     name = "startup_libs",
-    actual = "@%{sysroot_repo_name}//:startup_libs",
+    actual = "@@%{sysroot_repo_name}//:startup_libs",
     visibility = ["//visibility:public"],
 )
 
 alias(
     name = "includes_c",
-    actual = "@%{sysroot_repo_name}//:includes_c",
+    actual = "@@%{sysroot_repo_name}//:includes_c",
     visibility = ["//visibility:public"],
 )
 
 alias(
     name = "includes",
-    actual = "@%{sysroot_repo_name}//:includes",
+    actual = "@@%{sysroot_repo_name}//:includes",
     visibility = ["//visibility:public"],
 )
 
 alias(
     name = "includes_system",
-    actual = "@%{sysroot_repo_name}//:includes_system",
+    actual = "@@%{sysroot_repo_name}//:includes_system",
     visibility = ["//visibility:public"],
 )
 
 alias(
     name = "glibc",
-    actual = "@%{sysroot_repo_name}//:glibc",
+    actual = "@@%{sysroot_repo_name}//:glibc",
     visibility = ["//visibility:public"],
 )
 
 alias(
     name = "pthread",
-    actual = "@%{sysroot_repo_name}//:pthread",
+    actual = "@@%{sysroot_repo_name}//:pthread",
     visibility = ["//visibility:public"],
 )
