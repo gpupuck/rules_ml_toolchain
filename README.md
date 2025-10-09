@@ -43,7 +43,7 @@ If CUDA initialization is required, insert this block before CUDA initialization
 LLVM `18` and the `linux_glibc_2_27` sysroot are used for compilation by default.
 To change these defaults, specify the required LLVM version and sysroot distribution in `.bazelrc` file.
 
-For example, to configure LLVM `21` with `linux_glibc_2_31`, update your .bazelrc.
+For example, to configure LLVM `21` with `linux_glibc_2_31`, update your `.bazelrc`.
 ```
 common --enable_platform_specific_config
 
