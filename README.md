@@ -38,7 +38,7 @@ register_toolchains("@rules_ml_toolchain//cc:linux_x86_64_linux_x86_64")
 register_toolchains("@rules_ml_toolchain//cc:linux_aarch64_linux_aarch64")
 ```
 
-If CUDA initialization is required, insert this block before CUDA initialization.
+If CUDA or SYCL initialization is required, ensure this block is inserted before either initialization occurs.
 
 LLVM `18` and the `linux_glibc_2_27` sysroot are used for compilation by default.
 To change these defaults, specify the required LLVM version and sysroot distribution in `.bazelrc` file.
