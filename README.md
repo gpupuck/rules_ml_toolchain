@@ -51,6 +51,15 @@ build:linux --repo_env=LLVM_VERSION=21
 build:linux --repo_env=SYSROOT_DIST=linux_glibc_2_31
 ```
 
+Supported versions of LLVM are:
+* Linux x86_64 LLVM `18` / `19` / `20` / `21`
+* Linux aarch64 LLVM `18` / `20`
+* macOS aarch64 LLVM `18` / `20`
+
+Available sysroot distributions are:
+* Linux x86_64 `linux_glibc_2_27` / `linux_glibc_2_31`
+* Linux aarch64 `linux_glibc_2_27` / `linux_glibc_2_31`
+
 It must be ensured that builds for Linux x86_64 / aarch64 are run without the `--noincompatible_enable_cc_toolchain_resolution` 
 flag. Furthermore, reliance on environment variables like `CLANG_COMPILER_PATH`, `BAZEL_COMPILER`, `CC`, or `CXX` 
 must be avoided.
