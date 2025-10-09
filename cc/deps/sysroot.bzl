@@ -26,12 +26,13 @@ def _get_sysroot_dist_flag(ctx):
 
 def _get_sysroot_dist(ctx):
     """Returns the sysroot distribution from the SYSROOT_DIST repository environment variable, defaulting otherwise"""
-    ver = _get_sysroot_dist_flag(ctx) or ctx.attr.default_dist
 
-    if not ver:
-        fail("Specify SYSROOT_DIST in .bazelrc file. Example: --repo_env=SYSROOT_DIST=linux_x86_64_glibc_2_31")
+    dist = _get_sysroot_dist_flag(ctx) or ctx.attr.default_dist
 
-    return ver
+    if not dist:
+        fail("Specify SYSROOT_DIST in .bazelrc file. Example: --repo_env=SYSROOT_DIST=linux_glibc_2_31")
+
+    return dist
 
 def _get_sysroot_label(ctx, ver):
     """Returns the sysroot label for the specified version"""

@@ -50,8 +50,8 @@ def cc_toolchain_deps():
             name = "sysroot_linux_x86_64",
             default_dist = "linux_x86_64_glibc_2_27",
             dists = {
-                "@sysroot_linux_x86_64_glibc_2_27//:startup_libs": "linux_x86_64_glibc_2_27",
-                "@sysroot_linux_x86_64_glibc_2_31//:startup_libs": "linux_x86_64_glibc_2_31",
+                "@sysroot_linux_x86_64_glibc_2_27//:startup_libs": "linux_glibc_2_27",
+                "@sysroot_linux_x86_64_glibc_2_31//:startup_libs": "linux_glibc_2_31",
             },
             build_file_tpl = Label("sysroot_linux.BUILD.tpl"),
         )
@@ -85,8 +85,8 @@ def cc_toolchain_deps():
             name = "sysroot_linux_aarch64",
             default_dist = "linux_aarch64_glibc_2_27",
             dists = {
-                "@sysroot_linux_aarch64_glibc_2_27//:startup_libs": "linux_aarch64_glibc_2_27",
-                "@sysroot_linux_aarch64_glibc_2_31//:startup_libs": "linux_aarch64_glibc_2_31",
+                "@sysroot_linux_aarch64_glibc_2_27//:startup_libs": "linux_glibc_2_27",
+                "@sysroot_linux_aarch64_glibc_2_31//:startup_libs": "linux_glibc_2_31",
             },
             build_file_tpl = Label("sysroot_linux.BUILD.tpl"),
         )
