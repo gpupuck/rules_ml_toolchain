@@ -15,16 +15,15 @@ C++ cross-platform builds benefits:
 
 ## Configure hermetic C++ toolchains
 
-Add the following code before the CUDA initialization block in WORKSPACE file:
+Add the following code to WORKSPACE file:
 
-### C++17
 ```
 http_archive(
     name = "rules_ml_toolchain",
-    sha256 = "1a855dd94eebedae69d1804e8837ad70b8018358a0a03eea0bec71d7dc2b096a",
-    strip_prefix = "rules_ml_toolchain-d321763a84c900bc29b4f5459a4f81fad19b2356",
+    sha256 = "db6dfad550ad534b27b92cdbc675f8624f13f19bf3689a4d2b9d2b657767e02c",
+    strip_prefix = "rules_ml_toolchain-5c0d9c05ba7dd82c1b701338aa66e4cb74dd6efe",
     urls = [
-        "https://github.com/google-ml-infra/rules_ml_toolchain/archive/d321763a84c900bc29b4f5459a4f81fad19b2356.tar.gz",
+        "https://github.com/google-ml-infra/rules_ml_toolchain/archive/5c0d9c05ba7dd82c1b701338aa66e4cb74dd6efe.tar.gz",
     ],
 )
 
@@ -38,27 +37,18 @@ cc_toolchain_deps()
 register_toolchains("@rules_ml_toolchain//cc:linux_x86_64_linux_x86_64")
 register_toolchains("@rules_ml_toolchain//cc:linux_aarch64_linux_aarch64")
 ```
-### C++20
+
+If CUDA initialization is required, insert this block before CUDA initialization.
+
+LLVM 18 and the linux_glibc_2_27 sysroot are used for compilation by default.
+To change these defaults, specify the required LLVM and sysroot versions in .bazelrc file.
+
+For example, to configure LLVM 21 with linux_glibc_2_31, update your .bazelrc.
 ```
-http_archive(
-    name = "rules_ml_toolchain",
-    sha256 = "f8407b0d1b327a9dc730febd21f54aedf399bed93cee01b6d6892e4673dfc305",
-    strip_prefix = "rules_ml_toolchain-a3443590cbe85adb217524f106e6f7c769e6cc2d",
-    urls = [
-        "https://github.com/google-ml-infra/rules_ml_toolchain/archive/a3443590cbe85adb217524f106e6f7c769e6cc2d.tar.gz",
-    ],
-)
+common --enable_platform_specific_config
 
-load(
-    "@rules_ml_toolchain//cc/deps:cc_toolchain_deps.bzl",
-    "cc_toolchain_deps",
-)
-
-cc_toolchain_deps()
-
-register_toolchains("@rules_ml_toolchain//cc:linux_x86_64_linux_x86_64")
-register_toolchains("@rules_ml_toolchain//cc:linux_aarch64_linux_aarch64")
-
+build:linux --repo_env=LLVM_VERSION=21
+build:linux --repo_env=SYSROOT_DIST=linux_glibc_2_31
 ```
 
 It must be ensured that builds for Linux x86_64 / aarch64 are run without the `--noincompatible_enable_cc_toolchain_resolution` 
