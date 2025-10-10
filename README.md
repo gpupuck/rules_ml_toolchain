@@ -63,7 +63,7 @@ build:linux --repo_env=SYSROOT_DIST=linux_glibc_2_31
 Supported versions of LLVM are:
 * Linux x86_64 LLVM `18` / `19` / `20` / `21`
 * Linux aarch64 LLVM `18` / `20`
-* macOS aarch64 LLVM `18` / `20`
+* macOS aarch64 LLVM `18` / `20` - *In Development*
 
 Available sysroots are:
 * Linux x86_64 `linux_glibc_2_27` / `linux_glibc_2_31`
