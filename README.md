@@ -13,7 +13,7 @@ C++ cross-platform builds benefits:
 * Efficiency: Streamlines the build and release process for multiple platforms.
 -->
 
-## Configure rules_ml_toolchain
+## Configure C++ toolchains in rules_ml_toolchain
 
 Add the following code to WORKSPACE file:
 
