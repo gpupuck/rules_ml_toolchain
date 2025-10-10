@@ -71,10 +71,10 @@ Available sysroot distributions are:
 
 Details about sysroots
 
-| Distribution      | GCC | GLIBC | C++ Standard | Based On |
-|-------------------|---|---|--------------|----------|
-| linux_glibc_2_27  | GCC 8 | 2.27 | C++17        | Ubuntu 18.04    |
-| linux_glibc_2_27  | GCC 10 | 2.31 | C++20        | Ubuntu 20.04    |
+| Name             | GCC | GLIBC | C++ Standard | Used OS |
+|------------------|---|---|--------------|---------|
+| linux_glibc_2_27 | GCC 8 | 2.27 | C++17        | Ubuntu 18.04 |
+| linux_glibc_2_27 | GCC 10 | 2.31 | C++20        | Ubuntu 20.04 |
 
 ## Configure hermetic CUDA, CUDNN, NCCL and NVSHMEM
 For detailed instructions on how to configure hermetic CUDA, CUDNN, NCCL and NVSHMEM, [click this link](gpu/).
