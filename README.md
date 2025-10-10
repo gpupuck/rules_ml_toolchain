@@ -52,7 +52,7 @@ to the Bazel command. This will facilitate checking that the compiler or linker 
 LLVM `18` and the `linux_glibc_2_27` sysroot are used for compilation by default.
 To change these defaults, specify the required LLVM version and sysroot distribution in `.bazelrc` file.
 
-For example, to configure LLVM `21` with `linux_glibc_2_31`, update your `.bazelrc` with below lines
+For example, to configure LLVM `20` with `linux_glibc_2_31`, update your `.bazelrc` with below lines
 ```
 common --enable_platform_specific_config
 
@@ -71,10 +71,10 @@ Available sysroot distributions are:
 
 Details about sysroots
 
-| Distribution      | GCC | GLIBC | C++ standard |Ubuntu LTS|
-|-------------------|---|---|---|---|
-| linux_glibc_2_27  | GCC 8 | 2.27 | C++17 |18.04|
-| linux_glibc_2_27  | GCC 10 | 2.31 | C++20 |20.04|
+| Distribution      | GCC | GLIBC | C++ Standard | Based On |
+|-------------------|---|---|--------------|----------|
+| linux_glibc_2_27  | GCC 8 | 2.27 | C++17        | Ubuntu 18.04    |
+| linux_glibc_2_27  | GCC 10 | 2.31 | C++20        | Ubuntu 20.04    |
 
 ## Configure hermetic CUDA, CUDNN, NCCL and NVSHMEM
 For detailed instructions on how to configure hermetic CUDA, CUDNN, NCCL and NVSHMEM, [click this link](gpu/).
