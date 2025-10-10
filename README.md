@@ -65,7 +65,7 @@ Supported versions of LLVM are:
 * Linux aarch64 LLVM `18` / `20`
 * macOS aarch64 LLVM `18` / `20`
 
-Available sysroot distributions are:
+Available sysroots are:
 * Linux x86_64 `linux_glibc_2_27` / `linux_glibc_2_31`
 * Linux aarch64 `linux_glibc_2_27` / `linux_glibc_2_31`
 
@@ -74,7 +74,7 @@ Details about sysroots
 | Name             | GCC | GLIBC | C++ Standard | Used OS |
 |------------------|---|---|--------------|---------|
 | linux_glibc_2_27 | GCC 8 | 2.27 | C++17        | Ubuntu 18.04 |
-| linux_glibc_2_27 | GCC 10 | 2.31 | C++20        | Ubuntu 20.04 |
+| linux_glibc_2_31 | GCC 10 | 2.31 | C++20        | Ubuntu 20.04 |
 
 ## Configure hermetic CUDA, CUDNN, NCCL and NVSHMEM
 For detailed instructions on how to configure hermetic CUDA, CUDNN, NCCL and NVSHMEM, [click this link](gpu/).
