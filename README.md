@@ -1,4 +1,4 @@
-# Hermetic Toolchains for ML | rules_ml_toolchain
+# Hermetic Toolchains for ML
 
 This project provides Bazel rules for ML project to achieve hermetic builds.
 
@@ -13,7 +13,7 @@ C++ cross-platform builds benefits:
 * Efficiency: Streamlines the build and release process for multiple platforms.
 -->
 
-## Configure hermetic C++ toolchains
+## Configure rules_ml_toolchain
 
 Add the following code to WORKSPACE file:
 
@@ -47,7 +47,7 @@ must be avoided.
 For diagnosing the utility set being used during build or test execution, the `--subcommands` flag should be appended
 to the Bazel command. This will facilitate checking that the compiler or linker are not being used from your machine.
 
-## Configure the LLVM / Sysroot combination
+## Configure the LLVM / Sysroot in rules_ml_toolchain
 
 LLVM `18` and the `linux_glibc_2_27` sysroot are used for compilation by default.
 To change these defaults, specify the required LLVM version and sysroot distribution in `.bazelrc` file.
