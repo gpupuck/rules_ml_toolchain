@@ -1,4 +1,4 @@
-# Hermetic Toolchains for ML
+# Hermetic Toolchains for ML | rules_ml_toolchain
 
 This project provides Bazel rules for ML project to achieve hermetic builds.
 
