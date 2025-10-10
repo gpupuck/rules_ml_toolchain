@@ -50,6 +50,35 @@ to the Bazel command. This will facilitate checking that the compiler or linker 
 ## Configure hermetic CUDA, CUDNN, NCCL and NVSHMEM
 For detailed instructions on how to configure hermetic CUDA, CUDNN, NCCL and NVSHMEM, [click this link](gpu/).
 
+## Configure the LLVM / Sysroot in rules_ml_toolchain
+
+LLVM `18` and the `linux_glibc_2_27` sysroot are used for compilation by default.
+To change these defaults, specify the required LLVM version and sysroot distribution in `.bazelrc` file.
+
+For example, to configure LLVM `20` with `linux_glibc_2_31`, update your `.bazelrc` with below lines
+```
+common --enable_platform_specific_config
+
+build:linux --repo_env=LLVM_VERSION=20
+build:linux --repo_env=SYSROOT_DIST=linux_glibc_2_31
+```
+
+Supported versions of LLVM are:
+* Linux x86_64 LLVM `18` / `19` / `20` / `21`
+* Linux aarch64 LLVM `18` / `20`
+* macOS aarch64 LLVM `18` / `20` - *In Development*
+
+Available sysroots are:
+* Linux x86_64 `linux_glibc_2_27` / `linux_glibc_2_31`
+* Linux aarch64 `linux_glibc_2_27` / `linux_glibc_2_31`
+
+Details about sysroots
+
+| Name             | GCC | GLIBC | C++ Standard | Used OS |
+|------------------|---|---|--------------|---------|
+| linux_glibc_2_27 | GCC 8 | 2.27 | C++17        | Ubuntu 18.04 |
+| linux_glibc_2_31 | GCC 10 | 2.31 | C++20        | Ubuntu 20.04 |
+
 ## How to run this project tests
 ### CPU hermetic tests
 Project supports CPU hermetic builds on:
@@ -103,32 +132,3 @@ and allows build for such targets:
 
 `bazel build //cc/tests/cpu/... --platforms=//common:macos_aarch64`
 -->
-
-## Configure the LLVM / Sysroot in rules_ml_toolchain
-
-LLVM `18` and the `linux_glibc_2_27` sysroot are used for compilation by default.
-To change these defaults, specify the required LLVM version and sysroot distribution in `.bazelrc` file.
-
-For example, to configure LLVM `20` with `linux_glibc_2_31`, update your `.bazelrc` with below lines
-```
-common --enable_platform_specific_config
-
-build:linux --repo_env=LLVM_VERSION=20
-build:linux --repo_env=SYSROOT_DIST=linux_glibc_2_31
-```
-
-Supported versions of LLVM are:
-* Linux x86_64 LLVM `18` / `19` / `20` / `21`
-* Linux aarch64 LLVM `18` / `20`
-* macOS aarch64 LLVM `18` / `20` - *In Development*
-
-Available sysroots are:
-* Linux x86_64 `linux_glibc_2_27` / `linux_glibc_2_31`
-* Linux aarch64 `linux_glibc_2_27` / `linux_glibc_2_31`
-
-Details about sysroots
-
-| Name             | GCC | GLIBC | C++ Standard | Used OS |
-|------------------|---|---|--------------|---------|
-| linux_glibc_2_27 | GCC 8 | 2.27 | C++17        | Ubuntu 18.04 |
-| linux_glibc_2_31 | GCC 10 | 2.31 | C++20        | Ubuntu 20.04 |
