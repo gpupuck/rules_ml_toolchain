@@ -20,10 +20,10 @@ Add the following code to WORKSPACE file:
 ```
 http_archive(
     name = "rules_ml_toolchain",
-    sha256 = "db6dfad550ad534b27b92cdbc675f8624f13f19bf3689a4d2b9d2b657767e02c",
-    strip_prefix = "rules_ml_toolchain-5c0d9c05ba7dd82c1b701338aa66e4cb74dd6efe",
+    sha256 = "998d8b2c12ae0020798e3898e13dfd8e47bde66138b65944498efe7464a3d51f",
+    strip_prefix = "rules_ml_toolchain-d4eb49253d98134df1722ce70b1f4294aa683036",
     urls = [
-        "https://github.com/google-ml-infra/rules_ml_toolchain/archive/5c0d9c05ba7dd82c1b701338aa66e4cb74dd6efe.tar.gz",
+        "https://github.com/google-ml-infra/rules_ml_toolchain/archive/d4eb49253d98134df1722ce70b1f4294aa683036.tar.gz",
     ],
 )
 
