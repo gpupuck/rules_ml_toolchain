@@ -113,7 +113,7 @@ def _sycl_configure_impl(ctx):
         },
     )
 
-    ctx.file("sycl/BUILD", "")
+    ctx.file("sycl/BUILD", ctx.read(Label("//gpu/sycl:sycl.BUILD")))
 
     ctx.file("BUILD", "")
 
