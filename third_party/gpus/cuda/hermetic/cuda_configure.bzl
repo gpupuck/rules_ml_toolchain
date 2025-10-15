@@ -30,7 +30,7 @@
   * `TF_SYSROOT`: The sysroot to use when compiling.
   * `HERMETIC_CUDA_VERSION`: The version of the CUDA toolkit. If not specified,
     the version will be determined by the `TF_CUDA_VERSION`.
-  * `HERMETIC_CUDA_COMPUTE_CAPABILITIES`: The CUDA compute capabilities. Default 
+  * `HERMETIC_CUDA_COMPUTE_CAPABILITIES`: The CUDA compute capabilities. Default
     is `3.5,5.2`. If not specified, the value will be determined by the
     `TF_CUDA_COMPUTE_CAPABILITIES`.
   * `TMPDIR`: specifies the directory to use for temporary files. This
@@ -53,6 +53,7 @@ load("@cuda_nvjitlink//:version.bzl", _nvjitlink_version = "VERSION")
 load("@cuda_nvml//:version.bzl", _nvml_version = "VERSION")
 load("@cuda_nvtx//:version.bzl", _nvtx_version = "VERSION")
 load("@cuda_nvvm//:version.bzl", _nvvm_version = "VERSION")
+load("@cuda_profiler_api//:version.bzl", _cuda_profiler_api_version = "VERSION")
 load("@llvm_linux_aarch64//:version.bzl", _llvm_aarch64_hermetic_version = "VERSION")
 load("@llvm_linux_x86_64//:version.bzl", _llvm_x86_64_hermetic_version = "VERSION")
 load(
@@ -364,6 +365,7 @@ def _get_cuda_config(repository_ctx):
         cuda_version = get_cuda_version(repository_ctx),
         cupti_version = _cupti_version,
         cudart_version = _cudart_version,
+        cuda_profiler_api_version = _cuda_profiler_api_version,
         cublas_version = _cublas_version,
         cusolver_version = _cusolver_version,
         curand_version = _curand_version,
@@ -474,7 +476,7 @@ def _create_local_toolchains_repository(repository_ctx):
             cuda_defines["%{cuda_toolkit_path}"] = repository_ctx.attr.nvcc_binary.workspace_root
         else:
             cuda_defines["%{cuda_toolkit_path}"] = ""
-        cuda_defines["%{cuda_nvcc_files}"] = "if_cuda([\"@{nvcc_archive}//:bin\", \"@{nvcc_archive}//:nvvm\"])".format(
+        cuda_defines["%{cuda_nvcc_files}"] = "if_cuda([\"@@{nvcc_archive}//:bin\", \"@@{nvcc_archive}//:nvvm\"])".format(
             nvcc_archive = repository_ctx.attr.nvcc_binary.repo_name,
         )
     if is_clang_compiler:

@@ -41,7 +41,6 @@ cc_library(
     %{comment}deps = select({
         %{comment}"@cuda_driver//:forward_compatibility": [
             %{comment}"@cuda_driver//:nvidia_driver",
-            %{comment}"@cuda_driver//:nvidia_ml",
             %{comment}"@cuda_driver//:nvidia_ptxjitcompiler",
         %{comment}],
         %{comment}"//conditions:default": [":cuda_driver"],
@@ -83,6 +82,10 @@ cc_library(
         %{comment}"include/cuda_egl_interop.h",
         %{comment}"include/cuda_fp16.h",
         %{comment}"include/cuda_fp16.hpp",
+        %{comment}"include/cuda_fp4.h",
+        %{comment}"include/cuda_fp4.hpp",
+        %{comment}"include/cuda_fp6.h",
+        %{comment}"include/cuda_fp6.hpp",
         %{comment}"include/cuda_fp8.h",
         %{comment}"include/cuda_fp8.hpp",
         %{comment}"include/cuda_gl_interop.h",

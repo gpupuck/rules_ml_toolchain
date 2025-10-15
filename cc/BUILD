@@ -37,6 +37,7 @@ toolchain(
     ],
     target_settings = [
         "//common:is_cuda_disabled",
+        "//common:is_sycl_disabled",
         "//common:is_hermetic_cc_enabled",
     ],
     toolchain = "//cc/impls/linux_x86_64_linux_x86_64:toolchain",
@@ -59,6 +60,7 @@ toolchain(
     ],
     target_settings = [
         "//common:is_cuda_disabled",
+        "//common:is_sycl_disabled",
         "//common:is_hermetic_cc_enabled",
     ],
     toolchain = "//cc/impls/linux_aarch64_linux_aarch64:toolchain",
@@ -81,6 +83,7 @@ toolchain(
     ],
     target_settings = [
         "//common:is_cuda_enabled",
+        "//common:is_sycl_disabled",
         "//common:is_hermetic_cc_enabled",
     ],
     toolchain = "//cc/impls/linux_x86_64_linux_x86_64_cuda:toolchain",
@@ -103,9 +106,33 @@ toolchain(
     ],
     target_settings = [
         "//common:is_cuda_enabled",
+        "//common:is_sycl_disabled",
         "//common:is_hermetic_cc_enabled",
     ],
     toolchain = "//cc/impls/linux_aarch64_linux_aarch64_cuda:toolchain",
+    toolchain_type = "@bazel_tools//tools/cpp:toolchain_type",
+)
+
+#=====================================================================
+# Tools: Linux x86_64, Sysroot: Linux x86_64, SYCL
+#=====================================================================
+
+toolchain(
+    name = "linux_x86_64_linux_x86_64_sycl",
+    exec_compatible_with = [
+        "@platforms//cpu:x86_64",
+        "@platforms//os:linux",
+    ],
+    target_compatible_with = [
+        "@platforms//cpu:x86_64",
+        "@platforms//os:linux",
+    ],
+    target_settings = [
+        "//common:is_cuda_disabled",
+        "//common:is_sycl_enabled",
+        "//common:is_hermetic_cc_enabled",
+    ],
+    toolchain = "//cc/impls/linux_x86_64_linux_x86_64_sycl:toolchain",
     toolchain_type = "@bazel_tools//tools/cpp:toolchain_type",
 )
 
@@ -125,6 +152,7 @@ toolchain(
     ],
     target_settings = [
         "//common:is_cuda_disabled",
+        "//common:is_sycl_disabled",
         "//common:is_hermetic_cc_enabled",
     ],
     toolchain = "//cc/impls/linux_x86_64_linux_aarch64:toolchain",
@@ -148,6 +176,7 @@ toolchain(
     ],
     target_settings = [
         "//common:is_cuda_disabled",
+        "//common:is_sycl_disabled",
         "//common:is_hermetic_cc_enabled",
     ],
     toolchain = "//cc/impls/linux_x86_64_darwin_aarch64:toolchain",
@@ -171,6 +200,7 @@ toolchain(
     ],
     target_settings = [
         "//common:is_cuda_disabled",
+        "//common:is_sycl_disabled",
         "//common:is_hermetic_cc_enabled",
     ],
     toolchain = "//cc/impls/darwin_aarch64_darwin_aarch64:toolchain",
