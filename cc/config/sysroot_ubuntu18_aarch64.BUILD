@@ -139,9 +139,9 @@ cc_toolchain_import(
     additional_libs = [
         "usr/lib/aarch64-linux-gnu/libgomp.so.1",
         "usr/lib/aarch64-linux-gnu/libgomp.so.1.0.0",
-        "usr/lib/gcc/aarch64-linux-gnu/{gcc_version}/libgomp.so".format(gcc_version = GCC_VERSION),
-        "usr/lib/gcc/aarch64-linux-gnu/{gcc_version}/libgomp.a".format(gcc_version = GCC_VERSION),
     ],
+    shared_library = "usr/lib/gcc/aarch64-linux-gnu/{gcc_version}/libgomp.so".format(gcc_version = GCC_VERSION),
+    static_library = "usr/lib/gcc/aarch64-linux-gnu/{gcc_version}/libgomp.a".format(gcc_version = GCC_VERSION),
     visibility = ["//visibility:public"],
 )
 
@@ -188,7 +188,7 @@ cc_toolchain_import(
     deps = [
         ":gcc",
         ":math",
-        #":openmp",
+        ":openmp",
         ":stdc++",
         ":stdc++fs",
         ":rt",

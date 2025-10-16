@@ -87,7 +87,6 @@ filegroup(
         "@llvm_linux_aarch64//:clang++",
         "@llvm_linux_aarch64//:distro_libs",
         "@llvm_linux_aarch64//:asan_ignorelist",
-        "@llvm_linux_aarch64//:openmp",
     ],
 )
 
@@ -100,6 +99,7 @@ filegroup(
         "@llvm_linux_aarch64//:ld",
         "@sysroot_linux_aarch64//:startup_libs",
         "@llvm_linux_aarch64//:distro_libs",
+        "@sysroot_linux_aarch64//:openmp",
     ],
 )
 
