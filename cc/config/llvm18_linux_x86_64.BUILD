@@ -118,20 +118,15 @@ cc_toolchain_import(
 
 cc_toolchain_import(
     name = "openmp",
-    additional_libs = [
+    additional_libs = glob([
         "lib/libgomp.so",
         "lib/libiomp5.so",
-        "lib/libompd.so",
-        "lib/libomp.so",
-        "lib/libomptarget.rtl.amdgpu.so",
-        "lib/libomptarget.rtl.amdgpu.so.18.1",
-        "lib/libomptarget.rtl.cuda.so",
-        "lib/libomptarget.rtl.cuda.so.18.1",
-        "lib/libomptarget.rtl.x86_64.so",
-        "lib/libomptarget.rtl.x86_64.so.18.1",
-        "lib/libomptarget.so",
-        "lib/libomptarget.so.18.1",
-    ],
+        "lib/libomp*",
+        "lib/libomptarget.*",
+        "lib/libomptarget.so*",
+    ]),
+    runtime_path = "/usr/lib/llvm-19/lib",
+    shared_library = "lib/libomp.so",
     visibility = ["//visibility:public"],
 )
 

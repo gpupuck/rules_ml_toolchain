@@ -19,7 +19,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 using namespace std;
 
 int main() {
-  cout << "Hello C++ World!" << endl;
+  std::cout << "Hello C++ World!" << std::endl;
   return 0;
 }
 

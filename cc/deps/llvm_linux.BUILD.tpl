@@ -82,6 +82,12 @@ alias(
     visibility = ["//visibility:public"],
 )
 
+alias(
+    name = "openmp",
+    actual = "@@%{llvm_repo_name}//:openmp",
+    visibility = ["//visibility:public"],
+)
+
 # Use when build CUDA by Clang (NVCC doesn't need it)
 alias(
     name = "cuda_wrappers_headers",

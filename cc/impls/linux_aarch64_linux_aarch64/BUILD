@@ -66,6 +66,22 @@ cc_toolchain_import_feature(
     toolchain_import = ":imports",
 )
 
+cc_toolchain_import(
+    name = "openmp",
+    deps = select({
+        "//common:is_openmp_enabled": [
+            "@llvm_linux_aarch64//:openmp",
+        ],
+        "//conditions:default": [],
+    }),
+)
+
+cc_toolchain_import_feature(
+    name = "openmp_feature",
+    enabled = True,
+    toolchain_import = ":openmp",
+)
+
 # buildifier: leave-alone
 filegroup(
     name = "all",
@@ -99,7 +115,7 @@ filegroup(
         "@llvm_linux_aarch64//:ld",
         "@sysroot_linux_aarch64//:startup_libs",
         "@llvm_linux_aarch64//:distro_libs",
-        "@sysroot_linux_aarch64//:openmp",
+        "@llvm_linux_aarch64//:openmp",
     ],
 )
 
@@ -122,6 +138,7 @@ cc_toolchain_config(
         # Hermetic libraries feature required before import.
         "//third_party/rules_cc_toolchain/features:hermetic_libraries",
         ":imports_feature",
+        ":openmp_feature",
 
         # Toolchain configuration
         "//third_party/rules_cc_toolchain/features:warnings",
