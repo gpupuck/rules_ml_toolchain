@@ -37,6 +37,16 @@ cc_test(
 )
 
 #############################################
+# Test compiler Builtins
+cc_test(
+    name = "builtins_test",
+    srcs = ["builtins_test.cc"],
+    deps = [
+        "@gtest//:gtest_main",
+    ],
+)
+
+#############################################
 # C++ library
 cc_library(
     name = "echo",
@@ -218,6 +228,7 @@ test_suite(
     name = "all",
     tests = [
         ":absl_test",
+        ":builtins_test",
         ":echoclient_test",
         ":protobuf_test",
         ":protoclient_tool_test",

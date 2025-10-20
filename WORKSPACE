@@ -109,8 +109,6 @@ python_register_toolchains(
     python_version = "3.12",
 )
 
-bazel_skylib_workspace()
-
 load("@pybind11_bazel//:python_configure.bzl", "python_configure")
 load("@python//:defs.bzl", "interpreter")
 
@@ -210,3 +208,16 @@ load(
 nvshmem_redist_init_repository(
     nvshmem_redistributions = NVSHMEM_REDISTRIBUTIONS,
 )
+
+################################################################
+# SYCL configure
+load(
+    "//gpu/sycl:sycl_init_repository.bzl",
+    "sycl_init_repository",
+)
+
+sycl_init_repository()
+
+load("//gpu/sycl:sycl_configure.bzl", "sycl_configure")
+
+sycl_configure(name = "local_config_sycl")

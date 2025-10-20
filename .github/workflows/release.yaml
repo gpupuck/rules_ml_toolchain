@@ -1,0 +1,28 @@
+# Automatically perform a release whenever a new "release-like" tag is pushed to the repo.
+name: Release
+
+on:
+  push:
+    tags:
+      # Detect tags that look like a release.
+      # Note that we don't use a "v" prefix to help anchor this pattern.
+      # This is purely a matter of preference.
+      - "*.*.*"
+permissions:
+  id-token: write
+  attestations: write
+  contents: write
+jobs:
+  release:
+    uses: bazel-contrib/.github/.github/workflows/release_ruleset.yaml@v7.2.3
+    with:
+      prerelease: false
+      release_files: rules_ml_toolchain-*.tar.gz
+      tag_name: ${{ github.ref_name }}
+  publish:
+    needs: release
+    uses: ./.github/workflows/publish.yaml
+    with:
+      tag_name: ${{ github.ref_name }}
+      environment: release
+    secrets: inherit

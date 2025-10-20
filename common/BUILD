@@ -45,7 +45,7 @@ platform(
 )
 
 #######################################################
-# Enable Hermetic C++ support flags.
+# Enable Hermetic C++ support flags
 
 bool_flag(
     name = "enable_hermetic_cc",
@@ -60,7 +60,7 @@ config_setting(
 )
 
 #######################################################
-# Enable CUDA support flags.
+# Enable CUDA support flags
 #
 # Enable with '--@local_config_cuda//:enable_cuda', or indirectly with
 # ./configure or '--config=cuda'.
@@ -94,4 +94,26 @@ config_setting(
 config_setting(
     name = "is_cuda_disabled",
     flag_values = {":enable_cuda": "False"},
+)
+
+#######################################################
+# Enable SYCL support flags
+
+bool_flag(
+    name = "enable_sycl",
+    build_setting_default = False,
+)
+
+config_setting(
+    name = "is_sycl_enabled",
+    flag_values = {
+        ":enable_sycl": "True",
+    },
+)
+
+config_setting(
+    name = "is_sycl_disabled",
+    flag_values = {
+        ":enable_sycl": "False",
+    },
 )

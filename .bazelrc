@@ -1,10 +1,11 @@
 common --noenable_bzlmod
+common:bzlmod --enable_bzlmod --noenable_workspace
 
-build --incompatible_enable_cc_toolchain_resolution     # Only for bazel 6.5: C++ rules use platforms to select toolchains when you set this
+common --incompatible_enable_cc_toolchain_resolution     # Only for bazel 6.5: C++ rules use platforms to select toolchains when you set this
 build --toolchain_resolution_debug=.*
 build --cxxopt=-std=c++17
 
-build:clang_local --noincompatible_enable_cc_toolchain_resolution
+common:clang_local --noincompatible_enable_cc_toolchain_resolution
 build:clang_local --@rules_ml_toolchain//common:enable_hermetic_cc=False
 build:clang_local --repo_env USE_HERMETIC_CC_TOOLCHAIN=0
 
@@ -113,4 +114,25 @@ build:ci_linux_x86_64_clang --config=ci_linux_x86_64
 # compliance.
 build:ci_linux_x86_64_cuda --config=cuda --config=build_cuda_with_nvcc
 build:ci_linux_x86_64_cuda --config=ci_linux_x86_64
+
+# #############################################################################
+# This config option is used for SYCL as GPU backend.
+# #############################################################################
+# Non-hermetic SYCL Configuration
+build:sycl --@rules_ml_toolchain//common:enable_sycl=True
+build:sycl --define=tensorflow_mkldnn_contraction_kernel=0
+build:sycl --repo_env=TF_NEED_SYCL=1
+build:sycl --cxxopt=-std=c++17
+build:sycl --repo_env=SYCL_BUILD_HERMETIC=0
+
+# Hermetic SYCL Configuration
+build:sycl_hermetic --config=sycl
+build:sycl_hermetic --repo_env=SYCL_BUILD_HERMETIC=1
+build:sycl_hermetic --repo_env=ONEAPI_VERSION=2025.1
+build:sycl_hermetic --repo_env=OS=ubuntu_24.10
+
+# Enable Clang for host and icpx for SYCL
+build:icpx_clang --repo_env TF_ICPX_CLANG=1
+build:icpx_clang --copt=-fclang-abi-compat=17
+build:icpx_clang --copt=-fsycl-unnamed-lambda
 

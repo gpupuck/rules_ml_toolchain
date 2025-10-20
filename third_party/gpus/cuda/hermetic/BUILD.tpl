@@ -58,6 +58,7 @@ cc_library(
     ],
     deps = [":cudart_headers",
             ":cublas_headers",
+            ":profiler_api_headers",
             ":cccl_headers",
             ":nvtx_headers",
             ":nvcc_headers",
@@ -145,6 +146,11 @@ alias(
 )
 
 alias(
+  name = "profiler_api_headers",
+  actual = "@cuda_profiler_api//:headers",
+)
+
+alias(
   name = "cusolver_headers",
   actual = "@cuda_cusolver//:headers",
 )
@@ -167,6 +173,11 @@ alias(
 alias(
   name = "nvjitlink_headers",
   actual = "@cuda_nvjitlink//:headers",
+)
+
+alias(
+  name = "nvrtc_headers",
+  actual = "@cuda_nvrtc//:headers",
 )
 
 alias(
@@ -202,6 +213,11 @@ alias(
 alias(
   name = "curand",
   actual = "@cuda_curand//:curand",
+)
+
+alias(
+  name = "nvrtc",
+  actual = "@cuda_nvrtc//:nvrtc",
 )
 
 cc_library(
