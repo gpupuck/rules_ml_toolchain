@@ -20,10 +20,10 @@ Add the following code to WORKSPACE file:
 ```
 http_archive(
     name = "rules_ml_toolchain",
-    sha256 = "998d8b2c12ae0020798e3898e13dfd8e47bde66138b65944498efe7464a3d51f",
-    strip_prefix = "rules_ml_toolchain-d4eb49253d98134df1722ce70b1f4294aa683036",
+    sha256 = "dd6035b2aa22ec22c7598c0c78d1f593a74606d787d1059d19ab0f9b581e513d",
+    strip_prefix = "rules_ml_toolchain-4d9fa39eda9c769db86770a13ce2c2e2090bced8",
     urls = [
-        "https://github.com/google-ml-infra/rules_ml_toolchain/archive/d4eb49253d98134df1722ce70b1f4294aa683036.tar.gz",
+        "https://github.com/google-ml-infra/rules_ml_toolchain/archive/4d9fa39eda9c769db86770a13ce2c2e2090bced8.tar.gz",
     ],
 )
 
@@ -63,20 +63,24 @@ build:linux --repo_env=LLVM_VERSION=20
 build:linux --repo_env=SYSROOT_DIST=linux_glibc_2_31
 ```
 
-Supported versions of LLVM are:
-* Linux x86_64 LLVM `18` / `19` / `20` / `21`
-* Linux aarch64 LLVM `18` / `20`
-* macOS aarch64 LLVM `18` / `20` - *In Development*
+Supported versions of LLVM
 
-Available sysroots are:
+| Version | Execution OS                               |
+|---------|---------------------------------------|
+| 18      | Linux x86_64 / aarch64, macOS aarch64 |
+| 19      | Linux x86_64                          |
+| 20      | Linux x86_64 / aarch64                |
+| 21      | Linux x86_64                          |
 
-| Name             | Supported Arch. | GCC    | GLIBC | C++ Standard          | Used OS      |
+Available sysroots
+
+| Name             | Architecture    | GCC    | GLIBC | C++ Standard          | Used OS      |
 |------------------|-----------------|--------|-------|-----------------------|--------------|
 | linux_glibc_2_27 | x86_64, aarch64 | GCC 8   | 2.27  | C++17                 | Ubuntu 18.04 |
 | linux_glibc_2_31 | x86_64, aarch64 | GCC 10  | 2.31  | C++20                 | Ubuntu 20.04 |
 | linux_glibc_2_35 | x86_64          | GCC 12  | 2.35  | C++23 partial support | Ubuntu 22.04 |
 
-## How to run this project tests
+## Run rules_ml_toolchain tests
 ### CPU hermetic tests
 Project supports CPU hermetic builds on:
 * Linux x86_64 / aarch64

@@ -79,7 +79,7 @@ def cc_toolchain_deps():
         )
 
     if "sysroot_linux_x86_64_glibc_2_35" not in native.existing_rules():
-        # C++20 / C++23, manylinux_2_35, gcc-12
+        # C++20 / C++23 partial support, manylinux_2_35, gcc-12
         mirrored_http_archive(
             name = "sysroot_linux_x86_64_glibc_2_35",
             sha256 = "a24665b464d8d1e2235690dd77f8a5fd2d7f717afe83208635ae1b25ef5874bf",
