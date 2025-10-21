@@ -69,15 +69,12 @@ Supported versions of LLVM are:
 * macOS aarch64 LLVM `18` / `20` - *In Development*
 
 Available sysroots are:
-* Linux x86_64 `linux_glibc_2_27` / `linux_glibc_2_31`
-* Linux aarch64 `linux_glibc_2_27` / `linux_glibc_2_31`
 
-Details about sysroots
-
-| Name             | GCC | GLIBC | C++ Standard | Used OS |
-|------------------|---|---|--------------|---------|
-| linux_glibc_2_27 | GCC 8 | 2.27 | C++17        | Ubuntu 18.04 |
-| linux_glibc_2_31 | GCC 10 | 2.31 | C++20        | Ubuntu 20.04 |
+| Name             | Supported Arch. | GCC    | GLIBC | C++ Standard          | Used OS      |
+|------------------|-----------------|--------|-------|-----------------------|--------------|
+| linux_glibc_2_27 | x86_64, aarch64 | GCC 8   | 2.27  | C++17                 | Ubuntu 18.04 |
+| linux_glibc_2_31 | x86_64, aarch64 | GCC 10  | 2.31  | C++20                 | Ubuntu 20.04 |
+| linux_glibc_2_35 | x86_64          | GCC 12  | 2.35  | C++23 partial support | Ubuntu 22.04 |
 
 ## How to run this project tests
 ### CPU hermetic tests
