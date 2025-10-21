@@ -50,12 +50,6 @@ alias(
 )
 
 alias(
-    name = "openmp",
-    actual = "@@%{sysroot_repo_name}//:openmp",
-    visibility = ["//visibility:public"],
-)
-
-alias(
     name = "pthread",
     actual = "@@%{sysroot_repo_name}//:pthread",
     visibility = ["//visibility:public"],
