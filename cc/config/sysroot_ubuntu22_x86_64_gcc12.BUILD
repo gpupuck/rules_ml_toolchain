@@ -27,8 +27,8 @@ sysroot_package(
     visibility = ["//visibility:public"],
 )
 
-GCC_VERSION = 10
-GLIBC_VERSION = "2.31"
+GCC_VERSION = 12
+GLIBC_VERSION = "2.35"
 
 # Details about C RunTime (CRT) objects:
 # https://docs.oracle.com/cd/E88353_01/html/E37853/crt1.o-7.html
@@ -100,7 +100,7 @@ cc_toolchain_import(
     name = "stdc++",
     additional_libs = [
         "usr/lib/x86_64-linux-gnu/libstdc++.so.6",
-        "usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.28",
+        "usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30",
     ],
     shared_library = "usr/lib/gcc/x86_64-linux-gnu/{gcc_version}/libstdc++.so".format(gcc_version = GCC_VERSION),
     static_library = "usr/lib/gcc/x86_64-linux-gnu/{gcc_version}/libstdc++.a".format(gcc_version = GCC_VERSION),
@@ -112,7 +112,7 @@ cc_toolchain_import(
     additional_libs = [
         "lib64/ld-linux-x86-64.so.2",
         "lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
-        "lib/x86_64-linux-gnu/ld-{glibc_version}.so".format(glibc_version = GLIBC_VERSION),
+        "usr/lib/x86_64-linux-gnu/libdl.so.2",
     ],
     shared_library = "usr/lib/x86_64-linux-gnu/libdl.so",
     static_library = "usr/lib/x86_64-linux-gnu/libdl.a",
@@ -136,8 +136,7 @@ cc_toolchain_import(
 cc_toolchain_import(
     name = "pthread",
     additional_libs = [
-        "lib/x86_64-linux-gnu/libpthread.so.0",
-        "lib/x86_64-linux-gnu/libpthread-{glibc_version}.so".format(glibc_version = GLIBC_VERSION),
+        "usr/lib/x86_64-linux-gnu/libpthread.so.0",
     ],
     shared_library = "usr/lib/x86_64-linux-gnu/libpthread.so",
     static_library = "usr/lib/x86_64-linux-gnu/libpthread.a",
@@ -150,9 +149,7 @@ cc_toolchain_import(
 cc_toolchain_import(
     name = "rt",
     additional_libs = [
-        "lib/x86_64-linux-gnu/librt-{glibc_version}.so".format(glibc_version = GLIBC_VERSION),
-        "lib/x86_64-linux-gnu/librt.so.1",
-        "usr/lib/x86_64-linux-gnu/librt.so",
+        "usr/lib/x86_64-linux-gnu/librt.so.1",
         "usr/lib/x86_64-linux-gnu/librt.a",
     ],
     visibility = ["//visibility:private"],
@@ -162,7 +159,6 @@ cc_toolchain_import(
     name = "libc",
     additional_libs = [
         "lib/x86_64-linux-gnu/libc.so.6",
-        "lib/x86_64-linux-gnu/libc-{glibc_version}.so".format(glibc_version = GLIBC_VERSION),
         "usr/lib/x86_64-linux-gnu/libc_nonshared.a",
     ],
     shared_library = "usr/lib/x86_64-linux-gnu/libc.so",

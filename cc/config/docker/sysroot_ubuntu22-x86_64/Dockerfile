@@ -11,32 +11,33 @@
 
 # Invalid links
 
-#
+# Fix ld-linux-x86-64.so.2 -> /lib/x86_64-linux-gnu/ld-linux-x86-64.so.2
 # cd lib64/
 # sudo rm ./ld-linux-x86-64.so.2
-# sudo ln -s ../lib/x86_64-linux-gnu/ld-2.27.so ./ld-linux-x86-64.so.2
-
-# cd usr/lib/x86_64-linux-gnu
-# sudo rm ./libdl.so
-# sudo ln -s ../../../lib/x86_64-linux-gnu/libdl.so.2 ./libdl.so
+# sudo ln -s ../lib/x86_64-linux-gnu/ld-linux-x86-64.so.2 ./ld-linux-x86-64.so.2
 
 # Fix libmvec.so -> /lib/x86_64-linux-gnu/libmvec.so.1
 # cd usr/lib/x86_64-linux-gnu/
 # rm ./libmvec.so
 # sudo ln -s ../../../lib/x86_64-linux-gnu/libmvec.so.1 ./libmvec.so
 
-FROM ubuntu:18.04
+# Add links
+# cd lib/x86_64-linux-gnu/
+# sudo ln -s ./libpthread.so.0 ./libpthread.so
+# cd usr/lib/x86_64-linux-gnu/
+# sudo ln -s ./libdl.so.2 ./libdl.so
+
+FROM ubuntu:22.04
 
 RUN apt-get update
 RUN apt-get -y install \
     build-essential \
-    gcc-8 g++-8 \
+    gcc-12 g++-12 \
     libomp-dev
 
-RUN rm -rf /usr/include/c++/7
-RUN rm -rf /usr/include/c++/7.5.0
-RUN rm -rf /usr/include/x86_64-linux-gnu/c++/7
-RUN rm -rf /usr/include/x86_64-linux-gnu/c++/7.5.0
+RUN rm -rf /usr/include/c++/11
+RUN rm -rf /usr/include/x86_64-linux-gnu/c++/11
+RUN rm -rf /usr/lib/gcc/x86_64-linux-gnu/11
 
 WORKDIR /root
 
