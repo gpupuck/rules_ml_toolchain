@@ -1,5 +1,5 @@
 # Create docker image from Dockerfile
-# docker build -t sysroot_ubuntu18_x86_64 .
+# docker build -t sysroot_ubuntu18_x86_64:latest -f ./sysroot_ubuntu18_x86_64.Dockerfile .
 
 # Run docker image
 # docker run -it sysroot_ubuntu18_x86_64
@@ -9,7 +9,7 @@
 # docker cp <DOCKER IMG ID>:/lib .
 # docker cp <DOCKER IMG ID>:/lib64 .
 
-# Invalid links
+# Fix invalid links
 
 # Fix ld-linux-x86-64.so.2 -> /lib/x86_64-linux-gnu/ld-linux-x86-64.so.2
 # cd lib64/
