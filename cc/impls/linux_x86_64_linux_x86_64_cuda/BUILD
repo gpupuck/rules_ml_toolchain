@@ -146,7 +146,6 @@ filegroup(
         "@llvm_linux_x86_64//:ld",
         ":startup_libs",
         "@llvm_linux_x86_64//:distro_libs",
-        "@sysroot_linux_x86_64//:openmp",
     ],
 )
 
