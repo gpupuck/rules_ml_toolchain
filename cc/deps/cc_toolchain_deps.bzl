@@ -82,10 +82,10 @@ def cc_toolchain_deps():
         # C++20 / C++23, manylinux_2_35, gcc-12
         mirrored_http_archive(
             name = "sysroot_linux_x86_64_glibc_2_35",
-            sha256 = "e99dd072253bc8f290e334dc52e41a5e9047eb9c7e00a77ba3202e6d6c9c40dd",
+            sha256 = "a24665b464d8d1e2235690dd77f8a5fd2d7f717afe83208635ae1b25ef5874bf",
             urls = tf_mirror_urls("https://storage.googleapis.com/ml-sysroot-testing/sysroot_x86_64_ubuntu22_gcc12-0.0.1.tar.xz"),
             build_file = Label("//cc/config:sysroot_ubuntu22_x86_64_gcc12.BUILD"),
-            strip_prefix = "sysroot_x86_64_ubuntu22_gcc12",
+            strip_prefix = "sysroot_x86_64_ubuntu22_gcc12-0.0.1",
         )
 
     ################################################################

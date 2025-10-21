@@ -123,7 +123,6 @@ cc_toolchain_import(
     name = "math",
     additional_libs = [
         "lib/x86_64-linux-gnu/libm.so.6",
-        "lib/x86_64-linux-gnu/libmvec-{glibc_version}.so".format(glibc_version = GLIBC_VERSION),
         "lib/x86_64-linux-gnu/libmvec.so.1",
         "usr/lib/x86_64-linux-gnu/libm-{glibc_version}.a".format(glibc_version = GLIBC_VERSION),
         "usr/lib/x86_64-linux-gnu/libmvec.so",
