@@ -176,7 +176,6 @@ cc_toolchain_import(
     deps = [
         ":gcc",
         ":math",
-        ":openmp",
         ":stdc++",
         ":stdc++fs",
         ":rt",
