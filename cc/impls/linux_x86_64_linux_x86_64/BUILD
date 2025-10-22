@@ -35,17 +35,10 @@ filegroup(
     visibility = ["//visibility:public"],
 )
 
-# TODO: remove below alias
-alias(
-    name = "startup_libs",
-    actual = "@sysroot_linux_x86_64//:startup_libs",
-    visibility = ["//visibility:public"],
-)
-
 cc_toolchain_import_feature(
     name = "startup_libs_feature",
     enabled = True,
-    toolchain_import = ":startup_libs",
+    toolchain_import = "@sysroot_linux_x86_64//:startup_libs",
 )
 
 # buildifier: leave-alone
@@ -122,7 +115,7 @@ cc_toolchain_config(
     compiler_features = [
         # Hermetic libraries feature required before import.
         "//third_party/rules_cc_toolchain/features:hermetic_libraries",
-        "//cc/impls/linux_x86_64_linux_x86_64:imports_feature",
+        ":imports_feature",
 
         # Toolchain configuration
         "//third_party/rules_cc_toolchain/features:warnings",
@@ -131,7 +124,7 @@ cc_toolchain_config(
         "//third_party/rules_cc_toolchain/features:language",
         "//third_party/rules_cc_toolchain/features:use_lld",
         "//cc/features:sysroot_linux_x86_64",
-        "//cc/impls/linux_x86_64_linux_x86_64:startup_libs_feature",
+        ":startup_libs_feature",
         "//third_party/rules_cc_toolchain/features:coverage",
         "//cc/features:clang",
         #"//cc/features:clang19",    # TODO: Add a selection mechanism based on the Clang version

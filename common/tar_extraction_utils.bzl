@@ -19,7 +19,6 @@ load(
     "get_bash_bin",
 )
 
-
 def extract_tar_with_non_hermetic_tar_tool(repository_ctx, file_name, strip_prefix):
     if not (repository_ctx.os.name == "linux" and hasattr(repository_ctx.attr, "tar_tool")):
         repository_ctx.extract(
@@ -43,9 +42,10 @@ def extract_tar_with_non_hermetic_tar_tool(repository_ctx, file_name, strip_pref
     extract_command = "{tar_tool_path} -xvf {archive} --strip-components=1 {compress_program_option}".format(
         tar_tool_path = tar_tool_path,
         archive = file_name,
-        compress_program_option = compress_program_option
+        compress_program_option = compress_program_option,
     )
-    exec_result = execute(repository_ctx,
+    exec_result = execute(
+        repository_ctx,
         [get_bash_bin(repository_ctx), "-c", extract_command],
         allow_failure = True,
     )

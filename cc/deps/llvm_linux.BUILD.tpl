@@ -75,7 +75,7 @@ alias(
 )
 
 # This library is needed for LiteRT because it uses a compiler-specific
-# built-in functions, and these functions are not provided by GCC 8.4.
+# built-in functions, and these functions are not provided by GCC
 alias(
     name = "libclang_rt",
     actual = "@@%{llvm_repo_name}//:libclang_rt",

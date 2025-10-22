@@ -9,11 +9,6 @@ cc_import(
 )
 
 cc_import(
-    name = "nvidia-ml_shared_library",
-    shared_library = "lib/libnvidia-ml.so.%{libnvidia-ml_version}",
-)
-
-cc_import(
     name = "nvidia-ptxjitcompiler_shared_library",
     shared_library = "lib/libnvidia-ptxjitcompiler.so.%{libnvidia-ptxjitcompiler_version}",
 )
@@ -21,11 +16,6 @@ cc_import(
 cc_import(
     name = "libcuda_so_1",
     shared_library = "lib/libcuda.so.1",
-)
-
-cc_import(
-    name = "libnvidia-ml_so_1",
-    shared_library = "lib/libnvidia-ml.so.1",
 )
 
 cc_import(
@@ -66,15 +56,6 @@ cc_library(
         %{comment}":fake_libcuda",
         %{comment}":libcuda_so_1",
         %{comment}":driver_shared_library",
-    %{comment}],
-    visibility = ["//visibility:public"],
-)
-
-cc_library(
-    name = "nvidia_ml",
-    %{comment}deps = [
-        %{comment}":libnvidia-ml_so_1",
-        %{comment}":nvidia-ml_shared_library",
     %{comment}],
     visibility = ["//visibility:public"],
 )

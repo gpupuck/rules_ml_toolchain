@@ -13,12 +13,8 @@
 # limitations under the License.
 # ==============================================================================
 
-package(default_visibility = ["//visibility:public"])
 
-filegroup(
-    name = "all",
-    srcs = [
-        "nvcc_wrapper",
-    ],
-    visibility = ["//visibility:public"],
+alias(
+    name = "sycl_headers",
+    actual = "@@oneapi//:headers"
 )

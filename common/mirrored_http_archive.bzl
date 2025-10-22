@@ -26,11 +26,44 @@ load(
 ```
 """
 
+load(
+    "@bazel_tools//tools/build_defs/repo:utils.bzl",
+    "patch",
+    "read_netrc",
+    "read_user_netrc",
+    "update_attrs",
+    "use_netrc",
+)
 load("//common:tar_extraction_utils.bzl", "extract_tar_with_non_hermetic_tar_tool")
+
+def _get_auth(ctx, urls):
+    """Given the list of URLs obtain the correct auth dict."""
+    if ctx.attr.netrc:
+        netrc = read_netrc(ctx, ctx.attr.netrc)
+    elif "NETRC" in ctx.os.environ:
+        netrc = read_netrc(ctx, ctx.os.environ["NETRC"])
+    else:
+        netrc = read_user_netrc(ctx)
+    return use_netrc(netrc, urls, ctx.attr.auth_patterns)
+
+def _download_remote_files(ctx, auth = None):
+    for path, remote_file_urls in ctx.attr.remote_file_urls.items():
+        ctx.download(
+            remote_file_urls,
+            path,
+            canonical_id = ctx.attr.canonical_id,
+            auth = _get_auth(ctx, remote_file_urls) if auth == None else auth,
+            integrity = ctx.attr.remote_file_integrity.get(path, ""),
+        )
+
+def _update_sha256_attr(ctx, attrs, download_info):
+    # We don't need to override the sha256 attribute if integrity is already specified.
+    sha256_override = {} if ctx.attr.integrity else {"sha256": download_info.sha256}
+    return update_attrs(ctx.attr, attrs.keys(), sha256_override)
 
 def _mirrored_http_archive_impl(repository_ctx):
     """Implementation of the mirrored_http_archive rule."""
-    
+
     if not repository_ctx.attr.urls:
         fail("At least one of url must be provided")
 
@@ -44,7 +77,6 @@ def _mirrored_http_archive_impl(repository_ctx):
     if (use_tars and mirrored_tar_sha256 and
         first_url.endswith(".tar.xz") and
         first_url.startswith("https://storage.googleapis.com/mirror.tensorflow.org")):
-
         mirrored_tar_url = first_url.replace(".tar.xz", ".tar")
         mirrored_tar_file_name = mirrored_tar_url.split("/")[-1]
         download_info = repository_ctx.download(
@@ -76,42 +108,83 @@ def _mirrored_http_archive_impl(repository_ctx):
     else:
         strip_prefix = mirrored_file_name.split(".")[0]
     if first_url.endswith(".tar.xz") or first_url.endswith(".tar"):
-       extract_tar_with_non_hermetic_tar_tool(repository_ctx, mirrored_file, strip_prefix)
+        extract_tar_with_non_hermetic_tar_tool(repository_ctx, mirrored_file, strip_prefix)
     else:
         repository_ctx.extract(
             archive = mirrored_file,
             stripPrefix = strip_prefix,
         )
     repository_ctx.file(
-        "BUILD.bazel", 
+        "BUILD.bazel",
         repository_ctx.read(repository_ctx.attr.build_file),
     )
 
+    _download_remote_files(repository_ctx)
+
     repository_ctx.delete(mirrored_file)
+
+    return _update_sha256_attr(repository_ctx, _http_archive_attrs, download_info)
+
+_http_archive_attrs = {
+    "urls": attr.string_list(),
+    "sha256": attr.string(),
+    "mirrored_tar_sha256": attr.string(mandatory = False),
+    "integrity": attr.string(
+        doc = """Expected checksum in Subresource Integrity format of the file downloaded.
+
+This must match the checksum of the file downloaded. _It is a security risk
+to omit the checksum as remote files can change._ At best omitting this
+field will make your build non-hermetic. It is optional to make development
+easier but either this attribute or `sha256` should be set before shipping.""",
+    ),
+    "build_file": attr.label(
+        allow_single_file = True,
+        mandatory = True,
+    ),
+    "netrc": attr.string(
+        doc = "Location of the .netrc file to use for authentication",
+    ),
+    "auth_patterns": attr.string_dict(
+        doc = "An optional dict mapping host names to custom authorization patterns.",
+    ),
+    "canonical_id": attr.string(
+        doc = """A canonical id of the archive downloaded.
+
+If specified and non-empty, bazel will not take the archive from cache,
+unless it was added to the cache by a request with the same canonical id.
+""",
+    ),
+    "strip_prefix": attr.string(),
+    "remote_file_urls": attr.string_list_dict(
+        default = {},
+        doc =
+            "A map of relative paths (key) to a list of URLs (value) that are to be downloaded " +
+            "and made available as overlaid files on the repo. This is useful when you want " +
+            "to add WORKSPACE or BUILD.bazel files atop an existing repository. The files " +
+            "are downloaded before applying the patches in the `patches` attribute and the list of URLs " +
+            "should all be possible mirrors of the same file. The URLs are tried in order until one succeeds. ",
+    ),
+    "remote_file_integrity": attr.string_dict(
+        default = {},
+        doc =
+            "A map of file relative paths (key) to its integrity value (value). These relative paths should map " +
+            "to the files (key) in the `remote_file_urls` attribute.",
+    ),
+    "xz_tool": attr.label(
+        default = Label("@xz//:bin/xz"),
+        allow_single_file = True,
+    ),
+    "tar_tool": attr.label(
+        default = Label("@tar//:bin/tar"),
+        allow_single_file = True,
+    ),
+}
 
 mirrored_http_archive = repository_rule(
     implementation = _mirrored_http_archive_impl,
-    attrs = {
-        "urls": attr.string_list(),
-        "sha256": attr.string(),
-        "mirrored_tar_sha256": attr.string(mandatory = False),
-        "build_file": attr.label(
-            allow_single_file = True,
-            mandatory = True,
-        ),
-        "strip_prefix": attr.string(),
-        "xz_tool": attr.label(
-            default = Label("@xz//:bin/xz"),
-            allow_single_file = True,
-        ),
-        "tar_tool": attr.label(
-            default = Label("@tar//:bin/tar"),
-            allow_single_file = True,
-        ),
-    },
+    attrs = _http_archive_attrs,
     doc = """Downloads a compressed archive file, decompresses it,
         and makes its targets available for binding. For tar.xz it can use a
         mirrored tar if mirrored_tar_sha256 is provided and the .tar file is
         available in the mirror.""",
 )
-

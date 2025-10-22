@@ -18,3 +18,8 @@ cc_import(
 )
 %{multiline_comment}
 
+cc_library(
+    name = "nvml",
+    %{comment}deps = [":nvidia-ml_stub"],
+    visibility = ["//visibility:public"],
+)

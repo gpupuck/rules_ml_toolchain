@@ -13,18 +13,17 @@ C++ cross-platform builds benefits:
 * Efficiency: Streamlines the build and release process for multiple platforms.
 -->
 
-## Configure hermetic C++ toolchains
+## Configure C++ toolchains in rules_ml_toolchain
 
-Add the following code before the CUDA initialization block in WORKSPACE file:
+Add the following code to WORKSPACE file:
 
-### C++17
 ```
 http_archive(
     name = "rules_ml_toolchain",
-    sha256 = "1a855dd94eebedae69d1804e8837ad70b8018358a0a03eea0bec71d7dc2b096a",
-    strip_prefix = "rules_ml_toolchain-d321763a84c900bc29b4f5459a4f81fad19b2356",
+    sha256 = "dd6035b2aa22ec22c7598c0c78d1f593a74606d787d1059d19ab0f9b581e513d",
+    strip_prefix = "rules_ml_toolchain-4d9fa39eda9c769db86770a13ce2c2e2090bced8",
     urls = [
-        "https://github.com/google-ml-infra/rules_ml_toolchain/archive/d321763a84c900bc29b4f5459a4f81fad19b2356.tar.gz",
+        "https://github.com/google-ml-infra/rules_ml_toolchain/archive/4d9fa39eda9c769db86770a13ce2c2e2090bced8.tar.gz",
     ],
 )
 
@@ -38,40 +37,50 @@ cc_toolchain_deps()
 register_toolchains("@rules_ml_toolchain//cc:linux_x86_64_linux_x86_64")
 register_toolchains("@rules_ml_toolchain//cc:linux_aarch64_linux_aarch64")
 ```
-### C++20
-```
-http_archive(
-    name = "rules_ml_toolchain",
-    sha256 = "f8407b0d1b327a9dc730febd21f54aedf399bed93cee01b6d6892e4673dfc305",
-    strip_prefix = "rules_ml_toolchain-a3443590cbe85adb217524f106e6f7c769e6cc2d",
-    urls = [
-        "https://github.com/google-ml-infra/rules_ml_toolchain/archive/a3443590cbe85adb217524f106e6f7c769e6cc2d.tar.gz",
-    ],
-)
 
-load(
-    "@rules_ml_toolchain//cc/deps:cc_toolchain_deps.bzl",
-    "cc_toolchain_deps",
-)
+If CUDA or SYCL initialization is required, ensure this block is inserted before either initialization occurs.
 
-cc_toolchain_deps()
-
-register_toolchains("@rules_ml_toolchain//cc:linux_x86_64_linux_x86_64")
-register_toolchains("@rules_ml_toolchain//cc:linux_aarch64_linux_aarch64")
-
-```
-
-It must be ensured that builds for Linux x86_64 / aarch64 are run without the `--noincompatible_enable_cc_toolchain_resolution` 
-flag. Furthermore, reliance on environment variables like `CLANG_COMPILER_PATH`, `BAZEL_COMPILER`, `CC`, or `CXX` 
+It must be ensured that builds for Linux x86_64 / aarch64 are run without the `--noincompatible_enable_cc_toolchain_resolution`
+flag. Furthermore, reliance on environment variables like `CLANG_COMPILER_PATH`, `BAZEL_COMPILER`, `CC`, or `CXX`
 must be avoided.
 
-For diagnosing the utility set being used during build or test execution, the `--subcommands` flag should be appended 
+For diagnosing the utility set being used during build or test execution, the `--subcommands` flag should be appended
 to the Bazel command. This will facilitate checking that the compiler or linker are not being used from your machine.
 
 ## Configure hermetic CUDA, CUDNN, NCCL and NVSHMEM
 For detailed instructions on how to configure hermetic CUDA, CUDNN, NCCL and NVSHMEM, [click this link](gpu/).
 
-## How to run this project tests
+## Configure the LLVM / Sysroot in rules_ml_toolchain
+
+LLVM `18` and the `linux_glibc_2_27` sysroot are used for compilation by default.
+To change these defaults, specify the required LLVM version and sysroot distribution in `.bazelrc` file.
+
+For example, to configure LLVM `20` with `linux_glibc_2_31`, update your `.bazelrc` with below lines
+```
+common --enable_platform_specific_config
+
+build:linux --repo_env=LLVM_VERSION=20
+build:linux --repo_env=SYSROOT_DIST=linux_glibc_2_31
+```
+
+Supported versions of LLVM
+
+| Version | Execution OS                               |
+|---------|---------------------------------------|
+| 18      | Linux x86_64 / aarch64, macOS aarch64 |
+| 19      | Linux x86_64                          |
+| 20      | Linux x86_64 / aarch64                |
+| 21      | Linux x86_64                          |
+
+Available sysroots
+
+| Name             | Architecture    | GCC    | GLIBC | C++ Standard          | Used OS      |
+|------------------|-----------------|--------|-------|-----------------------|--------------|
+| linux_glibc_2_27 | x86_64, aarch64 | GCC 8   | 2.27  | C++17                 | Ubuntu 18.04 |
+| linux_glibc_2_31 | x86_64, aarch64 | GCC 10  | 2.31  | C++20                 | Ubuntu 20.04 |
+| linux_glibc_2_35 | x86_64          | GCC 12  | 2.35  | C++23 partial support | Ubuntu 22.04 |
+
+## Run rules_ml_toolchain tests
 ### CPU hermetic tests
 Project supports CPU hermetic builds on:
 * Linux x86_64 / aarch64
