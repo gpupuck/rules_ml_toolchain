@@ -43,6 +43,13 @@ alias(
     visibility = ["//visibility:public"],
 )
 
+# Used as single file target in NCCL
+alias(
+    name = "ar_tool",
+    actual = "@@%{llvm_repo_name}//:bin/llvm-ar",
+    visibility = ["//visibility:public"],
+)
+
 alias(
     name = "ar_darwin",
     actual = "@@%{llvm_repo_name}//:ar_darwin",
