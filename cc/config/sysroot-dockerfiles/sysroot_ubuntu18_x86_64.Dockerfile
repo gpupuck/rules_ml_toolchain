@@ -9,23 +9,6 @@
 # docker cp <DOCKER IMG ID>:/lib .
 # docker cp <DOCKER IMG ID>:/lib64 .
 
-# Fix invalid links
-
-# Fix ld-linux-x86-64.so.2 -> /lib/x86_64-linux-gnu/ld-linux-x86-64.so.2
-# cd lib64/
-# sudo rm ./ld-linux-x86-64.so.2
-# sudo ln -s ../lib/x86_64-linux-gnu/ld-2.27.so ./ld-linux-x86-64.so.2
-
-# Fix libdl.so -> /lib/x86_64-linux-gnu/libdl.so.2
-# cd usr/lib/x86_64-linux-gnu
-# sudo rm ./libdl.so
-# sudo ln -s ../../../lib/x86_64-linux-gnu/libdl.so.2 ./libdl.so
-
-# Fix libmvec.so -> /lib/x86_64-linux-gnu/libmvec.so.1
-# cd usr/lib/x86_64-linux-gnu/
-# rm ./libmvec.so
-# sudo ln -s ../../../lib/x86_64-linux-gnu/libmvec.so.1 ./libmvec.so
-
 FROM ubuntu:18.04
 
 RUN apt-get update
@@ -38,6 +21,26 @@ RUN rm -rf /usr/include/c++/7
 RUN rm -rf /usr/include/c++/7.5.0
 RUN rm -rf /usr/include/x86_64-linux-gnu/c++/7
 RUN rm -rf /usr/include/x86_64-linux-gnu/c++/7.5.0
+
+# Fix invalid links
+WORKDIR /lib64
+
+# Fix /lib64/ld-linux-x86-64.so.2 -> /lib/x86_64-linux-gnu/ld-linux-x86-64.so.2
+# cd lib64/
+# sudo ln -sfn ../lib/x86_64-linux-gnu/ld-2.27.so ./ld-linux-x86-64.so.2
+RUN ln -sfn ../lib/x86_64-linux-gnu/ld-2.27.so ./ld-linux-x86-64.so.2
+
+WORKDIR /usr/lib/x86_64-linux-gnu
+
+# Fix /usr/lib/x86_64-linux-gnu/libdl.so -> /lib/x86_64-linux-gnu/libdl.so.2
+# cd usr/lib/x86_64-linux-gnu
+# sudo ln -sfn ../../../lib/x86_64-linux-gnu/libdl.so.2 ./libdl.so
+RUN ln -sfn ../../../lib/x86_64-linux-gnu/libdl.so.2 ./libdl.so
+
+# Fix /usr/lib/x86_64-linux-gnu/libmvec.so -> /lib/x86_64-linux-gnu/libmvec.so.1
+# cd usr/lib/x86_64-linux-gnu/
+# sudo ln -sfn ../../../lib/x86_64-linux-gnu/libmvec.so.1 ./libmvec.so
+RUN ln -sfn ../../../lib/x86_64-linux-gnu/libmvec.so.1 ./libmvec.so
 
 WORKDIR /root
 

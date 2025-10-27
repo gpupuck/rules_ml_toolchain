@@ -20,6 +20,7 @@
 load("//third_party/rules_cc_toolchain:toolchain_config.bzl", "cc_toolchain_config")
 load("//third_party/rules_cc_toolchain/features:cc_toolchain_import.bzl", "cc_toolchain_import")
 load("//third_party/rules_cc_toolchain/features:features.bzl", "cc_toolchain_import_feature")
+load("//cc/features:openmp_feature.bzl", "cc_toolchain_import_openmp_feature")
 
 package(
     default_visibility = [
@@ -61,6 +62,34 @@ cc_toolchain_import_feature(
     toolchain_import = ":imports",
 )
 
+#cc_toolchain_import(
+#    name = "openmp",
+    #    features = select({
+    #        "//common:is_openmp_enabled": [
+    #            "openmp",
+    #        ],
+    #        "//conditions:default": [],
+    #    }),
+#    deps = select({
+#        "//common:is_openmp_enabled": [
+#            "@sysroot_linux_x86_64//:openmp",
+#        ],
+#        "//conditions:default": [],
+#    }),
+#)
+
+#cc_toolchain_import_feature(
+#    name = "openmp_feature",
+#    enabled = True,
+#    toolchain_import = ":openmp",
+#)
+
+cc_toolchain_import_openmp_feature(
+    name = "openmp_feature",
+    enabled = True,
+    toolchain_import = "@sysroot_linux_x86_64//:openmp",
+)
+
 # buildifier: leave-alone
 filegroup(
     name = "all",
@@ -93,6 +122,7 @@ filegroup(
         ":wrappers",
         "@llvm_linux_x86_64//:ld",
         "@sysroot_linux_x86_64//:startup_libs",
+        "@sysroot_linux_x86_64//:openmp",
         "@llvm_linux_x86_64//:distro_libs",
     ],
 )
@@ -116,6 +146,7 @@ cc_toolchain_config(
         # Hermetic libraries feature required before import.
         "//third_party/rules_cc_toolchain/features:hermetic_libraries",
         ":imports_feature",
+        ":openmp_feature",
 
         # Toolchain configuration
         "//third_party/rules_cc_toolchain/features:warnings",

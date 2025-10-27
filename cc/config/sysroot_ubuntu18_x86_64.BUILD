@@ -142,6 +142,17 @@ cc_toolchain_import(
     visibility = ["//visibility:public"],
 )
 
+# Application Programming Interface (API) for shared-memory parallel programming.
+cc_toolchain_import(
+    name = "openmp",
+    additional_libs = glob([
+        "usr/lib/x86_64-linux-gnu/libgomp*",
+        "usr/lib/x86_64-linux-gnu/libomp*",
+    ]),
+    shared_library = "usr/lib/x86_64-linux-gnu/libomp.so",
+    visibility = ["//visibility:public"],
+)
+
 cc_toolchain_import(
     name = "pthread",
     additional_libs = [

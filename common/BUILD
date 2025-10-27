@@ -60,6 +60,21 @@ config_setting(
 )
 
 #######################################################
+# Enable OpenMP
+
+bool_flag(
+    name = "enable_openmp",
+    build_setting_default = False,
+)
+
+config_setting(
+    name = "is_openmp_enabled",
+    flag_values = {
+        ":enable_openmp": "True",
+    },
+)
+
+#######################################################
 # Enable CUDA support flags
 #
 # Enable with '--@local_config_cuda//:enable_cuda', or indirectly with
