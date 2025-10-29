@@ -10,18 +10,44 @@ RUN rm -rf /usr/include/c++/7.5.0
 RUN rm -rf /usr/include/c++/7
 RUN rm -rf /usr/include/aarch64-linux-gnu/c++/7.5.0
 RUN rm -rf /usr/include/aarch64-linux-gnu/c++/7
+RUN rm -rf /usr/lib/gcc/aarch64-linux-gnu/7
+
+# Replace absulte links by relative in /usr/lib/aarch64-linux-gnu/ directory
+WORKDIR /usr/lib/aarch64-linux-gnu
+
+# /usr/lib/aarch64-linux-gnu/libBrokenLocale.so -> /lib/aarch64-linux-gnu/libBrokenLocale.so.1
+RUN ln -sfn ../../../lib/aarch64-linux-gnu/libBrokenLocale.so.1 ./libBrokenLocale.so
+# /usr/lib/aarch64-linux-gnu/libanl.so -> /lib/aarch64-linux-gnu/libanl.so.1
+RUN ln -sfn ../../../lib/aarch64-linux-gnu/libanl.so.1 ./libanl.so
+# /usr/lib/aarch64-linux-gnu/libcidn.so -> /lib/aarch64-linux-gnu/libcidn.so.1
+RUN ln -sfn ../../../lib/aarch64-linux-gnu/libcidn.so.1 ./libcidn.so
+# /usr/lib/aarch64-linux-gnu/libcrypt.so -> /lib/aarch64-linux-gnu/libcrypt.so.1
+RUN ln -sfn ../../../lib/aarch64-linux-gnu/libcrypt.so.1 ./libcrypt.so
+# /usr/lib/aarch64-linux-gnu/libdl.so -> /lib/aarch64-linux-gnu/libdl.so.2
+RUN ln -sfn ../../../lib/aarch64-linux-gnu/libdl.so.2 ./libdl.so
+# /usr/lib/aarch64-linux-gnu/libm.so -> /lib/aarch64-linux-gnu/libm.so.6
+RUN ln -sfn ../../../lib/aarch64-linux-gnu/libm.so.6 ./libm.so
+# /usr/lib/aarch64-linux-gnu/libnsl.so -> /lib/aarch64-linux-gnu/libnsl.so.1
+RUN ln -sfn ../../../lib/aarch64-linux-gnu/libnsl.so.1 ./libnsl.so
+# /usr/lib/aarch64-linux-gnu/libnss_compat.so -> /lib/aarch64-linux-gnu/libnss_compat.so.2
+RUN ln -sfn ../../../lib/aarch64-linux-gnu/libnss_compat.so.2 ./libnss_compat.so
+# /usr/lib/aarch64-linux-gnu/libnss_dns.so -> /lib/aarch64-linux-gnu/libnss_dns.so.2
+RUN ln -sfn ../../../lib/aarch64-linux-gnu/libnss_dns.so.2 ./libnss_dns.so
+# /usr/lib/aarch64-linux-gnu/libnss_files.so -> /lib/aarch64-linux-gnu/libnss_files.so.2
+RUN ln -sfn ../../../lib/aarch64-linux-gnu/libnss_files.so.2 ./libnss_files.so
+# /usr/lib/aarch64-linux-gnu/libnss_hesiod.so -> /lib/aarch64-linux-gnu/libnss_hesiod.so.2
+RUN ln -sfn ../../../lib/aarch64-linux-gnu/libnss_hesiod.so.2 ./libnss_hesiod.so
+# /usr/lib/aarch64-linux-gnu/libnss_nis.so -> /lib/aarch64-linux-gnu/libnss_nis.so.2
+RUN ln -sfn ../../../lib/aarch64-linux-gnu/libnss_nis.so.2 ./libnss_nis.so
+# /usr/lib/aarch64-linux-gnu/libnss_nisplus.so -> /lib/aarch64-linux-gnu/libnss_nisplus.so.2
+RUN ln -sfn ../../../lib/aarch64-linux-gnu/libnss_nisplus.so.2 ./libnss_nisplus.so
+# /usr/lib/aarch64-linux-gnu/libresolv.so -> /lib/aarch64-linux-gnu/libresolv.so.2
+RUN ln -sfn ../../../lib/aarch64-linux-gnu/libresolv.so.2 ./libresolv.so
+# /usr/lib/aarch64-linux-gnu/librt.so -> /lib/aarch64-linux-gnu/librt.so.1
+RUN ln -sfn ../../../lib/aarch64-linux-gnu/librt.so.1 ./librt.so
+# /usr/lib/aarch64-linux-gnu/libthread_db.so -> /lib/aarch64-linux-gnu/libthread_db.so.1
+RUN ln -sfn ../../../lib/aarch64-linux-gnu/libthread_db.so.1 ./libthread_db.so
+# /usr/lib/aarch64-linux-gnu/libutil.so -> /lib/aarch64-linux-gnu/libutil.so.1
+RUN ln -sfn ../../../lib/aarch64-linux-gnu/libutil.so.1 ./libutil.so
 
 WORKDIR /root
-
-# Create docker image from Dockerfile
-# docker build -t sysroot_aarch64_ubuntu18:latest .
-
-# Run docker image
-# docker run -it sysroot_aarch64_ubuntu18
-
-# Copy needed directories from Docker image
-# docker cp <DOCKER IMG ID>:/usr .
-# docker cp <DOCKER IMG ID>:/lib .
-# docker cp <DOCKER IMG ID>:/lib64 .
-
-# tar cf - sysroot_aarch64_ubuntu18_gcc8.4-X.Y.Z | xz -T8 -c > sysroot_aarch64_ubuntu18_gcc8.4-X.Y.Z.tar.xz
