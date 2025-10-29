@@ -52,6 +52,7 @@ cc_toolchain_import(
         "@sysroot_linux_x86_64//:glibc",
         "@sysroot_linux_x86_64//:pthread",
         "@llvm_linux_x86_64//:libclang_rt",
+        #"@sysroot_linux_x86_64//:openmp",
     ],
     visibility = ["//visibility:public"],
 )
@@ -122,7 +123,7 @@ filegroup(
         ":wrappers",
         "@llvm_linux_x86_64//:ld",
         "@sysroot_linux_x86_64//:startup_libs",
-        "@sysroot_linux_x86_64//:openmp",
+        #"@sysroot_linux_x86_64//:openmp",
         "@llvm_linux_x86_64//:distro_libs",
     ],
 )
@@ -146,7 +147,7 @@ cc_toolchain_config(
         # Hermetic libraries feature required before import.
         "//third_party/rules_cc_toolchain/features:hermetic_libraries",
         ":imports_feature",
-        ":openmp_feature",
+        #":openmp_feature",
 
         # Toolchain configuration
         "//third_party/rules_cc_toolchain/features:warnings",

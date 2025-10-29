@@ -182,14 +182,31 @@ cc_toolchain_import(
     ],
 )
 
-# This is a group of all the system libraries we need. The actual glibc library is split
+# Application Programming Interface (API) for shared-memory parallel programming.
+cc_toolchain_import(
+    name = "openmp",
+    additional_libs = glob([
+        "usr/lib/aarch64-linux-gnu/libgomp*",
+        "usr/lib/aarch64-linux-gnu/libomp*",
+    ]),
+    visibility = ["//visibility:public"],
+)
+
+cc_import(
+    name = "openmp_lib",
+    shared_library = "usr/lib/aarch64-linux-gnu/libomp.so",
+    visibility = ["//visibility:public"],
+)
+
+# This is a group of all the system libraries we need. The actual essential libraries is split
 # out to fix link ordering problems that cause false undefined symbol positives.
 cc_toolchain_import(
-    name = "glibc",
+    name = "essential_libs",
     runtime_path = "/lib/aarch64-linux-gnu",
     visibility = ["//visibility:public"],
     deps = [
         ":dynamic_linker",
         ":libc",
+        ":openmp",
     ],
 )

@@ -17,10 +17,10 @@ RUN apt-get -y install \
     gcc-8 g++-8 \
     libomp-dev
 
-RUN rm -rf /usr/include/c++/7
 RUN rm -rf /usr/include/c++/7.5.0
-RUN rm -rf /usr/include/x86_64-linux-gnu/c++/7
+RUN rm -rf /usr/include/c++/7
 RUN rm -rf /usr/include/x86_64-linux-gnu/c++/7.5.0
+RUN rm -rf /usr/include/x86_64-linux-gnu/c++/7
 
 # Fix invalid links
 WORKDIR /lib64
@@ -44,4 +44,4 @@ RUN ln -sfn ../../../lib/x86_64-linux-gnu/libmvec.so.1 ./libmvec.so
 
 WORKDIR /root
 
-
+# tar cf - tar_x86_64_<tar_version>-<archive_version> | xz -T8 -c > tar_x86_64_<tar_version>-<archive_version>.tar.xz
