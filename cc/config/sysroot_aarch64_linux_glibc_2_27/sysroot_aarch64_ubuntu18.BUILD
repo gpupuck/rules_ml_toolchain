@@ -119,7 +119,6 @@ cc_toolchain_import(
         "lib/aarch64-linux-gnu/ld-linux-aarch64.so.1",
         "lib/aarch64-linux-gnu/ld-{glibc_version}.so".format(glibc_version = GLIBC_VERSION),
     ],
-    runtime_path = "/lib64",
     shared_library = "usr/lib/aarch64-linux-gnu/libdl.so",
     static_library = "usr/lib/aarch64-linux-gnu/libdl.a",
     deps = [":libc"],
@@ -165,7 +164,6 @@ cc_toolchain_import(
         "lib/aarch64-linux-gnu/libc.so.6",
         "usr/lib/aarch64-linux-gnu/libc_nonshared.a",
     ],
-    runtime_path = "/usr/lib/gcc/aarch64-linux-gnu/{gcc_version}".format(gcc_version = GCC_VERSION),
     shared_library = "usr/lib/aarch64-linux-gnu/libc.so",
     static_library = "usr/lib/aarch64-linux-gnu/libc.a",
     #target_compatible_with = select({
