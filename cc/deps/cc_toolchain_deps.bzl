@@ -64,7 +64,7 @@ def cc_toolchain_deps():
             sha256 = "7c54a97a8f62d467d493f2942f9063d5ea3d6ec012fcecf4ba62ababe1889be5",
             mirrored_tar_sha256 = "4d48dff78a648cf6a210f409e9b807a0bd212eda34708c9374251d8c8b6b4808",
             urls = tf_mirror_urls("https://storage.googleapis.com/ml-sysroot-testing/ubuntu18_x86_64_sysroot_gcc8_patched-0.1.1.tar.xz"),
-            build_file = Label("//cc/config:sysroot_ubuntu18_x86_64.BUILD"),
+            build_file = Label("//cc/config/sysroot_x86_64_linux_glibc_2_27:sysroot_x86_64_ubuntu18.BUILD"),
             strip_prefix = "ubuntu18_x86_64_sysroot_gcc8_patched-0.1.1",
         )
 

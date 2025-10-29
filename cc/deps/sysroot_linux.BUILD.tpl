@@ -44,25 +44,7 @@ alias(
 )
 
 alias(
-    name = "pthread",
-    actual = "@@%{sysroot_repo_name}//:pthread",
-    visibility = ["//visibility:public"],
-)
-
-alias(
-    name = "openmp",
-    actual = "@@%{sysroot_repo_name}//:openmp",
-    visibility = ["//visibility:public"],
-)
-
-alias(
-    name = "openmp_lib",
-    actual = "@@%{sysroot_repo_name}//:openmp_lib",
-    visibility = ["//visibility:public"],
-)
-
-alias(
-    name = "essential_libs",
-    actual = "@@%{sysroot_repo_name}//:essential_libs",
+    name = "libs",
+    actual = "@@%{sysroot_repo_name}//:libs",
     visibility = ["//visibility:public"],
 )

@@ -49,10 +49,8 @@ cc_toolchain_import(
         "@sysroot_linux_x86_64//:includes_c",
         "@llvm_linux_x86_64//:includes",
         "@sysroot_linux_x86_64//:includes_system",
-        "@sysroot_linux_x86_64//:glibc",
-        "@sysroot_linux_x86_64//:pthread",
+        "@sysroot_linux_x86_64//:libs",
         "@llvm_linux_x86_64//:libclang_rt",
-        #"@sysroot_linux_x86_64//:openmp",
     ],
     visibility = ["//visibility:public"],
 )
@@ -84,12 +82,6 @@ cc_toolchain_import_feature(
 #    enabled = True,
 #    toolchain_import = ":openmp",
 #)
-
-cc_toolchain_import_openmp_feature(
-    name = "openmp_feature",
-    enabled = True,
-    toolchain_import = "@sysroot_linux_x86_64//:openmp",
-)
 
 # buildifier: leave-alone
 filegroup(
@@ -123,7 +115,6 @@ filegroup(
         ":wrappers",
         "@llvm_linux_x86_64//:ld",
         "@sysroot_linux_x86_64//:startup_libs",
-        #"@sysroot_linux_x86_64//:openmp",
         "@llvm_linux_x86_64//:distro_libs",
     ],
 )
@@ -147,7 +138,6 @@ cc_toolchain_config(
         # Hermetic libraries feature required before import.
         "//third_party/rules_cc_toolchain/features:hermetic_libraries",
         ":imports_feature",
-        #":openmp_feature",
 
         # Toolchain configuration
         "//third_party/rules_cc_toolchain/features:warnings",

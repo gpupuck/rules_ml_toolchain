@@ -1,5 +1,5 @@
 # Create docker image from Dockerfile
-# docker build -t sysroot_ubuntu18_x86_64:latest -f ./sysroot_ubuntu18_x86_64.Dockerfile .
+# docker build -t sysroot_ubuntu18_x86_64:latest -f .
 
 # Run docker image
 # docker run -it sysroot_ubuntu18_x86_64
@@ -44,4 +44,4 @@ RUN ln -sfn ../../../lib/x86_64-linux-gnu/libmvec.so.1 ./libmvec.so
 
 WORKDIR /root
 
-# tar cf - tar_x86_64_<tar_version>-<archive_version> | xz -T8 -c > tar_x86_64_<tar_version>-<archive_version>.tar.xz
+# tar cf - sysroot_x86_64_ubuntu18_gcc8.4-X.Y.Z | xz -T8 -c > sysroot_x86_64_ubuntu18_gcc8.4-X.Y.Z.tar.xz
