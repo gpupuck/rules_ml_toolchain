@@ -60,28 +60,6 @@ cc_toolchain_import_feature(
     toolchain_import = ":imports",
 )
 
-#cc_toolchain_import(
-#    name = "openmp",
-    #    features = select({
-    #        "//common:is_openmp_enabled": [
-    #            "openmp",
-    #        ],
-    #        "//conditions:default": [],
-    #    }),
-#    deps = select({
-#        "//common:is_openmp_enabled": [
-#            "@sysroot_linux_x86_64//:openmp",
-#        ],
-#        "//conditions:default": [],
-#    }),
-#)
-
-#cc_toolchain_import_feature(
-#    name = "openmp_feature",
-#    enabled = True,
-#    toolchain_import = ":openmp",
-#)
-
 # buildifier: leave-alone
 filegroup(
     name = "all",
