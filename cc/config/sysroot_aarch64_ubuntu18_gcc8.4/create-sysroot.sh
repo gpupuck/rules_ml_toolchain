@@ -1,38 +1,44 @@
 #!/bin/bash
 
-if [ "$#" -ne 2 ]; then
-    echo "Usage (subscript): $0 <sysroot> <version>"
-    exit 1
+if [ "$#" -ne 1 ]; then
+    echo "Usage: $0 <version>"
 fi
 
-SYSROOT="$1"
-VERSION="$2"
+SYSROOT="$(basename "$(pwd)")"
+CONTAINER=$(echo "$SYSROOT" | sed -E 's/.*ubuntu([0-9]+).*/u\1sysroot/')
 
-ARCH_NAME=sysroot_aarch64_ubuntu18_gcc8.4-0.2.0
+echo "Please enter sysroot version (default: 0.1.0):"
+read VERSION
+if [ -z "$VERSION" ]; then
+    VERSION="0.1.0"
+fi
+
+ARCH_NAME=$SYSROOT-$VERSION
 
 # Remove old files and image
-rm -f ./$ARCH_NAME/$ARCH_NAME.tar.xz
-rm -rf ./$ARCH_NAME
-docker rm -f u18sysroot
+rm -rf /tmp/$ARCH_NAME
+docker rm -f $CONTAINER
 docker rmi -f $ARCH_NAME:latest
 
 # Create docker image from Dockerfile
 docker build -t $ARCH_NAME:latest .
 
-mkdir ./$ARCH_NAME
-
 # Run docker image
-docker run -d --name u18sysroot $ARCH_NAME:latest bash -c "sleep 20"
+docker run -d --name $CONTAINER $ARCH_NAME:latest bash -c "sleep 20"
+
+mkdir /tmp/$ARCH_NAME
 
 # Copy needed directories from Docker image
-docker cp u18sysroot:/lib ./$ARCH_NAME/
-docker cp u18sysroot:/usr ./$ARCH_NAME/
-rm -rf ./$ARCH_NAME/lib/cpp
-rm -rf ./$ARCH_NAME/usr/bin
-rm -rf ./$ARCH_NAME/usr/games
-rm -rf ./$ARCH_NAME/usr/sbin
-rm -rf ./$ARCH_NAME/usr/share
-rm -rf ./$ARCH_NAME/usr/src
+docker cp $CONTAINER:/lib /tmp/$ARCH_NAME/
+docker cp $CONTAINER:/usr /tmp/$ARCH_NAME/
+# Remove not used directories
+rm -rf /tmp/$ARCH_NAME/lib/cpp
+rm -rf /tmp/$ARCH_NAME/usr/bin
+rm -rf /tmp/$ARCH_NAME/usr/games
+rm -rf /tmp/$ARCH_NAME/usr/sbin
+rm -rf /tmp/$ARCH_NAME/usr/share
+rm -rf /tmp/$ARCH_NAME/usr/src
 
-echo "Creating $ARCH_NAME.tar.xz archive..."
-tar cf - $ARCH_NAME | xz -T8 -c > $ARCH_NAME.tar.xz
+echo "Creating /tmp/$ARCH_NAME.tar.xz archive..."
+XZ_OPT="-T8"
+tar -cJf /tmp/$ARCH_NAME.tar.xz -C /tmp/ $ARCH_NAME

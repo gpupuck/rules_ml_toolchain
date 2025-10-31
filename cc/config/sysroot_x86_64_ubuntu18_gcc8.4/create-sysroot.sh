@@ -1,14 +1,24 @@
 #!/bin/bash
 
-if [ "$#" -ne 3 ]; then
-    echo "Usage (subscript): $0 <sysroot> <version>"
-    exit 1
+if [ "$#" -ne 1 ]; then
+    echo "Usage: $0 <version>"
 fi
 
-SYSROOT="$1"
-VERSION="$2"
-CONTAINER="$3"
+SYSROOT="$(basename "$(pwd)")"
+CONTAINER=$(echo "$SYSROOT" | sed -E 's/.*ubuntu([0-9]+).*/u\1sysroot/')
+
+echo "Please enter sysroot version (default: 0.1.0):"
+read VERSION
+if [ -z "$VERSION" ]; then
+    VERSION="0.1.0"
+fi
+
 ARCH_NAME=$SYSROOT-$VERSION
+
+# Remove old files and image
+rm -rf /tmp/$ARCH_NAME
+docker rm -f $CONTAINER
+docker rmi -f $ARCH_NAME:latest
 
 # Create docker image from Dockerfile
 docker build -t $ARCH_NAME:latest .
@@ -20,6 +30,7 @@ mkdir /tmp/$ARCH_NAME
 
 # Copy needed directories from Docker image
 docker cp $CONTAINER:/lib /tmp/$ARCH_NAME/
+docker cp $CONTAINER:/lib64 /tmp/$ARCH_NAME/
 docker cp $CONTAINER:/usr /tmp/$ARCH_NAME/
 # Remove not used directories
 rm -rf /tmp/$ARCH_NAME/lib/cpp
@@ -29,3 +40,6 @@ rm -rf /tmp/$ARCH_NAME/usr/sbin
 rm -rf /tmp/$ARCH_NAME/usr/share
 rm -rf /tmp/$ARCH_NAME/usr/src
 
+echo "Creating /tmp/$ARCH_NAME.tar.xz archive..."
+XZ_OPT="-T8"
+tar -cJf /tmp/$ARCH_NAME.tar.xz -C /tmp/ $ARCH_NAME
