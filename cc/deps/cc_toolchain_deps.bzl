@@ -59,13 +59,14 @@ def cc_toolchain_deps():
 
     if "sysroot_linux_x86_64_glibc_2_27" not in native.existing_rules():
         # C++17, manylinux_2_27, gcc-8
+        # TODO: !!!!!!!!!!!!!!! Add C++ patch !!!!!!!!!!!!!!!!
         mirrored_http_archive(
             name = "sysroot_linux_x86_64_glibc_2_27",
-            sha256 = "7c54a97a8f62d467d493f2942f9063d5ea3d6ec012fcecf4ba62ababe1889be5",
-            mirrored_tar_sha256 = "4d48dff78a648cf6a210f409e9b807a0bd212eda34708c9374251d8c8b6b4808",
-            urls = tf_mirror_urls("https://storage.googleapis.com/ml-sysroot-testing/ubuntu18_x86_64_sysroot_gcc8_patched-0.1.1.tar.xz"),
-            build_file = Label("//cc/config/sysroot_x86_64_linux_glibc_2_27:sysroot_x86_64_ubuntu18.BUILD"),
-            strip_prefix = "ubuntu18_x86_64_sysroot_gcc8_patched-0.1.1",
+            sha256 = "33d65928d3c0a79702b10ceac2a172666aa8997822abc3d10f1ce0ba1fe7c1bf",
+            mirrored_tar_sha256 = "18496de0f6eb0dd4cfbab4b618c0a50e8082989779acd048b68e760bf4d5b7d5",
+            urls = tf_mirror_urls("https://storage.googleapis.com/ml-sysroot-testing/sysroot_x86_64_ubuntu18_gcc8.4-0.2.0.tar.xz"),
+            build_file = Label("//cc/config/sysroot_x86_64_ubuntu18_gcc8.4:sysroot_x86_64_ubuntu18.BUILD"),
+            strip_prefix = "sysroot_x86_64_ubuntu18_gcc8.4-0.2.0",
         )
 
     if "sysroot_linux_x86_64_glibc_2_31" not in native.existing_rules():
@@ -109,7 +110,7 @@ def cc_toolchain_deps():
             sha256 = "6168a4d40caed088a59c7c9f3c99900e1795002e8aaca43522a6391c05988c2e",
             mirrored_tar_sha256 = "854dce12fa5a92001ac728f6b7a2101b3cdb0356b83e987022aaa7b2a4b77202",
             urls = tf_mirror_urls("https://storage.googleapis.com/ml-sysroot-testing/sysroot_aarch64_ubuntu18_gcc8.4-0.2.0.tar.xz"),
-            build_file = Label("//cc/config/sysroot_aarch64_linux_glibc_2_27:sysroot_aarch64_ubuntu18.BUILD"),
+            build_file = Label("//cc/config/sysroot_aarch64_ubuntu18_gcc8.4:sysroot_aarch64_ubuntu18.BUILD"),
             strip_prefix = "sysroot_aarch64_ubuntu18_gcc8.4-0.2.0",
         )
 

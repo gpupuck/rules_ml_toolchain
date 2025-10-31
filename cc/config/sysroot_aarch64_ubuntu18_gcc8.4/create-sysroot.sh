@@ -1,5 +1,13 @@
 #!/bin/bash
 
+if [ "$#" -ne 2 ]; then
+    echo "Usage (subscript): $0 <sysroot> <version>"
+    exit 1
+fi
+
+SYSROOT="$1"
+VERSION="$2"
+
 ARCH_NAME=sysroot_aarch64_ubuntu18_gcc8.4-0.2.0
 
 # Remove old files and image
