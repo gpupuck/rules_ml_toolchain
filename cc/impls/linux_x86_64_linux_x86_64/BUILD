@@ -20,7 +20,6 @@
 load("//third_party/rules_cc_toolchain:toolchain_config.bzl", "cc_toolchain_config")
 load("//third_party/rules_cc_toolchain/features:cc_toolchain_import.bzl", "cc_toolchain_import")
 load("//third_party/rules_cc_toolchain/features:features.bzl", "cc_toolchain_import_feature")
-load("//cc/features:openmp_feature.bzl", "cc_toolchain_import_openmp_feature")
 
 package(
     default_visibility = [
