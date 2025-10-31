@@ -59,15 +59,6 @@ http_archive(
     urls = ["https://github.com/protocolbuffers/protobuf/archive/refs/tags/v5.28.3.zip"],
 )
 
-#http_archive(
-#    name = "com_google_protobuf",
-#    sha256 = "6e09bbc950ba60c3a7b30280210cd285af8d7d8ed5e0a6ed101c72aff22e8d88",
-#    strip_prefix = "protobuf-6.31.1",
-#    urls = ["https://github.com/protocolbuffers/protobuf/archive/refs/tags/v6.31.1.zip"],
-#    patches = ["//third_party:protobuf.patch"],
-#    patch_args = ["-p1"],
-#)
-
 load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
 
 # Cross compilation error with older version. Details: https://github.com/bulletphysics/bullet3/issues/4607
