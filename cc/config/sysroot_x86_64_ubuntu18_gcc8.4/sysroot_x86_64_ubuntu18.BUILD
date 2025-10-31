@@ -198,12 +198,6 @@ cc_toolchain_import(
     visibility = ["//visibility:public"],
 )
 
-cc_import(
-    name = "openmp_lib",
-    shared_library = "usr/lib/x86_64-linux-gnu/libomp.so",
-    visibility = ["//visibility:public"],
-)
-
 # This is a group of all the system libraries we need. The actual essential libraries is split
 # out to fix link ordering problems that cause false undefined symbol positives.
 cc_toolchain_import(
