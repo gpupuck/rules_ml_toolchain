@@ -30,6 +30,9 @@ sysroot_package(
 GCC_VERSION = 8
 GLIBC_VERSION = "2.27"
 
+# Details about C RunTime (CRT) objects:
+# https://docs.oracle.com/cd/E88353_01/html/E37853/crt1.o-7.html
+# https://dev.gentoo.org/~vapier/crt.txt
 CRT_OBJECTS = [
     "crti",
     "crtn",
@@ -88,7 +91,6 @@ cc_toolchain_import(
         "lib/aarch64-linux-gnu/libgcc_s.so.1",
         "usr/lib/gcc/aarch64-linux-gnu/{gcc_version}/libgcc_eh.a".format(gcc_version = GCC_VERSION),
     ],
-    runtime_path = "/usr/lib/aarch64-linux-gnu",
     shared_library = "usr/lib/gcc/aarch64-linux-gnu/{gcc_version}/libgcc_s.so".format(gcc_version = GCC_VERSION),
     static_library = "usr/lib/gcc/aarch64-linux-gnu/{gcc_version}/libgcc.a".format(gcc_version = GCC_VERSION),
     visibility = ["//visibility:public"],
@@ -166,10 +168,6 @@ cc_toolchain_import(
     ],
     shared_library = "usr/lib/aarch64-linux-gnu/libc.so",
     static_library = "usr/lib/aarch64-linux-gnu/libc.a",
-    #target_compatible_with = select({
-    #    "@platforms//os:linux": ["@platforms//cpu:aarch64"],
-    #    "//conditions:default": ["@platforms//:incompatible"],
-    #}),
     visibility = ["//visibility:public"],
     deps = [
         ":gcc",
