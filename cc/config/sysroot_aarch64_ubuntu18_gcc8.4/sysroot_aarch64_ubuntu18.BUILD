@@ -118,6 +118,7 @@ cc_toolchain_import(
 cc_toolchain_import(
     name = "dynamic_linker",
     additional_libs = [
+        "lib/ld-linux-aarch64.so.1",
         "lib/aarch64-linux-gnu/ld-linux-aarch64.so.1",
         "lib/aarch64-linux-gnu/ld-{glibc_version}.so".format(glibc_version = GLIBC_VERSION),
     ],
@@ -164,6 +165,7 @@ cc_toolchain_import(
     name = "libc",
     additional_libs = [
         "lib/aarch64-linux-gnu/libc.so.6",
+        "lib/aarch64-linux-gnu/libc-{glibc_version}.so".format(glibc_version = GLIBC_VERSION),
         "usr/lib/aarch64-linux-gnu/libc_nonshared.a",
     ],
     shared_library = "usr/lib/aarch64-linux-gnu/libc.so",
