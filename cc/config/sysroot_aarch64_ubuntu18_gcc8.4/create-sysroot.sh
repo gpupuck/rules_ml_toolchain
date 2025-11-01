@@ -36,11 +36,14 @@ docker rm -f $CONTAINER
 docker rmi -f $ARCH_NAME:latest
 
 # Create docker image from Dockerfile
+echo -e "\nBuilding docker image $ARCH_NAME:latest"
 docker build -t $ARCH_NAME:latest .
 
 # Run docker image
+echo -e "\nRunning docker image $ARCH_NAME:latest, container name $CONTAINER"
 docker run -d --name $CONTAINER $ARCH_NAME:latest bash -c "sleep 20"
 
+echo -e "\nCopying files from docker container..."
 mkdir /tmp/$ARCH_NAME
 
 # Copy needed directories from Docker image
@@ -54,6 +57,6 @@ rm -rf /tmp/$ARCH_NAME/usr/sbin
 rm -rf /tmp/$ARCH_NAME/usr/share
 rm -rf /tmp/$ARCH_NAME/usr/src
 
-echo "Creating /tmp/$ARCH_NAME.tar.xz archive..."
+echo -e "\nCreating /tmp/$ARCH_NAME.tar.xz archive..."
 XZ_OPT="-T8"
 tar -cJf /tmp/$ARCH_NAME.tar.xz -C /tmp/ $ARCH_NAME
