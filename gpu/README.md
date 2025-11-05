@@ -195,6 +195,25 @@ is specified in [third_party/gpus/cuda/hermetic/cuda_redist_versions.bzl](https:
    see [NVIDIA documentation](https://docs.nvidia.com/deploy/cuda-compatibility/index.html#forward-compatibility-support-across-major-toolkit-versions) for the
    details.
 
+   The version of the User Mode Driver is controlled by the environment variable
+   `HERMETIC_CUDA_USER_MODE_DRIVER_VERSION`. If it is not set, the version of
+   the User Mode Driver will be the same as specified in
+   `HERMETIC_CUDA_VERSION`.
+
+   For example, the combination of the parameters below enables forward
+   compatibility mode on the machine with the NVIDIA Driver version 13.0.0, when
+   one needs to build the target using CUDA toolkit 12.9.0.
+
+   ````
+   bazel build --repo_env=HERMETIC_CUDA_VERSION=12.9.0 \
+     --repo_env=HERMETIC_CUDA_USER_MODE_DRIVER_VERSION=13.0.0 \
+     --@cuda_driver//:enable_forward_compatibility=true \
+     ... \
+     -- \
+     <target>
+   ```
+   
+
 ### Configure hermetic NVSHMEM
 
 1. In the downstream project dependent on `rules_ml_toolchain`, add the
