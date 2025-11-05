@@ -196,7 +196,7 @@ is specified in [third_party/gpus/cuda/hermetic/cuda_redist_versions.bzl](https:
    details.
 
    The version of the User Mode Driver is controlled by the environment variable
-   `HERMETIC_CUDA_USER_MODE_DRIVER_VERSION`. If it is not set, the version of
+   `HERMETIC_CUDA_UMD_VERSION`. If it is not set, the version of
    the User Mode Driver will be the same as specified in
    `HERMETIC_CUDA_VERSION`.
 
@@ -206,7 +206,7 @@ is specified in [third_party/gpus/cuda/hermetic/cuda_redist_versions.bzl](https:
 
    ```
    bazel build --repo_env=HERMETIC_CUDA_VERSION=12.9.0 \
-     --repo_env=HERMETIC_CUDA_USER_MODE_DRIVER_VERSION=13.0.0 \
+     --repo_env=HERMETIC_CUDA_UMD_VERSION=13.0.0 \
      --@cuda_driver//:enable_forward_compatibility=true \
      ... \
      -- \

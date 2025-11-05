@@ -606,14 +606,14 @@ def _get_json_file_content(
     repository_ctx.delete(json_file)
     return json_content
 
-def _is_cuda_user_mode_driver_above_cuda_runtime_version(
-        cuda_user_mode_driver_version,
+def _is_cuda_umd_above_cuda_runtime_version(
+        cuda_umd_version,
         cuda_runtime_version):
     for i in range(0, len(cuda_runtime_version)):
-        cuda_user_mode_driver_ver_int = int(cuda_user_mode_driver_version[i])
-        if cuda_user_mode_driver_ver_int < int(cuda_runtime_version[i]):
+        cuda_umd_ver_int = int(cuda_umd_version[i])
+        if cuda_umd_ver_int < int(cuda_runtime_version[i]):
             return False
-        if cuda_user_mode_driver_ver_int > int(cuda_runtime_version[i]):
+        if cuda_umd_ver_int > int(cuda_runtime_version[i]):
             return True
     return True
 
@@ -622,7 +622,7 @@ def _get_redist_version(repository_ctx, redist_version_env_vars):
     for redist_version_env_var in redist_version_env_vars:
         redist_version = get_env_var(repository_ctx, redist_version_env_var)
         if redist_version:
-            if repository_ctx.name == "cuda_user_mode_driver_redist_json":
+            if repository_ctx.name == "cuda_umd_redist_json":
                 print("User Mode Driver for CUDA {} will be used according to the value of {}".format(
                     redist_version,
                     redist_version_env_var,
@@ -631,7 +631,7 @@ def _get_redist_version(repository_ctx, redist_version_env_vars):
                     repository_ctx,
                     "HERMETIC_CUDA_VERSION",
                 ) or get_env_var(repository_ctx, "TF_CUDA_VERSION")
-                if not _is_cuda_user_mode_driver_above_cuda_runtime_version(
+                if not _is_cuda_umd_above_cuda_runtime_version(
                     redist_version.split("."),
                     cuda_runtime_version.split("."),
                 ):
