@@ -43,7 +43,7 @@ load(
     _cuda_umd_redistributions = "CUDA_UMD_REDISTRIBUTIONS",
 )
 
-_cuda_redistributions_updated = dict(_cuda_redistributions, nvidia_driver = _cuda_umd_redistributions["nvidia_driver"])
+_cuda_redistributions_updated = dict(_cuda_redistributions, nvidia_driver = _cuda_umd_redistributions.get("nvidia_driver", {}))
 
 CUDA_REDISTRIBUTIONS = _cuda_redistributions_updated
 
