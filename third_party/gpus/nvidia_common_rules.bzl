@@ -61,6 +61,7 @@ def _get_file_name(url):
 
 def _get_orig_repo_name(repository_ctx):
     """Get the repo name used when this repository rule was called"""
+
     # With Bzlmod, the repo name will be something like `_main~cuda_redist_init_ext~cuda_nvml`,
     # we need to extract the original repo name.
     # TODO: migrate to use repository_ctx.original_name with Bazel 8
@@ -255,7 +256,7 @@ def _create_libcuda_symlinks(
                 print("File %s already exists!" % repository_ctx.path(symlink_so_1))  # buildifier: disable=print
             else:
                 repository_ctx.symlink(versioned_lib_path, symlink_so_1)
-            if lib=="cuda":
+            if lib == "cuda":
                 unversioned_symlink = "lib/lib%s.so" % lib
                 if repository_ctx.path(unversioned_symlink).exists:
                     print("File %s already exists!" % repository_ctx.path(unversioned_symlink))  # buildifier: disable=print
@@ -605,6 +606,17 @@ def _get_json_file_content(
     repository_ctx.delete(json_file)
     return json_content
 
+def _is_cuda_user_mode_driver_above_cuda_runtime_version(
+        cuda_user_mode_driver_version,
+        cuda_runtime_version):
+    for i in range(0, len(cuda_runtime_version)):
+        cuda_user_mode_driver_ver_int = int(cuda_user_mode_driver_version[i])
+        if cuda_user_mode_driver_ver_int < int(cuda_runtime_version[i]):
+            return False
+        if cuda_user_mode_driver_ver_int > int(cuda_runtime_version[i]):
+            return True
+    return True
+
 def _get_redist_version(repository_ctx, redist_version_env_vars):
     redist_version = None
     for redist_version_env_var in redist_version_env_vars:
@@ -615,6 +627,18 @@ def _get_redist_version(repository_ctx, redist_version_env_vars):
                     redist_version,
                     redist_version_env_var,
                 ))  # buildifier: disable=print
+                cuda_runtime_version = get_env_var(
+                    repository_ctx,
+                    "HERMETIC_CUDA_VERSION",
+                ) or get_env_var(repository_ctx, "TF_CUDA_VERSION")
+                if not _is_cuda_user_mode_driver_above_cuda_runtime_version(
+                    redist_version.split("."),
+                    cuda_runtime_version.split("."),
+                ):
+                    fail(
+                        ("Selected User Mode Driver version %s is incompatible with selected " % redist_version) +
+                        ("CUDA Runtime version %s. The correct version formula is " % cuda_runtime_version) +
+                        "Runtime Version <= KMD version <= UMD version")
             break
     return redist_version
 
@@ -721,4 +745,3 @@ def cuda_lib_header_prefix(major_version, wanted_major_version, new_header_prefi
     if not major_version:
         return old_header_prefix
     return new_header_prefix if int(major_version) >= wanted_major_version else old_header_prefix
-
