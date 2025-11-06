@@ -276,7 +276,7 @@ def _create_repository_symlinks(repository_ctx):
 
 def create_version_file(repository_ctx, major_lib_version):
     if repository_ctx.name == "cuda_driver" and major_lib_version:
-        print("Hermetic User Mode Driver version is %s" % major_lib_version)  # buildifier: disable=print
+        print("Downloaded hermetic User Mode Driver version is %s" % major_lib_version)  # buildifier: disable=print
     repository_ctx.file(
         "version.bzl",
         "VERSION = \"{}\"".format(major_lib_version),
@@ -612,7 +612,7 @@ def _get_redist_version(repository_ctx, redist_version_env_vars):
         redist_version = get_env_var(repository_ctx, redist_version_env_var)
         if redist_version:
             if repository_ctx.name == "cuda_umd_redist_json":
-                print("User Mode Driver for CUDA {} will be used according to the value of {}".format(
+                print("User Mode Driver for CUDA {} will be downloaded to the value of {}".format(
                     redist_version,
                     redist_version_env_var,
                 ))  # buildifier: disable=print
