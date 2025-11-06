@@ -174,15 +174,17 @@ is specified in [third_party/gpus/cuda/hermetic/cuda_redist_versions.bzl](https:
    to test executables. The flag is false by default to avoid unwanted coupling
    of Google-released Python wheels to CUDA binaries.
 
-5. To enforce linking hermetic CUDA user mode driver libs, use the flag
-   `--@cuda_driver//:include_cuda_umd_libs`.
+5. The NVIDIA driver contains both the user mode CUDA driver and kernel mode
+   components necessary to run the application. Hermetic CUDA toolchain includes
+   hermetic user mode driver libs.
+
+   To enforce linking hermetic CUDA UMD, use the flag
+   `--@cuda_driver//:include_cuda_umd_libs`. The default flag value is `true`.
 
    You can provide it either directly in a shell or in `.bazelrc`:
    ```
    test:cuda --@cuda_driver//:include_cuda_umd_libs=true
    ```
-
-   The default flag value is `true`.
 
    The version of the User Mode Driver is controlled by the environment variable
    `HERMETIC_CUDA_UMD_VERSION`. If it is not set, the version of
