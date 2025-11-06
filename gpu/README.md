@@ -174,52 +174,53 @@ is specified in [third_party/gpus/cuda/hermetic/cuda_redist_versions.bzl](https:
    to test executables. The flag is false by default to avoid unwanted coupling
    of Google-released Python wheels to CUDA binaries.
 
-5. To enforce CUDA forward compatibility mode, add
-   `--@cuda_driver//:enable_forward_compatibility=true` flag to your bazel
-   command. You can provide it either directly in a shell or in `.bazelrc`:
+5. To enforce linking hermetic CUDA user mode driver libs, use the flag
+   `--@cuda_driver//:include_cuda_umd_libs`.
+
+   You can provide it either directly in a shell or in `.bazelrc`:
    ```
-   test:cuda --@cuda_driver//:enable_forward_compatibility=true
+   test:cuda --@cuda_driver//:include_cuda_umd_libs=true
    ```
 
-   The default flag value is `false`.
-
-   When CUDA forward compatibility mode is disabled, Bazel targets will use User
-   Mode and Kernel Mode Drivers pre-installed on the system.
-
-   When CUDA forward compatibility mode is enabled, Bazel targets will use User
-   Mode Driver from CUDA driver redistribution downloaded into Bazel cache and
-   Kernel Mode Driver pre-installed on the system. It allows enabling new CUDA
-   Toolkit features while using older Kernel Mode Driver.
-
-   Forward compatibility mode should be enforced only when it is appropriate -
-   see [NVIDIA documentation](https://docs.nvidia.com/deploy/cuda-compatibility/forward-compatibility.html) for the
-   details.
+   The default flag value is `true`.
 
    The version of the User Mode Driver is controlled by the environment variable
    `HERMETIC_CUDA_UMD_VERSION`. If it is not set, the version of
    the User Mode Driver will be the same as specified in
    `HERMETIC_CUDA_VERSION`.
 
-   For example, the combination of the parameters below enables forward
-   compatibility mode on the machine with the NVIDIA Driver version 13.0.0, when
-   one needs to build the target using CUDA toolkit 12.9.0.
+   For example, the combination of the parameters below enables linking NVIDIA
+   Driver version 13.0.0, when one needs to build the target using CUDA toolkit
+   12.9.0.
 
    ```
    bazel build --repo_env=HERMETIC_CUDA_VERSION=12.9.0 \
      --repo_env=HERMETIC_CUDA_UMD_VERSION=13.0.0 \
-     --@cuda_driver//:enable_forward_compatibility=true \
+     --@cuda_driver//:include_cuda_umd_libs=true \
      ... \
      -- \
      <target>
    ```
 
-   Supported Kernel Mode Driver and User Mode Driver version combinations:
-   
-   combination | result
-   -------- | --------
-   KMD version is higher than UMD version | Not supported
-   KMD version is equal to UMD version   | Supported, no restrictions
-   KMD version is lower than UMD version | Supported, with restrictions described in [NVIDIA documentation](https://docs.nvidia.com/deploy/cuda-compatibility/forward-compatibility.html)
+   UMD version should be compatible with KMD and CUDA Runtime versions.
+
+
+   - Supported Kernel Mode Driver and User Mode Driver version combinations:
+    
+     combination | result
+     -------- | --------
+     KMD version is higher than UMD version | Not supported
+     KMD version is equal to UMD version   | Supported, no restrictions
+     KMD version is lower than UMD version | Supported, no restrictions
+    
+   - UMD and CUDA Runtime versions compatibility is described in
+     [NVIDIA documentation](https://docs.nvidia.com/deploy/cuda-compatibility/why-cuda-compatibility.html).
+    
+     UMD | Compatibility type | Requirements
+     -------- | -------- | --------
+     Newer than the CUDA runtime | Backwards compatibility | None
+     Older than the CUDA runtime, but same major version of the CUDA runtime | Minor Version Compatibility | No PTX (requires SASS), NVCC target architecture required
+     Older than the major version of the CUDA runtime | Forward Compatibility | Extra CUDA compatibility package
 
 ### Configure hermetic NVSHMEM
 

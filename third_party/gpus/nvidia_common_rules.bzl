@@ -606,17 +606,6 @@ def _get_json_file_content(
     repository_ctx.delete(json_file)
     return json_content
 
-def _is_cuda_umd_above_cuda_runtime_version(
-        cuda_umd_version,
-        cuda_runtime_version):
-    for i in range(0, len(cuda_runtime_version)):
-        cuda_umd_ver_int = int(cuda_umd_version[i])
-        if cuda_umd_ver_int < int(cuda_runtime_version[i]):
-            return False
-        if cuda_umd_ver_int > int(cuda_runtime_version[i]):
-            return True
-    return True
-
 def _get_redist_version(repository_ctx, redist_version_env_vars):
     redist_version = None
     for redist_version_env_var in redist_version_env_vars:
@@ -627,18 +616,6 @@ def _get_redist_version(repository_ctx, redist_version_env_vars):
                     redist_version,
                     redist_version_env_var,
                 ))  # buildifier: disable=print
-                cuda_runtime_version = get_env_var(
-                    repository_ctx,
-                    "HERMETIC_CUDA_VERSION",
-                ) or get_env_var(repository_ctx, "TF_CUDA_VERSION")
-                if not _is_cuda_umd_above_cuda_runtime_version(
-                    redist_version.split("."),
-                    cuda_runtime_version.split("."),
-                ):
-                    fail(
-                        ("Selected User Mode Driver version %s is incompatible with selected " % redist_version) +
-                        ("CUDA Runtime version %s. The correct version formula is " % cuda_runtime_version) +
-                        "Runtime Version <= KMD version <= UMD version")
             break
     return redist_version
 
