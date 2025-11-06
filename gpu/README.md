@@ -174,9 +174,9 @@ is specified in [third_party/gpus/cuda/hermetic/cuda_redist_versions.bzl](https:
    to test executables. The flag is false by default to avoid unwanted coupling
    of Google-released Python wheels to CUDA binaries.
 
-5. The NVIDIA driver contains both the user mode CUDA driver and kernel mode
-   components necessary to run the application. Hermetic CUDA toolchain includes
-   hermetic user mode driver libs.
+5. The NVIDIA driver contains both the user mode CUDA driver (UMD) and kernel
+   mode driver (KMD) necessary to run the application. Hermetic CUDA  toolchain
+   includes hermetic UMD libs.
 
    To enforce linking hermetic CUDA UMD, use the flag
    `--@cuda_driver//:include_cuda_umd_libs`. The default flag value is `true`.
