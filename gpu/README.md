@@ -216,13 +216,7 @@ is specified in [third_party/gpus/cuda/hermetic/cuda_redist_versions.bzl](https:
      KMD version is lower than UMD version | Supported, no restrictions
     
    - UMD and CUDA Runtime versions compatibility is described in
-     [NVIDIA documentation](https://docs.nvidia.com/deploy/cuda-compatibility/why-cuda-compatibility.html).
-    
-     UMD | Compatibility type | Requirements
-     -------- | -------- | --------
-     Newer than the CUDA runtime | Backwards compatibility | None
-     Older than the CUDA runtime, but same major version of the CUDA runtime | Minor Version Compatibility | No PTX (requires SASS), NVCC target architecture required
-     Older than the major version of the CUDA runtime | Forward Compatibility | Extra CUDA compatibility package
+     [NVIDIA documentation](https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html#id6).
 
 ### Configure hermetic NVSHMEM
 
