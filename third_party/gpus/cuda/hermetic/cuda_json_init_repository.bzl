@@ -89,7 +89,11 @@ def cuda_json_init_repository(
         toolkit_name = "CUDA_UMD",
         json_dict = cuda_json_dict,
         mirrored_tars_json_dict = mirrored_tars_cuda_json_dict,
-        redist_version_env_vars = ["HERMETIC_CUDA_UMD_VERSION", "HERMETIC_CUDA_VERSION", "TF_CUDA_VERSION"],
+        redist_version_env_vars = [
+            "HERMETIC_CUDA_UMD_VERSION",
+            "HERMETIC_CUDA_VERSION",
+            "TF_CUDA_VERSION",
+        ],
         local_path_env_var = "LOCAL_CUDA_PATH",
         use_tar_file_env_var = "USE_CUDA_TAR_ARCHIVE_FILES",
     )
@@ -105,4 +109,9 @@ def cuda_json_init_repository_wrapper(
         cudnn_json_dict,
         mirrored_tars_cuda_json_dict,
         mirrored_tars_cudnn_json_dict):
-    cuda_json_init_repository(cuda_json_dict, cudnn_json_dict, mirrored_tars_cuda_json_dict, mirrored_tars_cudnn_json_dict)
+    cuda_json_init_repository(
+        cuda_json_dict,
+        cudnn_json_dict,
+        mirrored_tars_cuda_json_dict,
+        mirrored_tars_cudnn_json_dict,
+    )
