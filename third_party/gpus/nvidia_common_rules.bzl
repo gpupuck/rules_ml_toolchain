@@ -612,7 +612,7 @@ def _get_redist_version(repository_ctx, redist_version_env_vars):
         redist_version = get_env_var(repository_ctx, redist_version_env_var)
         if redist_version:
             if repository_ctx.name == "cuda_umd_redist_json":
-                print("User Mode Driver for CUDA {} will be downloaded to the value of {}".format(
+                print("User Mode Driver for CUDA {} will be downloaded according to the value of {}".format(
                     redist_version,
                     redist_version_env_var,
                 ))  # buildifier: disable=print
